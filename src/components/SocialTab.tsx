@@ -97,7 +97,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
           onClick={() => setSocialSubTab('people')}
           className={`flex-1 py-2 rounded-xl text-xs font-black transition-all ${
             socialSubTab === 'people'
-              ? 'bg-white text-slate-900 shadow-sm'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
@@ -119,7 +119,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
           onClick={() => setSocialSubTab('messages')}
           className={`flex-1 py-2 rounded-xl text-xs font-black transition-all ${
             socialSubTab === 'messages'
-              ? 'bg-white text-slate-900 shadow-sm'
+              ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20'
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >

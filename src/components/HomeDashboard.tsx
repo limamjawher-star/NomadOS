@@ -20,7 +20,8 @@ import {
   FileText,
   ShieldCheck,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Crown
 } from 'lucide-react';
 import { NomadState, NearbyNomad, NomadEvent } from '../types';
 
@@ -75,19 +76,19 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
   return (
     <div id="home-dashboard-view" className="space-y-4 pb-28 max-w-2xl mx-auto px-4 pt-3">
-      {/* 1. Header bar with 2026 Sleek Brand Identity */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-600 to-sky-500 text-white flex items-center justify-center font-black text-sm shadow-md shadow-indigo-500/20">
-            🌐
-          </div>
-          <div>
-            <span className="font-extrabold text-slate-900 text-base tracking-tight font-display">
-              Nomad<span className="text-indigo-600">OS</span>
+      {/* 1. Contextual In-App Dashboard Header (No duplicate NomadOS logo or outer toolbar button) */}
+      <div className="flex items-center justify-between pt-1">
+        <div>
+          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-display">
+            Welcome back, {state.user.name.split(' ')[0]} 👋
+          </h1>
+          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mt-0.5">
+            <span className="inline-flex items-center gap-1.5 text-indigo-600 font-bold">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>{state.currentCity}, {state.currentCountry}</span>
             </span>
-            <span className="text-[10px] text-slate-400 font-semibold block -mt-0.5">
-              Live Command Center
-            </span>
+            <span className="text-slate-300">·</span>
+            <span className="text-slate-400">Live Base</span>
           </div>
         </div>
 
@@ -96,20 +97,22 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             <button
               id="home-upgrade-pill-btn"
               onClick={onOpenPricing}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white text-xs font-black rounded-full shadow-md shadow-amber-500/20 flex items-center gap-1.5 transition-all transform active:scale-95"
+              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-full shadow-sm shadow-indigo-600/20 flex items-center gap-1.5 transition-all transform active:scale-95"
             >
-              <span>👑</span>
+              <Crown className="w-3.5 h-3.5 text-indigo-200" />
               <span>Upgrade Pro</span>
             </button>
           ) : (
-            <span className="px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-700 text-xs font-black rounded-full flex items-center gap-1">
-              👑 PRO
+            <span className="px-2.5 py-1 bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-[11px] font-bold rounded-full flex items-center gap-1">
+              <Crown className="w-3 h-3 text-indigo-600" />
+              <span>PRO</span>
             </span>
           )}
 
           <button
             onClick={() => onNavigateTab('me')}
-            className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-indigo-500/30 hover:ring-indigo-600 transition-all shadow-sm"
+            className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-slate-200 hover:ring-indigo-500 transition-all shadow-xs"
+            title="Passport & Settings"
           >
             <img src={state.user.avatarUrl} alt={state.user.name} className="w-full h-full object-cover" />
           </button>
@@ -152,7 +155,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             <p className="text-xs text-white/80 font-medium flex items-center gap-2 mt-0.5">
               <span>VoA B213 (Day 28 of 30)</span>
               <span className="w-1 h-1 rounded-full bg-white/40" />
-              <span className="text-amber-300 font-bold">2 days to renew</span>
+              <span className="px-2 py-0.5 rounded-md bg-amber-500/20 border border-amber-400/30 text-amber-200 text-[10px] font-bold">
+                2 days to renew
+              </span>
             </p>
           </div>
 
@@ -163,26 +168,28 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         </div>
       </div>
 
-      {/* 3. 4-STAT CARDS 2x2 GRID (Graphic Designer Elevation) */}
+      {/* 3. 4-STAT CARDS 2x2 GRID (Unified Design Language & Brand Palette) */}
       <div className="grid grid-cols-2 gap-2.5">
         {/* Location Card */}
         <div 
           onClick={() => onNavigateTab('social')}
-          className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between h-28 group relative overflow-hidden"
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-indigo-50/60 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-            <div className="flex items-center gap-1.5 text-indigo-600">
-              <MapPin className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <MapPin className="w-3.5 h-3.5" />
+              </div>
               <span className="text-slate-500 font-bold">Location</span>
             </div>
             <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <h4 className="text-lg font-black text-slate-900 leading-tight font-display">{state.currentCity}</h4>
-            <p className="text-xs text-slate-500 font-medium flex items-center gap-1">
+            <p className="text-xs text-slate-500 font-medium flex items-center gap-1 mt-0.5">
               <span>{state.currentCountry}</span>
-              <span className="text-[10px] text-indigo-600 font-bold bg-indigo-50 px-1 rounded">UTC+8</span>
+              <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.2 rounded">UTC+8</span>
             </p>
           </div>
         </div>
@@ -190,86 +197,92 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Next Trip Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between h-28 group relative overflow-hidden"
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-sky-50/60 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-            <div className="flex items-center gap-1.5 text-sky-600">
-              <Plane className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <Plane className="w-3.5 h-3.5" />
+              </div>
               <span className="text-slate-500 font-bold">Next Trip</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
               <h4 className="text-lg font-black text-slate-900 leading-tight font-display">28 days</h4>
-              <span className="text-[10px] text-sky-600 font-bold bg-sky-50 px-1 rounded">Oct 5</span>
+              <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.2 rounded">Oct 5</span>
             </div>
-            <p className="text-xs text-slate-600 font-bold">🇲🇽 Mexico City</p>
+            <p className="text-xs text-slate-600 font-bold mt-0.5">🇲🇽 Mexico City</p>
           </div>
         </div>
 
         {/* Visa Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm hover:border-amber-300 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between h-28 group relative overflow-hidden"
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-amber-50/60 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-            <div className="flex items-center gap-1.5 text-amber-600">
-              <Clock className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <Clock className="w-3.5 h-3.5" />
+              </div>
               <span className="text-slate-500 font-bold">Visa Window</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-amber-600 group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
-              <h4 className="text-lg font-black text-rose-600 leading-tight font-display">13 days</h4>
-              <span className="text-[10px] text-amber-700 font-bold bg-amber-50 px-1 rounded">Action</span>
+              <h4 className="text-lg font-black text-slate-900 leading-tight font-display">13 days</h4>
+              <span className="text-[10px] text-amber-800 font-bold bg-amber-50 border border-amber-200/60 px-1.5 py-0.2 rounded">Action</span>
             </div>
-            <p className="text-xs text-slate-500 font-medium truncate">Vietnam e-Visa (90d)</p>
+            <p className="text-xs text-slate-500 font-medium truncate mt-0.5">Vietnam e-Visa (90d)</p>
           </div>
         </div>
 
         {/* Spent Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm hover:border-emerald-300 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between h-28 group relative overflow-hidden"
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-emerald-50/60 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-            <div className="flex items-center gap-1.5 text-emerald-600">
-              <DollarSign className="w-3.5 h-3.5" />
+            <div className="flex items-center gap-1.5">
+              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                <DollarSign className="w-3.5 h-3.5" />
+              </div>
               <span className="text-slate-500 font-bold">Spend / Cap</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <div className="flex items-baseline justify-between">
               <h4 className="text-lg font-black text-slate-900 leading-tight font-display">€586</h4>
-              <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-1 rounded">21%</span>
+              <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.2 rounded">21%</span>
             </div>
-            <div className="w-full bg-slate-100 rounded-full h-1.5 mt-1 overflow-hidden">
-              <div className="bg-emerald-500 h-full rounded-full" style={{ width: '21%' }} />
+            <div className="w-full bg-slate-100 rounded-full h-1.5 mt-1.5 overflow-hidden">
+              <div className="bg-indigo-600 h-full rounded-full" style={{ width: '21%' }} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* 4. 4 DAYS STREAK WIDGET (2026 Solar Flame Glow) */}
-      <div className="bg-gradient-to-r from-amber-500/10 via-orange-500/5 to-transparent rounded-3xl p-3.5 border border-amber-200/80 shadow-sm flex items-center justify-between text-xs">
+      {/* 4. 4 DAYS STREAK WIDGET (Clean Balanced Card) */}
+      <div className="bg-white rounded-3xl p-3.5 border border-slate-200/90 shadow-sm flex items-center justify-between text-xs">
         <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-amber-500 to-orange-500 text-white flex items-center justify-center text-lg font-black shadow-md shadow-orange-500/25">
+          <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center text-sm font-black">
             🔥
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-black text-slate-900 text-sm font-display">4-Day Nomad Streak</span>
-              <span className="px-1.5 py-0.2 bg-amber-100 text-amber-800 text-[10px] font-bold rounded-md">
+              <span className="font-extrabold text-slate-900 text-sm font-display">4-Day Nomad Streak</span>
+              <span className="px-1.5 py-0.5 bg-emerald-50 text-emerald-700 border border-emerald-200/60 text-[10px] font-bold rounded-md">
                 Active
               </span>
             </div>
-            <span className="text-[11px] text-slate-500">Expenses, taxes & legal compliance verified</span>
+            <span className="text-[11px] text-slate-500">Expenses, taxes & legal days verified</span>
           </div>
         </div>
         <div className="flex items-center gap-1.5 text-slate-400 text-xs font-semibold">
@@ -351,17 +364,17 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             {/* INFO: Mexico trip */}
             <div 
               onClick={() => onNavigateTab('travel')}
-              className="p-3 bg-sky-50/70 hover:bg-sky-50 border border-sky-200/80 rounded-2xl flex items-center justify-between text-xs cursor-pointer transition-all"
+              className="p-3 bg-indigo-50/70 hover:bg-indigo-50 border border-indigo-200/80 rounded-2xl flex items-center justify-between text-xs cursor-pointer transition-all"
             >
               <div className="flex items-center gap-2.5">
-                <span className="px-2 py-0.5 bg-sky-600 text-white font-black text-[10px] rounded-md tracking-wider">
+                <span className="px-2 py-0.5 bg-indigo-600 text-white font-black text-[10px] rounded-md tracking-wider">
                   INFO
                 </span>
-                <span className="font-bold text-sky-950 text-xs">
+                <span className="font-bold text-indigo-950 text-xs">
                   Your trip to Mexico City starts in 28 days
                 </span>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-sky-400 shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
             </div>
           </div>
         )}
