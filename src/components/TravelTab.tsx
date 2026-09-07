@@ -165,13 +165,13 @@ export const TravelTab: React.FC<TravelTabProps> = ({
   };
 
   return (
-    <div id="travel-view" className="space-y-5 pb-24 max-w-2xl mx-auto px-4 pt-3">
-      {/* Subtabs matching competitor screenshot */}
-      <div className="flex bg-stone-100/90 p-1.5 rounded-2xl overflow-x-auto gap-1 no-scrollbar border border-stone-200/60">
+    <div id="travel-view" className="space-y-5 pb-28 max-w-2xl mx-auto px-4 pt-3">
+      {/* Subtabs */}
+      <div className="flex bg-slate-100/90 p-1.5 rounded-2xl overflow-x-auto gap-1 no-scrollbar border border-slate-200/80 shadow-inner">
         <button
           onClick={() => setSubTab('trips')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'trips' ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' : 'text-stone-600 hover:text-stone-900'
+            subTab === 'trips' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Plane className="w-3.5 h-3.5" />
@@ -181,7 +181,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
         <button
           onClick={() => setSubTab('day')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'day' ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' : 'text-stone-600 hover:text-stone-900'
+            subTab === 'day' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Calendar className="w-3.5 h-3.5" />
@@ -191,7 +191,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
         <button
           onClick={() => setSubTab('visas')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'visas' ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' : 'text-stone-600 hover:text-stone-900'
+            subTab === 'visas' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
@@ -201,7 +201,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
         <button
           onClick={() => setSubTab('expenses')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'expenses' ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' : 'text-stone-600 hover:text-stone-900'
+            subTab === 'expenses' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <DollarSign className="w-3.5 h-3.5" />
@@ -211,7 +211,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
         <button
           onClick={() => setSubTab('converter')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'converter' ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' : 'text-stone-600 hover:text-stone-900'
+            subTab === 'converter' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <ArrowRightLeft className="w-3.5 h-3.5" />
@@ -221,7 +221,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
         <button
           onClick={() => setSubTab('tax')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'tax' ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20' : 'text-stone-600 hover:text-stone-900'
+            subTab === 'tax' ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/20' : 'text-slate-600 hover:text-slate-900'
           }`}
         >
           <Scale className="w-3.5 h-3.5" />
@@ -241,7 +241,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               </h4>
               <button
                 onClick={() => setIsAddTripOpen(true)}
-                className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+                className="text-xs font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" />
                 <span>Add Destination</span>
@@ -287,161 +287,167 @@ export const TravelTab: React.FC<TravelTabProps> = ({
       {subTab === 'visas' && (
         <div className="space-y-4">
           {/* Sub-segment toggle: Visas | My Documents */}
-          <div className="flex bg-stone-100 p-1 rounded-2xl border border-stone-200/60">
+          <div className="flex bg-slate-100 p-1 rounded-2xl border border-slate-200/80 shadow-inner">
             <button
               onClick={() => setVisaSegment('visas')}
               className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all ${
                 visaSegment === 'visas'
-                  ? 'bg-white text-stone-900 shadow-sm'
-                  : 'text-stone-500 hover:text-stone-800'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
             >
-              Visas
+              Visas & Entry Permits
             </button>
             <button
               onClick={() => setVisaSegment('documents')}
               className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all ${
                 visaSegment === 'documents'
-                  ? 'bg-white text-stone-900 shadow-sm'
-                  : 'text-stone-500 hover:text-stone-800'
+                  ? 'bg-white text-slate-900 shadow-sm'
+                  : 'text-slate-500 hover:text-slate-800'
               }`}
             >
-              My Documents
+              Vault Documents
             </button>
           </div>
 
-          <p className="text-xs text-stone-500 font-medium">
-            Track your active visas and required documents.
+          <p className="text-xs text-slate-500 font-medium">
+            Monitor real-time visa validity, Schengen 90/180 countdowns, and travel compliance.
           </p>
 
           {/* 3 Status Cards Grid matching Screenshot 2 */}
-          <div className="grid grid-cols-3 gap-2 text-center">
-            <div className="bg-white rounded-2xl p-3 border border-stone-200/80 shadow-sm">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-orange-700 block">Active</span>
-              <span className="text-2xl font-black text-stone-900">2</span>
+          <div className="grid grid-cols-3 gap-2.5 text-center">
+            <div className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-indigo-600 block">Active</span>
+              <span className="text-2xl font-black text-slate-900 font-display">2</span>
             </div>
-            <div className="bg-white rounded-2xl p-3 border border-stone-200/80 shadow-sm">
+            <div className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm">
               <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-600 block">Expiring</span>
-              <span className="text-2xl font-black text-stone-900">1</span>
+              <span className="text-2xl font-black text-slate-900 font-display">1</span>
             </div>
-            <div className="bg-white rounded-2xl p-3 border border-stone-200/80 shadow-sm">
-              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 block">Overstay</span>
-              <span className="text-2xl font-black text-stone-900">0</span>
+            <div className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 block">Overstay Risk</span>
+              <span className="text-2xl font-black text-slate-900 font-display">0</span>
             </div>
           </div>
 
-          {/* Urgent banner (matching Screenshot 2: "Indonesia: 2 days left") */}
-          <div className="p-3 bg-rose-50 border border-rose-200/90 rounded-2xl flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
+          {/* Urgent banner */}
+          <div className="p-3.5 bg-rose-50 border border-rose-200/90 rounded-2xl flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2.5">
               <span className="text-base">⚠️</span>
-              <span className="font-extrabold text-rose-950">Indonesia: 2 days left</span>
+              <div>
+                <span className="font-extrabold text-rose-950 block">Indonesia: 2 days left</span>
+                <span className="text-[11px] text-rose-700">Expires soon on 2026-04-06</span>
+              </div>
             </div>
-            <span className="text-[10px] font-extrabold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-extrabold text-rose-700 bg-rose-100/90 px-2.5 py-1 rounded-full border border-rose-200">
               Extend / Exit
             </span>
           </div>
 
-          {/* Pending docs card (matching Screenshot 2: "6 PENDING across 3 visa(s)") */}
-          <div className="p-4 bg-orange-50/80 border border-orange-200/90 rounded-3xl flex items-center justify-between">
+          {/* Pending docs card */}
+          <div className="p-4 bg-indigo-50/80 border border-indigo-200/90 rounded-3xl flex items-center justify-between shadow-sm">
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">
                 <span className="text-sm">📋</span>
-                <h5 className="font-black text-stone-900 text-xs uppercase tracking-wider">
+                <h5 className="font-black text-indigo-950 text-xs uppercase tracking-wider font-display">
                   6 PENDING across 3 visa(s)
                 </h5>
               </div>
-              <p className="text-[11px] text-orange-700">
+              <p className="text-[11px] text-indigo-700">
                 Proof of onward travel, vaccination cert, bank statement
               </p>
             </div>
-            <ChevronRight className="w-4 h-4 text-orange-700" />
+            <ChevronRight className="w-4 h-4 text-indigo-700" />
           </div>
 
-          {/* Schengen 90/180 Calculator Box (matching Screenshot 2) */}
-          <div className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm space-y-3">
+          {/* Schengen 90/180 Calculator Box */}
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-sm">🇪🇺</span>
-                <h4 className="text-sm font-black text-stone-900">Schengen 90/180 Calculator</h4>
+                <h4 className="text-sm font-black text-slate-900 font-display">Schengen 90/180 Calculator</h4>
               </div>
-              <span className="px-2.5 py-0.5 bg-orange-600 text-white font-black text-xs rounded-full">
+              <span className="px-2.5 py-0.5 bg-indigo-600 text-white font-black text-xs rounded-full">
                 90/180
               </span>
             </div>
 
             <div className="flex items-baseline justify-between text-xs">
-              <span className="text-base font-black text-emerald-600">80 D left</span>
-              <span className="text-stone-500 font-bold">10/90 used</span>
+              <span className="text-base font-black text-emerald-600 font-display">{daysRemaining} Days left</span>
+              <span className="text-slate-500 font-bold">{totalSchengenDays}/90 used</span>
             </div>
 
-            <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
-              <div className="w-[11%] h-full bg-emerald-500 rounded-full" />
+            <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-emerald-500 rounded-full transition-all duration-500" 
+                style={{ width: `${Math.min(100, (totalSchengenDays / 90) * 100)}%` }}
+              />
             </div>
 
-            <div className="pt-1 flex items-center justify-between text-xs text-stone-400">
-              <span>Next reset in 48 days</span>
+            <div className="pt-1 flex items-center justify-between text-xs text-slate-400">
+              <span>Next rolling reset in 48 days</span>
               <button
                 onClick={() => setIsAddSchengenOpen(true)}
-                className="text-orange-600 hover:text-orange-700 font-extrabold"
+                className="text-indigo-600 hover:text-indigo-700 font-extrabold flex items-center gap-1"
               >
                 + Log Entry Date
               </button>
             </div>
           </div>
 
-          {/* List of Active Visas (matching Screenshot 2: Indonesia & Thailand) */}
+          {/* List of Active Visas */}
           <div className="space-y-3 pt-1">
-            <h4 className="text-xs font-extrabold uppercase text-stone-400 tracking-wider">
+            <h4 className="text-xs font-extrabold uppercase text-slate-400 tracking-wider">
               Tracked Visas
             </h4>
 
             {/* Indonesia */}
-            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-2">
+            <div className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-2">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2.5">
                   <span className="text-2xl">🇮🇩</span>
                   <div>
-                    <h5 className="font-black text-stone-900 text-sm">Indonesia</h5>
-                    <p className="text-xs text-stone-500 font-semibold">Visa on Arrival (B213)</p>
+                    <h5 className="font-black text-slate-900 text-sm font-display">Indonesia</h5>
+                    <p className="text-xs text-slate-500 font-semibold">Visa on Arrival (B213)</p>
                   </div>
                 </div>
                 <span className="px-2 py-0.5 bg-rose-50 text-rose-700 font-black text-[11px] rounded-md border border-rose-200">
                   2d left
                 </span>
               </div>
-              <p className="text-xs text-stone-500">
-                Entry: 2026-04-06 · <strong>28/30 used</strong>
+              <p className="text-xs text-slate-500">
+                Entry: 2026-04-06 · <strong>28/30 days used</strong>
               </p>
-              <div className="p-2.5 bg-stone-50 rounded-xl text-xs text-stone-600 font-medium">
+              <div className="p-2.5 bg-slate-50 rounded-xl text-xs text-slate-600 font-medium">
                 2d left — consider extension or exit to avoid overstay penalty.
               </div>
             </div>
 
             {/* Thailand */}
-            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-2">
+            <div className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-2">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2.5">
                   <span className="text-2xl">🇹🇭</span>
                   <div>
-                    <h5 className="font-black text-stone-900 text-sm">Thailand</h5>
-                    <p className="text-xs text-stone-500 font-semibold">Visa Exemption (Tourist - 30 days)</p>
+                    <h5 className="font-black text-slate-900 text-sm font-display">Thailand</h5>
+                    <p className="text-xs text-slate-500 font-semibold">Visa Exemption (Tourist - 30 days)</p>
                   </div>
                 </div>
                 <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-black text-[11px] rounded-md border border-emerald-200">
                   Ready
                 </span>
               </div>
-              <p className="text-xs text-stone-500">
+              <p className="text-xs text-slate-500">
                 Entry scheduled: 2026-06-18 · Valid until 2026-07-18
               </p>
             </div>
           </div>
 
-          {/* Floating Purple Add Button */}
+          {/* Floating Action Button */}
           <div className="flex justify-end pt-2">
             <button
               onClick={() => setIsAddTripOpen(true)}
-              className="w-12 h-12 rounded-full bg-orange-600 hover:bg-orange-700 text-white shadow-xl shadow-orange-600/30 flex items-center justify-center transition-all transform active:scale-95"
+              className="w-12 h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-600/30 flex items-center justify-center transition-all transform active:scale-95"
               title="Add Visa or Document"
             >
               <Plus className="w-6 h-6" />
@@ -497,7 +503,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
             <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-1">
               <span className="text-[10px] font-extrabold text-stone-400 uppercase tracking-wider block">COUNTRY</span>
               <h4 className="text-xl font-black text-stone-900">3</h4>
-              <span className="text-xs text-orange-600 font-bold">Top: Accommodation</span>
+              <span className="text-xs text-purple-600 font-bold">Top: Accommodation</span>
             </div>
           </div>
 
@@ -507,7 +513,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               <h4 className="text-sm font-black text-stone-900">Recent Expenses</h4>
               <button
                 onClick={() => setIsAddExpenseOpen(true)}
-                className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+                className="text-xs font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1"
               >
                 <Plus className="w-3.5 h-3.5" /> Add expense
               </button>
@@ -545,7 +551,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
           <div className="flex justify-end pt-2">
             <button
               onClick={() => setIsAddExpenseOpen(true)}
-              className="w-12 h-12 rounded-full bg-orange-600 hover:bg-orange-700 text-white shadow-xl shadow-orange-600/30 flex items-center justify-center transition-all transform active:scale-95"
+              className="w-12 h-12 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-xl shadow-purple-600/30 flex items-center justify-center transition-all transform active:scale-95"
               title="Add Expense"
             >
               <Plus className="w-6 h-6" />
@@ -558,7 +564,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
       {subTab === 'converter' && (
         <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-5">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
               <ArrowRightLeft className="w-4 h-4" />
             </div>
             <div>
@@ -574,7 +580,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                 type="number"
                 value={calcAmount}
                 onChange={(e) => setCalcAmount(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-2xl border border-stone-200 text-lg font-black focus:outline-none focus:border-orange-500"
+                className="w-full px-4 py-3 rounded-2xl border border-stone-200 text-lg font-black focus:outline-none focus:border-purple-500"
               />
             </div>
 
@@ -584,7 +590,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                 <select
                   value={calcFrom}
                   onChange={(e) => setCalcFrom(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
                 >
                   <option value="EUR">EUR (€)</option>
                   <option value="USD">USD ($)</option>
@@ -600,7 +606,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                 <select
                   value={calcTo}
                   onChange={(e) => setCalcTo(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
                 >
                   <option value="USD">USD ($)</option>
                   <option value="EUR">EUR (€)</option>
@@ -612,9 +618,9 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               </div>
             </div>
 
-            <div className="p-4 bg-orange-50 rounded-2xl border border-orange-200 text-center">
-              <span className="text-xs text-orange-700 font-bold block">Converted Value</span>
-              <span className="text-2xl font-black text-stone-900 mt-1 block">
+            <div className="p-4 bg-purple-50 rounded-2xl border border-purple-200 text-center">
+              <span className="text-xs text-purple-700 font-bold block">Converted Value</span>
+              <span className="text-2xl font-black text-purple-900 mt-1 block">
                 {convertedValue} {calcTo}
               </span>
             </div>
@@ -627,7 +633,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
         <div className="space-y-4">
           <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-4">
             <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
+              <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
                 <Scale className="w-4 h-4" />
               </div>
               <div>
@@ -649,7 +655,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   </div>
                   <div className="w-full h-2 bg-stone-200 rounded-full overflow-hidden">
                     <div 
-                      className="h-full bg-orange-600 rounded-full" 
+                      className="h-full bg-purple-600 rounded-full" 
                       style={{ width: `${(tp.daysSpent / (tp.maxSafeDays || 183)) * 100}%` }}
                     />
                   </div>
@@ -684,7 +690,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   value={newCity}
                   onChange={(e) => setNewCity(e.target.value)}
                   placeholder="e.g. Mexico City"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
               <div>
@@ -695,7 +701,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   value={newCountry}
                   onChange={(e) => setNewCountry(e.target.value)}
                   placeholder="e.g. Mexico"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
             </div>
@@ -707,7 +713,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   type="date"
                   value={newArrival}
                   onChange={(e) => setNewArrival(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
               <div>
@@ -716,7 +722,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   type="date"
                   value={newDeparture}
                   onChange={(e) => setNewDeparture(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
             </div>
@@ -731,7 +737,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-600/30"
+                className="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
               >
                 Save Trip
               </button>
@@ -763,7 +769,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                 value={expDesc}
                 onChange={(e) => setExpDesc(e.target.value)}
                 placeholder="e.g. Flight to BKK, Coworking pass, Dinner"
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
               />
             </div>
 
@@ -775,7 +781,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   required
                   value={expAmount}
                   onChange={(e) => setExpAmount(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
               <div>
@@ -783,7 +789,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                 <select
                   value={expCurrency}
                   onChange={(e) => setExpCurrency(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
                 >
                   <option value="EUR">EUR (€)</option>
                   <option value="USD">USD ($)</option>
@@ -799,7 +805,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               <select
                 value={expCategory}
                 onChange={(e) => setExpCategory(e.target.value as any)}
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
               >
                 <option value="Accommodation">Accommodation</option>
                 <option value="Transport">Transport / Flights</option>
@@ -820,7 +826,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-600/30"
+                className="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
               >
                 Save Expense
               </button>
@@ -852,7 +858,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                 value={stayCountry}
                 onChange={(e) => setStayCountry(e.target.value)}
                 placeholder="e.g. Portugal, Spain, France"
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
               />
             </div>
 
@@ -863,7 +869,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   type="date"
                   value={stayEntry}
                   onChange={(e) => setStayEntry(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
               <div>
@@ -872,7 +878,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   type="date"
                   value={stayExit}
                   onChange={(e) => setStayExit(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
             </div>
@@ -887,7 +893,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-600/30"
+                className="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
               >
                 Save Stay
               </button>

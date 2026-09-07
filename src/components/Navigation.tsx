@@ -8,17 +8,17 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ activeTab, onSelectTab }) => {
   const tabs = [
-    { id: 'home', label: 'Home', icon: Home },
+    { id: 'home', label: 'Dashboard', icon: Home },
     { id: 'travel', label: 'Travel', icon: Plane },
     { id: 'explore', label: 'Explore', icon: Compass },
-    { id: 'social', label: 'Social', icon: MessageSquare },
-    { id: 'me', label: 'Me', icon: User },
+    { id: 'social', label: 'Community', icon: MessageSquare },
+    { id: 'me', label: 'Passport', icon: User },
   ] as const;
 
   return (
     <nav
       id="bottom-navigation-bar"
-      className="sticky bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-stone-200/80 shadow-lg py-1.5 px-4"
+      className="sticky bottom-0 z-40 bg-white/90 backdrop-blur-xl border-t border-slate-200/90 shadow-[0_-4px_20px_rgba(15,23,42,0.06)] py-2 px-3"
     >
       <div className="max-w-md mx-auto flex items-center justify-between">
         {tabs.map((tab) => {
@@ -30,19 +30,21 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onSelectTab }
               key={tab.id}
               id={`nav-tab-${tab.id}`}
               onClick={() => onSelectTab(tab.id)}
-              className={`flex flex-col items-center justify-center flex-1 py-1 transition-all ${
+              className={`flex flex-col items-center justify-center flex-1 py-1 px-2 rounded-2xl transition-all duration-200 ${
                 isActive
-                  ? 'text-orange-600 font-bold scale-105'
-                  : 'text-stone-400 hover:text-stone-600 font-medium'
+                  ? 'text-indigo-600 font-extrabold'
+                  : 'text-slate-400 hover:text-slate-700 font-medium'
               }`}
             >
-              <div className="relative">
-                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[2]'}`} />
+              <div className={`relative p-1 rounded-xl transition-all ${isActive ? 'bg-indigo-50 text-indigo-600' : ''}`}>
+                <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
                 {isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-orange-600 rounded-full" />
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-indigo-600 rounded-full border-2 border-white" />
                 )}
               </div>
-              <span className="text-[10px] mt-1 tracking-tight font-extrabold">{tab.label}</span>
+              <span className={`text-[10px] mt-0.5 tracking-tight ${isActive ? 'font-extrabold text-indigo-600' : 'font-semibold text-slate-500'}`}>
+                {tab.label}
+              </span>
             </button>
           );
         })}

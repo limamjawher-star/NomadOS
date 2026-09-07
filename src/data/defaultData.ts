@@ -77,6 +77,7 @@ export const INITIAL_NOMAD_DATA: NomadState = {
       housingCostUSD: 950,
       visaType: 'Visa on Arrival (B213)',
       timezone: 'Asia/Makassar',
+      coverUrl: 'https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1000&q=80',
       notes: 'Canggu villa workspace with backup fiber',
     },
     {
@@ -90,6 +91,7 @@ export const INITIAL_NOMAD_DATA: NomadState = {
       housingCostUSD: 1200,
       visaType: '180 Day FMM Exemption',
       timezone: 'America/Mexico_City',
+      coverUrl: 'https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?auto=format&fit=crop&w=1000&q=80',
       notes: 'Roma Norte / Condesa apartment with coworking',
     },
     {
@@ -103,6 +105,7 @@ export const INITIAL_NOMAD_DATA: NomadState = {
       housingCostUSD: 720,
       visaType: 'Visa Exemption (Tourist - 30 days)',
       timezone: 'Asia/Bangkok',
+      coverUrl: 'https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1000&q=80',
       notes: 'Coworking Sukhumvit',
     },
   ],
@@ -236,6 +239,7 @@ export const INITIAL_NOMAD_DATA: NomadState = {
       hostName: 'Eva Fernandez',
       hostAvatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80',
       category: 'Coffee',
+      coverUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
     },
     {
       id: 'ev-2',
@@ -250,6 +254,7 @@ export const INITIAL_NOMAD_DATA: NomadState = {
       hostName: 'Alex Morgan',
       hostAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
       category: 'Coworking',
+      coverUrl: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80',
     },
     {
       id: 'ev-3',
@@ -264,6 +269,7 @@ export const INITIAL_NOMAD_DATA: NomadState = {
       hostName: 'Sofia Rossi',
       hostAvatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=400&q=80',
       category: 'Drinks',
+      coverUrl: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80',
     },
   ],
   nearbyNomads: [
@@ -522,6 +528,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     funScore: 85,
     coworkingSpacesCount: 42,
     highlights: ['Low cost of living', 'Vibrant cafe culture', 'Active nomad community'],
+    imageUrl: 'https://images.unsplash.com/photo-1513415564515-763d91423bdd?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-2',
@@ -538,6 +545,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     funScore: 87,
     coworkingSpacesCount: 65,
     highlights: ['Silicon Valley of India', 'Thriving tech meetups', 'Great craft beer'],
+    imageUrl: 'https://images.unsplash.com/photo-1596176530529-78163a4f7af2?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-3',
@@ -555,6 +563,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     coworkingSpacesCount: 8,
     highlights: ['Mountain views', 'Inexpensive living', 'Tranquil lakeside cafes'],
     bestTag: 'budget',
+    imageUrl: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-4',
@@ -572,6 +581,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     coworkingSpacesCount: 110,
     highlights: ['Blazing fast 5G', 'World-class transit', '24/7 cafe culture'],
     bestTag: 'wifi',
+    imageUrl: 'https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-5',
@@ -589,6 +599,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     coworkingSpacesCount: 220,
     highlights: ['Global capital of business', 'Endless networking', 'Top coworking hubs'],
     bestTag: 'coworking',
+    imageUrl: 'https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-6',
@@ -606,6 +617,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     coworkingSpacesCount: 28,
     highlights: ['Unmatched nomad network', 'Surf & wellness scene', 'Top tier colivings'],
     bestTag: 'community',
+    imageUrl: 'https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-7',
@@ -622,6 +634,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     funScore: 91,
     coworkingSpacesCount: 54,
     highlights: ['Sunniest EU capital', 'Digital nomad visa', 'Vibrant startup scene'],
+    imageUrl: 'https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-8',
@@ -639,6 +652,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     coworkingSpacesCount: 12,
     highlights: ['10% flat income tax', 'Affordable mountain coliving', 'Winter ski nomad fest'],
     bestTag: 'budget',
+    imageUrl: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-9',
@@ -655,6 +669,7 @@ export const EXPLORE_CITIES: NomadCity[] = [
     funScore: 94,
     coworkingSpacesCount: 35,
     highlights: ['Perfect climate year-round', 'Thriving expat hubs (El Poblado)', 'Low living costs'],
+    imageUrl: 'https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'city-10',
@@ -671,5 +686,6 @@ export const EXPLORE_CITIES: NomadCity[] = [
     funScore: 98,
     coworkingSpacesCount: 48,
     highlights: ['Incredible culinary culture', 'European architecture', 'High purchasing power'],
+    imageUrl: 'https://images.unsplash.com/photo-1589909202802-8f4aadce1849?auto=format&fit=crop&w=800&q=80',
   },
 ];

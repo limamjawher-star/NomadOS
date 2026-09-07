@@ -30,6 +30,7 @@ export interface TripDestination {
   housingCostUSD: number;
   visaType: string;
   timezone: string;
+  coverUrl?: string;
   notes?: string;
 }
 
@@ -96,6 +97,7 @@ export interface NomadCity {
   coworkingSpacesCount: number;
   highlights: string[];
   bestTag?: 'budget' | 'wifi' | 'coworking' | 'community';
+  imageUrl?: string;
 }
 
 export interface NomadEvent {
@@ -111,6 +113,7 @@ export interface NomadEvent {
   hostName: string;
   hostAvatar: string;
   category: 'Coworking' | 'Coffee' | 'Drinks' | 'Outdoor' | 'Workshop';
+  coverUrl?: string;
 }
 
 export interface DayItineraryActivity {

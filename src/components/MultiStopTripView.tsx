@@ -151,43 +151,36 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
 
   return (
     <div id="multi-stop-trip-view" className="space-y-5">
-      {/* Top Header Navigation (matching Screenshot 3) */}
+      {/* Top Header Navigation */}
       <div className="flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-1 text-xs font-extrabold text-stone-600 hover:text-orange-600 transition-colors uppercase tracking-wider"
+          className="flex items-center gap-1 text-xs font-extrabold text-slate-600 hover:text-indigo-600 transition-colors uppercase tracking-wider"
         >
           <ChevronLeft className="w-4 h-4" />
-          <span>TRIP</span>
+          <span>TRIP OVERVIEW</span>
         </button>
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 bg-orange-100/80 text-orange-700 text-xs font-extrabold rounded-full">
+          <span className="px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-extrabold rounded-full font-display">
             {trip.status}
           </span>
           <button
             onClick={() => setIsShareModalOpen(true)}
-            className="px-3 py-1 bg-white hover:bg-stone-50 border border-stone-200 text-stone-700 text-xs font-bold rounded-full flex items-center gap-1.5 transition-colors shadow-sm"
+            className="px-3 py-1 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 text-xs font-bold rounded-full flex items-center gap-1.5 transition-colors shadow-sm"
           >
-            <Share2 className="w-3.5 h-3.5 text-stone-500" />
+            <Share2 className="w-3.5 h-3.5 text-slate-500" />
             <span>Share</span>
-          </button>
-          <button
-            onClick={() => {}}
-            className="w-7 h-7 rounded-full bg-white hover:bg-rose-50 hover:text-rose-600 border border-stone-200 text-stone-400 flex items-center justify-center transition-colors shadow-sm"
-            title="Delete trip"
-          >
-            <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
 
-      {/* Main Title Banner (matching Screenshot 3) */}
+      {/* Main Title Banner */}
       <div className="space-y-2">
-        <h2 className="text-xl sm:text-2xl font-black text-stone-900 tracking-tight">
+        <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-display">
           {trip.title}
         </h2>
-        <p className="text-xs font-semibold text-stone-500">
+        <p className="text-xs font-semibold text-slate-500">
           {trip.dateRange}
         </p>
 
@@ -196,7 +189,7 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
           {trip.countries.map((c) => (
             <span
               key={c.code}
-              className="px-3 py-1 bg-white border border-stone-200/90 rounded-full text-xs font-bold text-stone-800 shadow-sm flex items-center gap-1.5"
+              className="px-3 py-1 bg-white border border-slate-200/90 rounded-full text-xs font-bold text-slate-800 shadow-sm flex items-center gap-1.5"
             >
               <span>{c.flag}</span>
               <span>{c.name}</span>
@@ -205,56 +198,56 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
         </div>
       </div>
 
-      {/* Action Strip (Icons matching Screenshot 3) */}
-      <div className="flex items-center gap-2 py-1 border-y border-stone-200/80">
+      {/* Action Strip */}
+      <div className="flex items-center gap-2 py-1 border-y border-slate-200/80">
         <button 
           title="Trip Calendar"
-          className="p-2 rounded-xl text-stone-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+          className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
         >
           <Calendar className="w-4 h-4" />
         </button>
         <button 
           title="Privacy & Lock"
-          className="p-2 rounded-xl text-stone-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+          className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
         >
           <Lock className="w-4 h-4" />
         </button>
         <button 
           title="Collaborators / Partners"
           onClick={() => setIsShareModalOpen(true)}
-          className="p-2 rounded-xl text-stone-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+          className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
         >
           <Users className="w-4 h-4" />
         </button>
         <button 
           title="Stops & Luggage"
-          className="p-2 rounded-xl text-stone-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
+          className="p-2 rounded-xl text-slate-500 hover:text-indigo-600 hover:bg-indigo-50 transition-colors"
         >
           <Briefcase className="w-4 h-4" />
         </button>
       </div>
 
-      {/* 4 Stats Cards Grid (matching Screenshot 3) */}
+      {/* 4 Stats Cards Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-        <div className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-sm">
-          <span className="text-stone-400 text-xs font-bold block mb-1">🌍 Countries</span>
-          <span className="text-xl font-black text-stone-900">{trip.countriesCount}</span>
+        <div className="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
+          <span className="text-slate-400 text-xs font-bold block mb-1">🌍 Countries</span>
+          <span className="text-xl font-black text-slate-900 font-display">{trip.countriesCount}</span>
         </div>
-        <div className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-sm">
-          <span className="text-stone-400 text-xs font-bold block mb-1">📅 Days</span>
-          <span className="text-xl font-black text-stone-900">{trip.daysCount}</span>
+        <div className="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
+          <span className="text-slate-400 text-xs font-bold block mb-1">📅 Days</span>
+          <span className="text-xl font-black text-slate-900 font-display">{trip.daysCount}</span>
         </div>
-        <div className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-sm">
-          <span className="text-stone-400 text-xs font-bold block mb-1">💰 Budget</span>
-          <span className="text-xl font-black text-stone-900">€{trip.totalBudgetEUR.toLocaleString()}</span>
+        <div className="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
+          <span className="text-slate-400 text-xs font-bold block mb-1">💰 Budget</span>
+          <span className="text-xl font-black text-slate-900 font-display">€{trip.totalBudgetEUR.toLocaleString()}</span>
         </div>
-        <div className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-sm">
-          <span className="text-stone-400 text-xs font-bold block mb-1">✈️ Stops</span>
-          <span className="text-xl font-black text-stone-900">{trip.stopsCount}</span>
+        <div className="bg-white rounded-2xl p-3.5 border border-slate-200/90 shadow-sm">
+          <span className="text-slate-400 text-xs font-bold block mb-1">✈️ Stops</span>
+          <span className="text-xl font-black text-slate-900 font-display">{trip.stopsCount}</span>
         </div>
       </div>
 
-      {/* List of Stops (Bangkok, Hanoi, Bali from Screenshot 3) */}
+      {/* List of Stops */}
       <div className="space-y-3">
         {trip.stops.map((stop, idx) => {
           const budgetPercent = Math.min(100, Math.round((stop.spentEUR / stop.budgetEUR) * 100));
@@ -263,17 +256,17 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
           return (
             <div
               key={stop.id}
-              className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm space-y-3 hover:border-orange-200 transition-all"
+              className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-3 hover:border-indigo-300 hover:shadow-md transition-all"
             >
               {/* Stop Header */}
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-2.5">
                   <span className="text-2xl">{stop.flag}</span>
                   <div>
-                    <h4 className="font-black text-stone-900 text-base flex items-center gap-2">
+                    <h4 className="font-black text-slate-900 text-base flex items-center gap-2 font-display">
                       <span>{stop.city}, {stop.country}</span>
                     </h4>
-                    <span className="inline-block mt-0.5 px-2.5 py-0.5 bg-orange-50 text-orange-700 text-[11px] font-extrabold rounded-md border border-orange-200/70">
+                    <span className="inline-block mt-0.5 px-2.5 py-0.5 bg-indigo-50 text-indigo-700 text-[11px] font-extrabold rounded-md border border-indigo-200/70">
                       {stop.visaName}
                     </span>
                   </div>
@@ -282,14 +275,14 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
                 <div className="flex items-center gap-1">
                   <button 
                     title="Edit stop"
-                    className="w-7 h-7 rounded-lg text-stone-400 hover:text-stone-700 hover:bg-stone-100 flex items-center justify-center transition-colors"
+                    className="w-7 h-7 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition-colors"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
                   <button 
                     onClick={() => handleDeleteStopLocal(stop.id)}
                     title="Delete stop"
-                    className="w-7 h-7 rounded-lg text-stone-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors"
+                    className="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -297,31 +290,31 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
               </div>
 
               {/* Timing & Coworking detail */}
-              <div className="flex flex-wrap items-center justify-between text-xs text-stone-500 font-semibold pt-1">
+              <div className="flex flex-wrap items-center justify-between text-xs text-slate-500 font-semibold pt-1">
                 <span className="flex items-center gap-1.5">
-                  <Calendar className="w-3.5 h-3.5 text-orange-600" />
+                  <Calendar className="w-3.5 h-3.5 text-indigo-600" />
                   <span>{stop.durationDays}d · {stop.dates}</span>
                 </span>
-                <span className="text-stone-400 italic">
+                <span className="text-slate-400 italic">
                   {stop.coworking}
                 </span>
               </div>
 
-              {/* Budget progress bar (matching Screenshot 3 Bangkok stop) */}
-              <div className="pt-2 border-t border-stone-100 space-y-1.5">
+              {/* Budget progress bar */}
+              <div className="pt-2 border-t border-slate-100 space-y-1.5">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-extrabold text-stone-900">
+                  <span className="font-extrabold text-slate-900 font-display">
                     €{stop.budgetEUR}
                   </span>
-                  <span className="text-stone-500 font-medium">
-                    Spent: <strong className="text-stone-800">€{stop.spentEUR}</strong> · <strong className="text-emerald-600">€{leftEUR} left</strong>
+                  <span className="text-slate-500 font-medium">
+                    Spent: <strong className="text-slate-800">€{stop.spentEUR}</strong> · <strong className="text-emerald-600">€{leftEUR} left</strong>
                   </span>
                 </div>
                 
                 {/* Progress bar */}
-                <div className="w-full h-2 rounded-full bg-stone-100 overflow-hidden">
+                <div className="w-full h-2 rounded-full bg-slate-100 overflow-hidden">
                   <div 
-                    className="h-full bg-gradient-to-r from-orange-600 to-orange-500 rounded-full transition-all duration-500"
+                    className="h-full bg-gradient-to-r from-indigo-600 to-sky-500 rounded-full transition-all duration-500"
                     style={{ width: `${budgetPercent}%` }}
                   />
                 </div>
@@ -336,7 +329,7 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
         <button
           onClick={() => setIsAddStopModalOpen(true)}
           id="multi-stop-add-stop-btn"
-          className="w-12 h-12 rounded-full bg-orange-600 hover:bg-orange-700 text-white shadow-xl shadow-orange-600/30 flex items-center justify-center transition-all transform active:scale-95"
+          className="w-12 h-12 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-xl shadow-indigo-600/30 flex items-center justify-center transition-all transform active:scale-95"
           title="Add Stop"
         >
           <Plus className="w-6 h-6" />
@@ -346,13 +339,13 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
       {/* Add Stop Modal */}
       {isAddStopModalOpen && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <form onSubmit={handleCreateStop} className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
+          <form onSubmit={handleCreateStop} className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-200 space-y-4 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between">
-              <h3 className="font-extrabold text-stone-900 text-base">Add Trip Stop</h3>
+              <h3 className="font-extrabold text-slate-900 text-base font-display">Add Trip Destination</h3>
               <button
                 type="button"
                 onClick={() => setIsAddStopModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500"
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -360,68 +353,68 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">City</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">City</label>
                 <input
                   type="text"
                   required
                   value={newCity}
                   onChange={(e) => setNewCity(e.target.value)}
                   placeholder="e.g. Kuala Lumpur"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Country</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Country</label>
                 <input
                   type="text"
                   value={newCountry}
                   onChange={(e) => setNewCountry(e.target.value)}
                   placeholder="e.g. Malaysia"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500"
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Duration (Days)</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Duration (Days)</label>
                 <input
                   type="number"
                   value={newDuration}
                   onChange={(e) => setNewDuration(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Stop Budget (€)</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Stop Budget (€)</label>
                 <input
                   type="number"
                   value={newBudget}
                   onChange={(e) => setNewBudget(Number(e.target.value))}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Visa Requirement Auto-Check</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Visa Requirement Auto-Check</label>
               <input
                 type="text"
                 value={newVisa}
                 onChange={(e) => setNewVisa(e.target.value)}
                 placeholder="e.g. Tourist 90-day Waiver"
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Coworking Space</label>
+              <label className="block text-xs font-bold text-slate-700 mb-1">Coworking Space</label>
               <input
                 type="text"
                 value={newCoworking}
                 onChange={(e) => setNewCoworking(e.target.value)}
                 placeholder="e.g. Common Ground KL"
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold focus:outline-none focus:border-indigo-500"
               />
             </div>
 
@@ -429,13 +422,13 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsAddStopModalOpen(false)}
-                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs"
+                className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-600/30"
+                className="flex-1 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-indigo-600/30"
               >
                 Add Stop
               </button>
@@ -450,7 +443,7 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
           <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
                   <Users className="w-4 h-4" />
                 </div>
                 <h4 className="font-extrabold text-stone-900 text-sm">Collaborative Trip Planning</h4>
@@ -473,7 +466,7 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
               </span>
               <button
                 onClick={handleCopyShareLink}
-                className="px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shrink-0 transition-colors"
+                className="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shrink-0 transition-colors"
               >
                 {copiedLink ? 'Copied! ✓' : 'Copy'}
               </button>
@@ -485,7 +478,7 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
                 <img
                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80"
                   alt="You"
-                  className="w-8 h-8 rounded-full border-2 border-orange-500 object-cover"
+                  className="w-8 h-8 rounded-full border-2 border-purple-500 object-cover"
                   title="You (Owner)"
                 />
                 <img

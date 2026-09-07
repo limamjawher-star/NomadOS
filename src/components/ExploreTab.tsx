@@ -55,100 +55,108 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
   };
 
   return (
-    <div id="explore-view" className="space-y-6 pb-24 max-w-2xl mx-auto px-4 pt-4">
-      {/* Subtab Toggle matching competitor */}
-      <div className="flex bg-stone-100 p-1.5 rounded-2xl">
+    <div id="explore-view" className="space-y-5 pb-28 max-w-2xl mx-auto px-4 pt-4">
+      {/* Subtab Toggle */}
+      <div className="flex bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 shadow-inner">
         <button
           onClick={() => setActiveSubTab('cities')}
-          className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 py-2 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all ${
             activeSubTab === 'cities'
-              ? 'bg-white text-stone-900 shadow-sm'
-              : 'text-stone-500 hover:text-stone-900'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
           }`}
         >
-          <Building2 className={`w-4 h-4 ${activeSubTab === 'cities' ? 'text-orange-500' : 'text-stone-400'}`} />
-          <span>Cities</span>
+          <Building2 className={`w-4 h-4 ${activeSubTab === 'cities' ? 'text-indigo-600' : 'text-slate-400'}`} />
+          <span>Nomad Hubs & Cities</span>
         </button>
         <button
           onClick={() => setActiveSubTab('countries')}
-          className={`flex-1 py-2.5 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 py-2 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all ${
             activeSubTab === 'countries'
-              ? 'bg-white text-stone-900 shadow-sm'
-              : 'text-stone-500 hover:text-stone-900'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
           }`}
         >
-          <Globe className={`w-4 h-4 ${activeSubTab === 'countries' ? 'text-orange-500' : 'text-stone-400'}`} />
-          <span>Countries</span>
+          <Globe className={`w-4 h-4 ${activeSubTab === 'countries' ? 'text-indigo-600' : 'text-slate-400'}`} />
+          <span>Visa & Country Guides</span>
         </button>
       </div>
 
-      <div className="text-center space-y-1">
-        <h2 className="text-xl font-black text-stone-900">
-          {activeSubTab === 'cities' ? 'Top Nomad Cities' : 'Country Nomad Guides'}
+      <div className="space-y-1">
+        <h2 className="text-xl font-black text-slate-900 font-display">
+          {activeSubTab === 'cities' ? 'Top Digital Nomad Cities' : 'Country Nomad Visa Guides'}
         </h2>
-        <p className="text-xs text-stone-500">
-          Discover top cities and verified country nomad visa guides.
+        <p className="text-xs text-slate-500">
+          Curated global hubs with verified fiber speeds, living expenses, and legal visa rules.
         </p>
       </div>
 
-      {/* 4 Highlight Cards in 2x2 grid matching screenshot */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* 4 Highlight Cards in 2x2 grid */}
+      <div className="grid grid-cols-2 gap-2.5">
         <div 
           onClick={() => setSearchQuery('Pokhara')}
-          className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer"
+          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
         >
-          <span className="text-xs">💰</span>
-          <p className="text-[11px] text-stone-400 font-bold uppercase tracking-wider mt-1">Best for budget</p>
-          <h4 className="text-sm font-black text-stone-900 mt-0.5">Pokhara 🇳🇵</h4>
-          <span className="text-xs font-bold text-orange-600">$650/mo</span>
+          <div className="flex items-center justify-between">
+            <span className="text-base">💰</span>
+            <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">$650/mo</span>
+          </div>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2">Best for budget</p>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">Pokhara 🇳🇵</h4>
         </div>
 
         <div 
           onClick={() => setSearchQuery('Seoul')}
-          className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer"
+          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
         >
-          <span className="text-xs">⚡</span>
-          <p className="text-[11px] text-stone-400 font-bold uppercase tracking-wider mt-1">Best for fast WiFi</p>
-          <h4 className="text-sm font-black text-stone-900 mt-0.5">Seoul 🇰🇷</h4>
-          <span className="text-xs font-bold text-orange-600">180 Mbps</span>
+          <div className="flex items-center justify-between">
+            <span className="text-base">⚡</span>
+            <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-1.5 py-0.5 rounded-md">180 Mbps</span>
+          </div>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2">Fastest 5G & WiFi</p>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">Seoul 🇰🇷</h4>
         </div>
 
         <div 
           onClick={() => setSearchQuery('New York')}
-          className="bg-white rounded-2xl p-3.5 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer"
+          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
         >
-          <span className="text-xs">📍</span>
-          <p className="text-[11px] text-stone-400 font-bold uppercase tracking-wider mt-1">Best coworking</p>
-          <h4 className="text-sm font-black text-stone-900 mt-0.5">New York 🇺🇸</h4>
-          <span className="text-xs font-bold text-orange-600">220+ Spaces</span>
+          <div className="flex items-center justify-between">
+            <span className="text-base">📍</span>
+            <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-md">220+ Spaces</span>
+          </div>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2">Top Coworking Hub</p>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">New York 🇺🇸</h4>
         </div>
 
         <div 
           onClick={() => setSearchQuery('Canggu')}
-          className="bg-white rounded-2xl p-3.5 border border-orange-200 bg-orange-50/20 shadow-sm hover:border-orange-400 transition-all cursor-pointer"
+          className="bg-white rounded-2xl p-3 border border-indigo-100 bg-gradient-to-br from-indigo-50/40 to-sky-50/20 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
         >
-          <span className="text-xs">🧡</span>
-          <p className="text-[11px] text-orange-500 font-bold uppercase tracking-wider mt-1">Best community</p>
-          <h4 className="text-sm font-black text-stone-900 mt-0.5">Canggu 🇮🇩</h4>
-          <span className="text-xs font-bold text-orange-600">Top Hub</span>
+          <div className="flex items-center justify-between">
+            <span className="text-base">🏄‍♂️</span>
+            <span className="text-[10px] font-bold text-indigo-700 bg-indigo-100/80 px-1.5 py-0.5 rounded-md">Top Hub</span>
+          </div>
+          <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider mt-2">Best Community</p>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">Canggu, Bali 🇮🇩</h4>
         </div>
       </div>
 
-      {/* Filter & Search Bar matching screenshot */}
+      {/* Filter & Search Bar */}
       <div className="space-y-3">
         <div className="relative">
-          <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-3.5" />
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search cities, countries, tags..."
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-2xl text-xs font-medium text-stone-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
+            placeholder="Search cities, countries, visa types..."
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/90 rounded-2xl text-xs font-medium text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3.5 top-3 text-xs text-stone-400 hover:text-stone-700"
+              className="absolute right-3.5 top-3 text-xs text-slate-400 hover:text-slate-700 font-bold"
             >
               Clear
             </button>
@@ -164,8 +172,8 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
                 onClick={() => setSelectedRegion(region)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
                   selectedRegion === region
-                    ? 'bg-stone-900 text-white shadow-sm'
-                    : 'bg-white border border-stone-200 text-stone-600 hover:bg-stone-50'
+                    ? 'bg-slate-900 text-white shadow-sm'
+                    : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50'
                 }`}
               >
                 {region}
@@ -175,115 +183,127 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
 
           <button
             onClick={onOpenPricing}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-black bg-orange-100 text-orange-700 hover:bg-orange-200 transition-colors shrink-0"
+            className="flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-black bg-amber-50 border border-amber-200 text-amber-800 hover:bg-amber-100 transition-all shrink-0"
           >
             <Lock className="w-3 h-3" /> Filters PRO
           </button>
         </div>
 
-        <div className="flex items-center justify-between text-xs text-stone-400 font-semibold px-1">
-          <span>Showing {filteredCities.length} of {EXPLORE_CITIES.length} verified hubs</span>
+        <div className="flex items-center justify-between text-xs text-slate-400 font-semibold px-1">
+          <span>Showing {filteredCities.length} of {EXPLORE_CITIES.length} verified destinations</span>
           <span>Ranked by NomadOS Score</span>
         </div>
       </div>
 
-      {/* Cities List Cards */}
+      {/* Photographic Cities List Cards */}
       <div className="space-y-4">
         {filteredCities.map((city, index) => (
           <div
             key={city.id}
-            className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all space-y-4"
+            className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all group"
           >
-            {/* Header row */}
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <span className="w-7 h-7 rounded-xl bg-stone-100 text-stone-600 font-black text-xs flex items-center justify-center">
+            {/* Visual Cover Photo Banner */}
+            <div className="relative h-40 sm:h-44 w-full bg-slate-900 overflow-hidden">
+              <img
+                src={city.imageUrl || "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80"}
+                alt={city.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-black/20" />
+
+              {/* Floating Top Badges */}
+              <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                <span className="px-2.5 py-1 rounded-xl bg-black/50 backdrop-blur-md border border-white/20 text-white text-[11px] font-black">
                   #{index + 1}
                 </span>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-base font-black text-stone-900">{city.name}</h3>
-                    <span className="text-xs text-stone-400 font-medium">
-                      {city.country} · {city.region}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2 mt-1">
-                    <div className="flex items-center gap-1 bg-orange-50 border border-orange-200/60 px-2 py-0.5 rounded-md">
-                      <Sparkles className="w-3 h-3 text-orange-500" />
-                      <span className="text-[11px] font-black text-orange-700">
-                        {city.nomadScore}/100 Score
-                      </span>
-                    </div>
-                    {city.bestTag && (
-                      <span className="text-[10px] font-bold uppercase tracking-wider bg-stone-100 text-stone-700 px-2 py-0.5 rounded-md">
-                        Best for {city.bestTag}
-                      </span>
-                    )}
-                  </div>
+
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-indigo-600/90 backdrop-blur-md text-white text-xs font-black shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>{city.nomadScore}/100 Score</span>
                 </div>
               </div>
 
-              <div className="text-right">
-                <span className="text-sm font-black text-stone-900">${city.costPerMonthUSD}</span>
-                <span className="text-[11px] text-stone-400 block">/month</span>
+              {/* Overlaid Title on Photo */}
+              <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
+                <div>
+                  <h3 className="text-xl font-black text-white tracking-tight font-display drop-shadow-sm">
+                    {city.name}
+                  </h3>
+                  <p className="text-xs text-slate-200 font-medium mt-0.5">
+                    {city.country} · {city.region}
+                  </p>
+                </div>
+                <div className="text-right bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/10">
+                  <span className="text-sm font-black text-white">${city.costPerMonthUSD}</span>
+                  <span className="text-[10px] text-slate-300 block leading-none">/month</span>
+                </div>
               </div>
             </div>
 
-            {/* Quick Metrics */}
-            <div className="grid grid-cols-3 gap-2 py-2 border-y border-stone-100 text-xs">
-              <div className="flex items-center gap-1.5 text-stone-600">
-                <Wifi className="w-3.5 h-3.5 text-orange-500" />
-                <span className="font-semibold">{city.internetSpeedMbps} Mbps</span>
+            {/* Body Info */}
+            <div className="p-4 space-y-3">
+              {/* Quick Metrics */}
+              <div className="grid grid-cols-3 gap-2 py-2 border-b border-slate-100 text-xs">
+                <div className="flex items-center gap-1.5 text-slate-700">
+                  <Wifi className="w-3.5 h-3.5 text-indigo-600" />
+                  <span className="font-bold">{city.internetSpeedMbps} Mbps</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-slate-700">
+                  <Sun className="w-3.5 h-3.5 text-amber-500" />
+                  <span className="font-bold">{city.weatherTempC}°C · {city.weather.split(' ')[0]}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-slate-700">
+                  <Shield className="w-3.5 h-3.5 text-emerald-600" />
+                  <span className="font-bold">{city.safetyScore}% Safety</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5 text-stone-600">
-                <Sun className="w-3.5 h-3.5 text-amber-500" />
-                <span className="font-semibold">{city.weatherTempC}°C</span>
-              </div>
-              <div className="flex items-center gap-1.5 text-stone-600">
-                <Shield className="w-3.5 h-3.5 text-emerald-500" />
-                <span className="font-semibold">{city.safetyScore}% Safety</span>
-              </div>
-            </div>
 
-            {/* Highlights tags */}
-            <div className="flex flex-wrap gap-1.5">
-              {city.highlights.map((h, i) => (
-                <span
-                  key={i}
-                  className="text-[11px] font-medium bg-stone-50 border border-stone-200 text-stone-600 px-2.5 py-1 rounded-lg"
-                >
-                  {h}
-                </span>
-              ))}
-            </div>
-
-            {/* Action buttons */}
-            <div className="flex items-center gap-2 pt-1">
-              <button
-                onClick={() => handleAddStop(city)}
-                className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
-                  addedCityId === city.id
-                    ? 'bg-emerald-500 text-white'
-                    : 'bg-orange-500 hover:bg-orange-600 text-white shadow-md shadow-orange-500/20'
-                }`}
-              >
-                {addedCityId === city.id ? (
-                  <>
-                    <Check className="w-4 h-4" /> Added to Itinerary!
-                  </>
-                ) : (
-                  <>
-                    <Plus className="w-4 h-4" /> Add to Trip
-                  </>
+              {/* Highlights tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {city.bestTag && (
+                  <span className="text-[10px] font-black uppercase tracking-wider bg-indigo-50 border border-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-md">
+                    ★ Best for {city.bestTag}
+                  </span>
                 )}
-              </button>
+                {city.highlights.map((h, i) => (
+                  <span
+                    key={i}
+                    className="text-[11px] font-medium bg-slate-50 border border-slate-200 text-slate-600 px-2 py-0.5 rounded-md"
+                  >
+                    {h}
+                  </span>
+                ))}
+              </div>
 
-              <button
-                onClick={() => setSelectedCityForModal(city)}
-                className="py-2.5 px-4 bg-stone-100 hover:bg-stone-200 text-stone-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
-              >
-                <Eye className="w-3.5 h-3.5" /> Details
-              </button>
+              {/* Action buttons */}
+              <div className="flex items-center gap-2 pt-1">
+                <button
+                  onClick={() => handleAddStop(city)}
+                  className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 ${
+                    addedCityId === city.id
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 active:scale-98'
+                  }`}
+                >
+                  {addedCityId === city.id ? (
+                    <>
+                      <Check className="w-4 h-4" /> Added to Itinerary!
+                    </>
+                  ) : (
+                    <>
+                      <Plus className="w-4 h-4" /> Add to Trip Itinerary
+                    </>
+                  )}
+                </button>
+
+                <button
+                  onClick={() => setSelectedCityForModal(city)}
+                  className="py-2.5 px-4 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs flex items-center justify-center gap-1.5 transition-colors"
+                >
+                  <Eye className="w-3.5 h-3.5 text-slate-600" />
+                  <span>City Intel</span>
+                </button>
+              </div>
             </div>
           </div>
         ))}
@@ -292,65 +312,74 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
       {/* City Details Modal */}
       {selectedCityForModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-lg bg-white rounded-3xl p-6 border border-stone-200 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-start justify-between">
-              <div>
-                <span className="text-xs font-black uppercase text-orange-600 tracking-wider">
-                  City Intelligence
-                </span>
-                <h3 className="text-2xl font-black text-stone-900">
-                  {selectedCityForModal.name}, {selectedCityForModal.country}
-                </h3>
-                <p className="text-xs text-stone-400 mt-0.5">
-                  Nomad Score: {selectedCityForModal.nomadScore}/100 · {selectedCityForModal.coworkingSpacesCount} registered coworking spaces
-                </p>
-              </div>
+          <div className="w-full max-w-lg bg-white rounded-3xl overflow-hidden border border-slate-200 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+            {/* Modal Hero Banner */}
+            <div className="relative h-48 w-full bg-slate-900">
+              <img
+                src={selectedCityForModal.imageUrl || "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80"}
+                alt={selectedCityForModal.name}
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
               <button
                 onClick={() => setSelectedCityForModal(null)}
-                className="text-stone-400 hover:text-stone-700 p-1.5"
+                className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 text-white hover:bg-black/70 flex items-center justify-center text-sm font-bold backdrop-blur-md"
               >
                 ✕
               </button>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-stone-50 rounded-2xl border border-stone-100">
-                <span className="text-[11px] text-stone-400 font-bold uppercase">Estimated Monthly Burn</span>
-                <p className="text-lg font-black text-stone-900 mt-1">${selectedCityForModal.costPerMonthUSD} USD</p>
-                <span className="text-[10px] text-stone-500">Includes 1BR apartment, food & coworking</span>
-              </div>
-              <div className="p-3 bg-stone-50 rounded-2xl border border-stone-100">
-                <span className="text-[11px] text-stone-400 font-bold uppercase">Average Internet Speed</span>
-                <p className="text-lg font-black text-stone-900 mt-1">{selectedCityForModal.internetSpeedMbps} Mbps</p>
-                <span className="text-[10px] text-emerald-600 font-bold">Fast enough for 4K video calls</span>
+              <div className="absolute bottom-3 left-4 right-4">
+                <span className="text-[10px] font-black uppercase text-indigo-300 tracking-wider">
+                  Verified Destination Intelligence
+                </span>
+                <h3 className="text-2xl font-black text-white font-display">
+                  {selectedCityForModal.name}, {selectedCityForModal.country}
+                </h3>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Nomad Score: {selectedCityForModal.nomadScore}/100 · {selectedCityForModal.coworkingSpacesCount} registered coworking spaces
+                </p>
               </div>
             </div>
 
-            <div className="space-y-2">
-              <h5 className="text-xs font-bold text-stone-800 uppercase tracking-wider">Nomad Insights & Tips</h5>
-              <div className="space-y-1.5 text-xs text-stone-600 leading-relaxed">
-                <p>• <strong>Visa:</strong> Check 90/180-day limits or dedicated digital nomad permits before booking flights.</p>
-                <p>• <strong>Neighborhoods:</strong> Stick to walking-distance hubs with fiber connectivity and 24/7 cafe access.</p>
-                <p>• <strong>Community:</strong> Active local Telegram and WhatsApp channels for weekly meetups and padel/surf sessions.</p>
+            <div className="p-5 space-y-4 pt-0">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                  <span className="text-[11px] text-slate-400 font-bold uppercase">Estimated Monthly Burn</span>
+                  <p className="text-lg font-black text-slate-900 mt-1 font-display">${selectedCityForModal.costPerMonthUSD} USD</p>
+                  <span className="text-[10px] text-slate-500">Includes 1BR apartment, food & coworking</span>
+                </div>
+                <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                  <span className="text-[11px] text-slate-400 font-bold uppercase">Average Internet Speed</span>
+                  <p className="text-lg font-black text-indigo-600 mt-1 font-display">{selectedCityForModal.internetSpeedMbps} Mbps</p>
+                  <span className="text-[10px] text-emerald-600 font-bold">Fast enough for 4K video calls</span>
+                </div>
               </div>
-            </div>
 
-            <div className="pt-2 flex gap-3">
-              <button
-                onClick={() => {
-                  handleAddStop(selectedCityForModal);
-                  setSelectedCityForModal(null);
-                }}
-                className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20"
-              >
-                Add {selectedCityForModal.name} to my next trip
-              </button>
-              <button
-                onClick={() => setSelectedCityForModal(null)}
-                className="px-4 py-3 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs"
-              >
-                Close
-              </button>
+              <div className="space-y-2">
+                <h5 className="text-xs font-bold text-slate-800 uppercase tracking-wider">Nomad Insights & Tips</h5>
+                <div className="space-y-1.5 text-xs text-slate-600 leading-relaxed">
+                  <p>• <strong>Visa Compliance:</strong> Check 90/180-day limits or dedicated digital nomad permits before booking flights.</p>
+                  <p>• <strong>Neighborhoods:</strong> Stick to walking-distance hubs with fiber connectivity and 24/7 cafe access.</p>
+                  <p>• <strong>Community:</strong> Active local Telegram and WhatsApp channels for weekly meetups and coworking sprints.</p>
+                </div>
+              </div>
+
+              <div className="pt-2 flex gap-3">
+                <button
+                  onClick={() => {
+                    handleAddStop(selectedCityForModal);
+                    setSelectedCityForModal(null);
+                  }}
+                  className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md shadow-indigo-600/20"
+                >
+                  Add {selectedCityForModal.name} to my next trip
+                </button>
+                <button
+                  onClick={() => setSelectedCityForModal(null)}
+                  className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs"
+                >
+                  Close
+                </button>
+              </div>
             </div>
           </div>
         </div>
