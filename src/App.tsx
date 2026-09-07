@@ -1,58 +1,200 @@
 import React, { useState, useEffect } from 'react';
-import { NomadState, SchengenStay, TaxPresence, TripDestination, TeamTimezone, NomadExpense, NomadDocCheck } from './types';
+import { 
+  NomadState, 
+  NomadUser, 
+  NomadCity, 
+  TripDestination, 
+  SchengenStay, 
+  NomadExpense 
+} from './types';
 import { INITIAL_NOMAD_DATA } from './data/defaultData';
-import { calculateSchengen } from './utils/schengenCalculator';
-import { Header } from './components/Header';
-import { SchengenTracker } from './components/SchengenTracker';
-import { TaxPresenceTracker } from './components/TaxPresenceTracker';
-import { ItineraryPlanner } from './components/ItineraryPlanner';
-import { TimezoneMatrix } from './components/TimezoneMatrix';
-import { ExpenseBurnRate } from './components/ExpenseBurnRate';
-import { NomadVault } from './components/NomadVault';
-import { MapPin, ShieldCheck, Compass, DollarSign, FileText } from 'lucide-react';
-import { formatUSD } from './utils/formatters';
+import { TopBar } from './components/TopBar';
+import { Navigation } from './components/Navigation';
+import { HomeDashboard } from './components/HomeDashboard';
+import { ExploreTab } from './components/ExploreTab';
+import { ProfileTab } from './components/ProfileTab';
+import { TravelTab } from './components/TravelTab';
+import { SocialTab } from './components/SocialTab';
+import { OnboardingModal } from './components/OnboardingModal';
+import { PricingModal } from './components/PricingModal';
+import { AuthModal } from './components/AuthModal';
 
-const STORAGE_KEY = 'nomados_state_v1';
+const STORAGE_KEY = 'nomados_state_v2';
 
 export function App() {
   const [state, setState] = useState<NomadState>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Ensure user structure exists
+        if (parsed && parsed.user) {
+          return parsed;
+        }
       }
     } catch (err) {
-      console.warn('Failed to load NomadOS state from localStorage:', err);
+      console.warn('Failed to load state from localStorage:', err);
     }
     return INITIAL_NOMAD_DATA;
   });
 
-  const [activeTab, setActiveTab] = useState<string>('schengen');
-  const [notification, setNotification] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'home' | 'travel' | 'explore' | 'social' | 'me'>('home');
+  const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
+  const [isPricingOpen, setIsPricingOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
 
-  // Save to localStorage on any state change
+  // Sync to localStorage
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (err) {
-      console.warn('Failed to persist NomadOS state:', err);
+      console.warn('Failed to save state:', err);
     }
   }, [state]);
 
   const showToast = (msg: string) => {
-    setNotification(msg);
-    setTimeout(() => setNotification(null), 3000);
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(null), 3000);
   };
 
-  // Schengen Handlers
-  const handleAddSchengenStay = (stay: Omit<SchengenStay, 'id'>) => {
-    const newStay: SchengenStay = {
-      ...stay,
-      id: `stay-${Date.now()}`,
+  // User Profile Handlers
+  const handleUpdateUser = (updated: Partial<NomadUser>) => {
+    setState((prev) => ({
+      ...prev,
+      user: { ...prev.user, ...updated },
+    }));
+    showToast('Profile updated!');
+  };
+
+  const handleUpgradePro = (plan: 'yearly' | 'monthly') => {
+    setState((prev) => ({
+      ...prev,
+      user: {
+        ...prev.user,
+        isPro: true,
+        subscriptionPlan: plan,
+      },
+    }));
+    showToast(`Upgraded to NomadOS Pro (${plan})! 👑`);
+  };
+
+  const handleSignIn = (userData: Partial<NomadUser>) => {
+    setState((prev) => ({
+      ...prev,
+      user: {
+        ...prev.user,
+        ...userData,
+      },
+    }));
+    showToast(`Welcome back, ${userData.name || 'Nomad'}!`);
+  };
+
+  const handleAddCountryVisited = (code: string) => {
+    if (!state.user.countriesVisited.includes(code)) {
+      setState((prev) => ({
+        ...prev,
+        user: {
+          ...prev.user,
+          countriesVisited: [...prev.user.countriesVisited, code],
+        },
+      }));
+      showToast(`Added ${code} to visited countries! 🌐`);
+    }
+  };
+
+  // Location and Events
+  const handleSetCity = (city: string) => {
+    setState((prev) => ({
+      ...prev,
+      currentCity: city,
+    }));
+    showToast(`Current location set to ${city} 📍`);
+  };
+
+  const handleToggleEventRSVP = (eventId: string) => {
+    setState((prev) => ({
+      ...prev,
+      events: prev.events.map((ev) => {
+        if (ev.id === eventId) {
+          const isAttending = !ev.isAttending;
+          return {
+            ...ev,
+            isAttending,
+            attendeesCount: isAttending ? ev.attendeesCount + 1 : Math.max(0, ev.attendeesCount - 1),
+          };
+        }
+        return ev;
+      }),
+    }));
+    showToast('RSVP status updated!');
+  };
+
+  const handleAddEvent = (title: string, date: string, city: string) => {
+    const newEvent = {
+      id: `ev-${Date.now()}`,
+      title,
+      city,
+      country: state.currentCountry || 'Portugal',
+      date,
+      time: '18:00',
+      location: `${city} Nomad Coworking Cafe`,
+      attendeesCount: 1,
+      isAttending: true,
+      hostName: state.user.name,
+      hostAvatar: state.user.avatarUrl,
+      category: 'Coffee' as const,
     };
     setState((prev) => ({
       ...prev,
-      schengenStays: [newStay, ...prev.schengenStays],
+      events: [newEvent, ...prev.events],
+    }));
+    showToast('Meetup created! Nomads in your city can now join.');
+  };
+
+  // Trips & Itinerary
+  const handleAddTrip = (trip: TripDestination) => {
+    setState((prev) => ({
+      ...prev,
+      trips: [...prev.trips, trip],
+    }));
+    showToast(`Added ${trip.city} to your itinerary! ✈️`);
+  };
+
+  const handleAddCityToTrip = (city: NomadCity) => {
+    const newTrip: TripDestination = {
+      id: `trip-${Date.now()}`,
+      city: city.name,
+      country: city.country,
+      countryCode: city.countryCode,
+      arrivalDate: '2026-11-01',
+      departureDate: '2026-12-01',
+      accommodationStatus: 'Searching',
+      housingCostUSD: Math.round(city.costPerMonthUSD * 0.6),
+      visaType: 'Tourist / Digital Nomad Visa',
+      timezone: 'UTC',
+      notes: `Discovered from Explore tab. Nomad Score: ${city.nomadScore}/100`,
+    };
+    setState((prev) => ({
+      ...prev,
+      trips: [...prev.trips, newTrip],
+    }));
+    showToast(`Added ${city.name} to your trips!`);
+  };
+
+  const handleDeleteTrip = (tripId: string) => {
+    setState((prev) => ({
+      ...prev,
+      trips: prev.trips.filter((t) => t.id !== tripId),
+    }));
+    showToast('Trip stop removed');
+  };
+
+  // Schengen Stays
+  const handleAddSchengenStay = (stay: SchengenStay) => {
+    setState((prev) => ({
+      ...prev,
+      schengenStays: [stay, ...prev.schengenStays],
     }));
     showToast(`Recorded stay in ${stay.country}`);
   };
@@ -65,107 +207,13 @@ export function App() {
     showToast('Schengen stay removed');
   };
 
-  // Tax Presence Handlers
-  const handleAddTaxPresence = (presence: Omit<TaxPresence, 'id'>) => {
-    const newP: TaxPresence = {
-      ...presence,
-      id: `tax-${Date.now()}`,
-    };
+  // Expenses
+  const handleAddExpense = (expense: NomadExpense) => {
     setState((prev) => ({
       ...prev,
-      taxPresences: [...prev.taxPresences, newP],
+      expenses: [expense, ...prev.expenses],
     }));
-    showToast(`Tracking tax presence for ${presence.country}`);
-  };
-
-  const handleUpdateTaxDays = (id: string, delta: number) => {
-    setState((prev) => ({
-      ...prev,
-      taxPresences: prev.taxPresences.map((p) => {
-        if (p.id === id) {
-          const newDays = Math.max(0, p.daysSpent + delta);
-          let risk: TaxPresence['taxResidencyRisk'] = 'low';
-          if (newDays >= p.maxSafeDays) risk = 'exceeded';
-          else if (newDays >= p.maxSafeDays * 0.8) risk = 'high';
-          else if (newDays >= p.maxSafeDays * 0.5) risk = 'moderate';
-          return { ...p, daysSpent: newDays, taxResidencyRisk: risk };
-        }
-        return p;
-      }),
-    }));
-  };
-
-  const handleDeleteTaxPresence = (id: string) => {
-    setState((prev) => ({
-      ...prev,
-      taxPresences: prev.taxPresences.filter((p) => p.id !== id),
-    }));
-    showToast('Tax jurisdiction removed');
-  };
-
-  // Itinerary Handlers
-  const handleAddTrip = (trip: Omit<TripDestination, 'id'>) => {
-    const newTrip: TripDestination = {
-      ...trip,
-      id: `trip-${Date.now()}`,
-    };
-    setState((prev) => ({
-      ...prev,
-      trips: [...prev.trips, newTrip],
-    }));
-    showToast(`Added ${trip.city} to itinerary`);
-  };
-
-  const handleSetCurrentBase = (trip: TripDestination) => {
-    setState((prev) => ({
-      ...prev,
-      currentCity: trip.city,
-      currentCountry: trip.country,
-      currentCountryCode: trip.countryCode,
-    }));
-    showToast(`Current nomad base updated to ${trip.city}, ${trip.country}`);
-  };
-
-  const handleDeleteTrip = (id: string) => {
-    setState((prev) => ({
-      ...prev,
-      trips: prev.trips.filter((t) => t.id !== id),
-    }));
-    showToast('Destination removed');
-  };
-
-  // Timezone Handlers
-  const handleAddTimezone = (tz: Omit<TeamTimezone, 'id'>) => {
-    const newTz: TeamTimezone = {
-      ...tz,
-      id: `tz-${Date.now()}`,
-    };
-    setState((prev) => ({
-      ...prev,
-      teamTimezones: [...prev.teamTimezones, newTz],
-    }));
-    showToast(`Added ${tz.label} timezone`);
-  };
-
-  const handleDeleteTimezone = (id: string) => {
-    setState((prev) => ({
-      ...prev,
-      teamTimezones: prev.teamTimezones.filter((t) => t.id !== id),
-    }));
-    showToast('Timezone removed');
-  };
-
-  // Expense Handlers
-  const handleAddExpense = (expense: Omit<NomadExpense, 'id'>) => {
-    const newExp: NomadExpense = {
-      ...expense,
-      id: `exp-${Date.now()}`,
-    };
-    setState((prev) => ({
-      ...prev,
-      expenses: [newExp, ...prev.expenses],
-    }));
-    showToast(`Logged expense: ${expense.description}`);
+    showToast(`Logged $${expense.amountUSD} for ${expense.description}`);
   };
 
   const handleDeleteExpense = (id: string) => {
@@ -176,211 +224,117 @@ export function App() {
     showToast('Expense removed');
   };
 
-  const handleUpdateBudget = (budget: number) => {
+  // Tax Presence
+  const handleUpdateTaxPresence = (id: string, days: number) => {
     setState((prev) => ({
       ...prev,
-      monthlyBudgetUSD: budget,
+      taxPresences: prev.taxPresences.map((p) => (p.id === id ? { ...p, daysSpent: days } : p)),
     }));
-    showToast('Monthly budget updated');
+    showToast('Updated tax presence days');
   };
-
-  // Document Handlers
-  const handleAddDoc = (doc: Omit<NomadDocCheck, 'id'>) => {
-    const newDoc: NomadDocCheck = {
-      ...doc,
-      id: `doc-${Date.now()}`,
-    };
-    setState((prev) => ({
-      ...prev,
-      documents: [...prev.documents, newDoc],
-    }));
-    showToast(`Registered document: ${doc.title}`);
-  };
-
-  const handleDeleteDoc = (id: string) => {
-    setState((prev) => ({
-      ...prev,
-      documents: prev.documents.filter((d) => d.id !== id),
-    }));
-    showToast('Document removed');
-  };
-
-  // Backup & Reset Handlers
-  const handleExport = () => {
-    const dataStr = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(state, null, 2));
-    const downloadAnchor = document.createElement('a');
-    downloadAnchor.setAttribute('href', dataStr);
-    downloadAnchor.setAttribute('download', `NomadOS_Backup_${new Date().toISOString().slice(0, 10)}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-    showToast('Backup JSON downloaded');
-  };
-
-  const handleImport = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const parsed = JSON.parse(event.target?.result as string);
-        if (parsed.schengenStays && parsed.trips) {
-          setState(parsed);
-          showToast('NomadOS state restored successfully!');
-        } else {
-          alert('Invalid NomadOS backup file.');
-        }
-      } catch (err) {
-        alert('Could not parse JSON file.');
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  };
-
-  const handleReset = () => {
-    if (confirm('Reset NomadOS to sample expedition data? This will overwrite local changes.')) {
-      setState(INITIAL_NOMAD_DATA);
-      showToast('Reset to default sample data');
-    }
-  };
-
-  // Schengen summary calculation
-  const schengenResult = calculateSchengen(state.schengenStays);
-  const totalSpentUSD = state.expenses.reduce((s, e) => s + e.amountUSD, 0);
 
   return (
-    <div className="min-h-screen bg-stone-950 text-stone-100 flex flex-col font-sans">
-      <Header
-        state={state}
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        onExport={handleExport}
-        onImport={handleImport}
-        onReset={handleReset}
-        schengenUsed={schengenResult.daysUsedInWindow}
+    <div id="nomados-app-root" className="min-h-screen bg-[#f8f9fc] text-stone-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
+      {/* Top Header */}
+      <TopBar
+        user={state.user}
+        onOpenPricing={() => setIsPricingOpen(true)}
+        onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenOnboarding={() => setIsOnboardingOpen(true)}
       />
 
-      {/* Main Container */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Quick HUD Metrics Bar */}
-        <div className="mb-6 grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="bg-stone-900/60 border border-stone-800 p-3 rounded-xl flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400">
-              <MapPin className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="text-[10px] text-stone-500 font-mono uppercase">Current Base</div>
-              <div className="text-xs font-semibold text-stone-200">
-                {state.currentCity}, {state.currentCountry}
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-stone-900/60 border border-stone-800 p-3 rounded-xl flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-emerald-500/10 text-emerald-400">
-              <ShieldCheck className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="text-[10px] text-stone-500 font-mono uppercase">Schengen Days</div>
-              <div className="text-xs font-semibold text-stone-200 font-mono">
-                {schengenResult.daysUsedInWindow}/90d ({schengenResult.daysRemainingInWindow} left)
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-stone-900/60 border border-stone-800 p-3 rounded-xl flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-              <DollarSign className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="text-[10px] text-stone-500 font-mono uppercase">Month Spend</div>
-              <div className="text-xs font-semibold text-stone-200 font-mono">
-                {formatUSD(totalSpentUSD)} / {formatUSD(state.monthlyBudgetUSD)}
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-stone-900/60 border border-stone-800 p-3 rounded-xl flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
-              <FileText className="h-4 w-4" />
-            </div>
-            <div>
-              <div className="text-[10px] text-stone-500 font-mono uppercase">Docs Valid</div>
-              <div className="text-xs font-semibold text-stone-200">
-                {state.documents.length} Checked
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === 'schengen' && (
-          <SchengenTracker
-            stays={state.schengenStays}
-            onAddStay={handleAddSchengenStay}
-            onDeleteStay={handleDeleteSchengenStay}
+      {/* Main View Router */}
+      <main className="flex-1 w-full">
+        {activeTab === 'home' && (
+          <HomeDashboard
+            state={state}
+            onNavigateTab={(tab) => setActiveTab(tab)}
+            onOpenPricing={() => setIsPricingOpen(true)}
+            onOpenOnboarding={() => setIsOnboardingOpen(true)}
+            onToggleEventRSVP={handleToggleEventRSVP}
+            onOpenCreateMeetup={() => setActiveTab('social')}
           />
         )}
 
-        {activeTab === 'tax' && (
-          <TaxPresenceTracker
-            presences={state.taxPresences}
-            onAddPresence={handleAddTaxPresence}
-            onUpdateDays={handleUpdateTaxDays}
-            onDeletePresence={handleDeleteTaxPresence}
-          />
-        )}
-
-        {activeTab === 'itinerary' && (
-          <ItineraryPlanner
-            trips={state.trips}
-            currentCity={state.currentCity}
+        {activeTab === 'travel' && (
+          <TravelTab
+            state={state}
             onAddTrip={handleAddTrip}
-            onSetCurrentBase={handleSetCurrentBase}
             onDeleteTrip={handleDeleteTrip}
-          />
-        )}
-
-        {activeTab === 'timezones' && (
-          <TimezoneMatrix
-            timezones={state.teamTimezones}
-            onAddTimezone={handleAddTimezone}
-            onDeleteTimezone={handleDeleteTimezone}
-          />
-        )}
-
-        {activeTab === 'expenses' && (
-          <ExpenseBurnRate
-            expenses={state.expenses}
-            monthlyBudgetUSD={state.monthlyBudgetUSD}
+            onAddSchengenStay={handleAddSchengenStay}
+            onDeleteSchengenStay={handleDeleteSchengenStay}
             onAddExpense={handleAddExpense}
             onDeleteExpense={handleDeleteExpense}
-            onUpdateBudget={handleUpdateBudget}
+            onUpdateTaxPresence={handleUpdateTaxPresence}
+            onOpenPricing={() => setIsPricingOpen(true)}
           />
         )}
 
-        {activeTab === 'vault' && (
-          <NomadVault
-            documents={state.documents}
-            onAddDoc={handleAddDoc}
-            onDeleteDoc={handleDeleteDoc}
+        {activeTab === 'explore' && (
+          <ExploreTab
+            onAddCityToTrip={handleAddCityToTrip}
+            onOpenPricing={() => setIsPricingOpen(true)}
+            isPro={state.user.isPro}
+          />
+        )}
+
+        {activeTab === 'social' && (
+          <SocialTab
+            state={state}
+            onToggleEventRSVP={handleToggleEventRSVP}
+            onAddEvent={handleAddEvent}
+            onSetCity={handleSetCity}
+          />
+        )}
+
+        {activeTab === 'me' && (
+          <ProfileTab
+            state={state}
+            onUpdateUser={handleUpdateUser}
+            onOpenPricing={() => setIsPricingOpen(true)}
+            onOpenAuth={() => setIsAuthOpen(true)}
+            onAddCountryVisited={handleAddCountryVisited}
           />
         )}
       </main>
 
-      {/* Toast Notification */}
-      {notification && (
-        <div className="fixed bottom-5 right-5 z-50 bg-stone-900 border border-amber-500/40 text-stone-100 text-xs px-4 py-2.5 rounded-xl shadow-xl flex items-center gap-2 animate-fade-in">
-          <span className="h-2 w-2 rounded-full bg-amber-400" />
-          <span>{notification}</span>
+      {/* Bottom Tab Bar Navigation */}
+      <Navigation activeTab={activeTab} onSelectTab={(tab) => setActiveTab(tab)} />
+
+      {/* Modals */}
+      <OnboardingModal
+        isOpen={isOnboardingOpen}
+        onClose={() => setIsOnboardingOpen(false)}
+        state={state}
+        onUpdateUser={handleUpdateUser}
+        onSetCity={handleSetCity}
+        onAddEvent={handleAddEvent}
+      />
+
+      <PricingModal
+        isOpen={isPricingOpen}
+        onClose={() => setIsPricingOpen(false)}
+        user={state.user}
+        onUpgradePro={handleUpgradePro}
+      />
+
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        currentUser={state.user}
+        onSignIn={handleSignIn}
+      />
+
+      {/* Toast Notification Banner */}
+      {toastMessage && (
+        <div
+          id="global-toast-notification"
+          className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-stone-900 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2"
+        >
+          <span className="w-2 h-2 rounded-full bg-orange-500" />
+          <span>{toastMessage}</span>
         </div>
       )}
-
-      {/* Footer */}
-      <footer className="border-t border-stone-800/80 py-4 text-center text-xs text-stone-500 font-mono">
-        NomadOS • Mission Control for Global Remote Workers & Digital Nomads • Local Offline-First Storage
-      </footer>
     </div>
   );
 }

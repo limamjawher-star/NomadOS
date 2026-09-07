@@ -13,7 +13,7 @@ export interface TaxPresence {
   countryCode: string;
   daysSpent: number;
   year: number;
-  maxSafeDays: number; // usually 183 or custom (e.g. 60 for Cyprus, 90, 183)
+  maxSafeDays: number;
   taxResidencyRisk: 'low' | 'moderate' | 'high' | 'exceeded';
   notes?: string;
 }
@@ -37,8 +37,8 @@ export interface TeamTimezone {
   label: string;
   location: string;
   timezone: string;
-  targetWorkingStart: number; // e.g. 9 for 09:00
-  targetWorkingEnd: number;   // e.g. 17 for 17:00
+  targetWorkingStart: number;
+  targetWorkingEnd: number;
 }
 
 export interface NomadExpense {
@@ -60,9 +60,72 @@ export interface NomadDocCheck {
   notes: string;
 }
 
+export interface NomadUser {
+  id: string;
+  name: string;
+  tag: string;
+  avatarUrl: string;
+  nationality: string;
+  nationalityCode: string;
+  gender: 'Male' | 'Female' | 'Non-binary' | 'Prefer not to say';
+  profession: string;
+  bio: string;
+  rank: string;
+  countriesVisited: string[];
+  followersCount: number;
+  followingCount: number;
+  isPro: boolean;
+  subscriptionPlan: 'free' | 'monthly' | 'yearly';
+  profileCompletion: number;
+}
+
+export interface NomadCity {
+  id: string;
+  name: string;
+  country: string;
+  countryCode: string;
+  region: string;
+  nomadScore: number;
+  costPerMonthUSD: number;
+  internetSpeedMbps: number;
+  weather: string;
+  weatherTempC: number;
+  safetyScore: number;
+  funScore: number;
+  coworkingSpacesCount: number;
+  highlights: string[];
+  bestTag?: 'budget' | 'wifi' | 'coworking' | 'community';
+}
+
+export interface NomadEvent {
+  id: string;
+  title: string;
+  city: string;
+  country: string;
+  date: string;
+  time: string;
+  location: string;
+  attendeesCount: number;
+  isAttending: boolean;
+  hostName: string;
+  hostAvatar: string;
+  category: 'Coworking' | 'Coffee' | 'Drinks' | 'Outdoor' | 'Workshop';
+}
+
+export interface NearbyNomad {
+  id: string;
+  name: string;
+  tag: string;
+  profession: string;
+  currentCity: string;
+  nationality: string;
+  avatarUrl: string;
+  isOnline: boolean;
+  bio: string;
+}
+
 export interface NomadState {
-  nomadName: string;
-  homeCountry: string;
+  user: NomadUser;
   currentCity: string;
   currentCountry: string;
   currentCountryCode: string;
@@ -73,4 +136,7 @@ export interface NomadState {
   expenses: NomadExpense[];
   monthlyBudgetUSD: number;
   documents: NomadDocCheck[];
+  events: NomadEvent[];
+  nearbyNomads: NearbyNomad[];
+  hasCompletedOnboarding: boolean;
 }
