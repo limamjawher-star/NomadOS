@@ -9,18 +9,20 @@ import {
   NomadEvent
 } from './types';
 import { INITIAL_NOMAD_DATA } from './data/defaultData';
-import { TopBar } from './components/TopBar';
 import { Navigation } from './components/Navigation';
 import { HomeDashboard } from './components/HomeDashboard';
 import { ExploreTab } from './components/ExploreTab';
 import { ProfileTab } from './components/ProfileTab';
 import { TravelTab } from './components/TravelTab';
 import { SocialTab } from './components/SocialTab';
+import { FinanceTab } from './components/FinanceTab';
+import { TopHeader } from './components/TopHeader';
 import { OnboardingModal } from './components/OnboardingModal';
 import { PricingModal } from './components/PricingModal';
 import { AuthModal } from './components/AuthModal';
 import { LandingPage } from './components/LandingPage';
 import { DeviceSimulator } from './components/DeviceSimulator';
+import { NomadIncomeStream, NomadFinancialGoal } from './types';
 
 const STORAGE_KEY = 'nomados_state_v3';
 
@@ -46,7 +48,7 @@ export function App() {
 
   const [viewMode, setViewMode] = useState<'landing' | 'app'>('app');
   const [deviceMode, setDeviceMode] = useState<'web' | 'ios' | 'android'>('web');
-  const [activeTab, setActiveTab] = useState<'home' | 'travel' | 'explore' | 'social' | 'me'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'travel' | 'finance' | 'explore' | 'social' | 'me'>('home');
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -240,20 +242,59 @@ export function App() {
     showToast('Tax residency days updated');
   };
 
-  return (
-    <div className="min-h-screen bg-[#FBF9F5] text-stone-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
-      {/* Top Application Header with Mode & Device Toggles */}
-      <TopBar
-        user={state.user}
-        viewMode={viewMode}
-        deviceMode={deviceMode}
-        onSetViewMode={setViewMode}
-        onSetDeviceMode={setDeviceMode}
-        onOpenPricing={() => setIsPricingOpen(true)}
-        onOpenAuth={() => setIsAuthOpen(true)}
-        onOpenOnboarding={() => setIsOnboardingOpen(true)}
-      />
+  // Financial Planning Handlers
+  const handleAddIncome = (income: NomadIncomeStream) => {
+    setState((prev) => ({
+      ...prev,
+      incomes: [income, ...prev.incomes],
+    }));
+    showToast(`Income stream added: +$${income.monthlyAmountUSD}/mo`);
+  };
 
+  const handleDeleteIncome = (id: string) => {
+    setState((prev) => ({
+      ...prev,
+      incomes: prev.incomes.filter((i) => i.id !== id),
+    }));
+    showToast('Income stream removed');
+  };
+
+  const handleUpdateGoal = (goalId: string, addedAmount: number) => {
+    setState((prev) => ({
+      ...prev,
+      financialGoals: prev.financialGoals.map((g) =>
+        g.id === goalId ? { ...g, currentUSD: g.currentUSD + addedAmount } : g
+      ),
+    }));
+    showToast(`Deposited $${addedAmount} towards goal`);
+  };
+
+  const handleAddGoal = (goal: NomadFinancialGoal) => {
+    setState((prev) => ({
+      ...prev,
+      financialGoals: [goal, ...prev.financialGoals],
+    }));
+    showToast(`New goal created: ${goal.title}`);
+  };
+
+  const handleUpdateTaxBuffer = (percentage: number) => {
+    setState((prev) => ({
+      ...prev,
+      taxBufferPercentage: percentage,
+    }));
+    showToast(`Tax reserve buffer updated to ${percentage}%`);
+  };
+
+  const handleUpdateMonthlyBudget = (budgetUSD: number) => {
+    setState((prev) => ({
+      ...prev,
+      monthlyBudgetUSD: budgetUSD,
+    }));
+    showToast(`Monthly budget set to ${budgetUSD}`);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
       {/* Main View: Landing Page OR App Workspace */}
       {viewMode === 'landing' ? (
         <main className="flex-1 w-full">
@@ -272,6 +313,13 @@ export function App() {
         /* App Workspace rendered inside DeviceSimulator (Web / iOS / Android) */
         <DeviceSimulator deviceMode={deviceMode}>
           <div className="flex flex-col min-h-full">
+            {/* Centered Top Search Bar & Header */}
+            <TopHeader
+              state={state}
+              onNavigateTab={(tab) => setActiveTab(tab)}
+              onOpenPricing={() => setIsPricingOpen(true)}
+            />
+
             <main className="flex-1 w-full">
               {activeTab === 'home' && (
                 <HomeDashboard
@@ -294,6 +342,21 @@ export function App() {
                   onAddExpense={handleAddExpense}
                   onDeleteExpense={handleDeleteExpense}
                   onUpdateTaxPresence={handleUpdateTaxPresence}
+                  onOpenPricing={() => setIsPricingOpen(true)}
+                />
+              )}
+
+              {activeTab === 'finance' && (
+                <FinanceTab
+                  state={state}
+                  onAddExpense={handleAddExpense}
+                  onDeleteExpense={handleDeleteExpense}
+                  onAddIncome={handleAddIncome}
+                  onDeleteIncome={handleDeleteIncome}
+                  onUpdateGoal={handleUpdateGoal}
+                  onAddGoal={handleAddGoal}
+                  onUpdateTaxBuffer={handleUpdateTaxBuffer}
+                  onUpdateMonthlyBudget={handleUpdateMonthlyBudget}
                   onOpenPricing={() => setIsPricingOpen(true)}
                 />
               )}

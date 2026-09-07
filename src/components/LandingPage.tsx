@@ -18,16 +18,28 @@ import {
   Monitor, 
   Star,
   ExternalLink,
-  Plus
+  Plus,
+  Flame,
+  AlertTriangle,
+  Crown,
+  MessageSquare,
+  Coffee,
+  Laptop,
+  Beer,
+  Palmtree,
+  Activity,
+  PartyPopper,
+  Building2
 } from 'lucide-react';
 import { NomadState } from '../types';
 import { SmartAlertsCarousel } from './SmartAlertsCarousel';
 import { DayItineraryView } from './DayItineraryView';
 import { MultiStopTripView } from './MultiStopTripView';
+import { CountryFlag } from './CountryFlag';
 
 interface LandingPageProps {
   state: NomadState;
-  onLaunchApp: (tab?: 'home' | 'travel' | 'explore' | 'social' | 'me') => void;
+  onLaunchApp: (tab?: 'home' | 'travel' | 'finance' | 'explore' | 'social' | 'me') => void;
   onOpenPricing: () => void;
   onOpenAuth: () => void;
   onOpenOnboarding: () => void;
@@ -55,7 +67,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black text-lg shadow-md shadow-orange-600/30">
-            🌐
+            <Globe className="w-5 h-5" />
           </div>
           <span className="text-lg font-black tracking-tight text-stone-900">
             NomadOS
@@ -103,7 +115,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       {/* 2. Hero Section (matching Screenshot 1 & 9) */}
       <section className="pt-12 sm:pt-20 pb-16 px-4 sm:px-8 max-w-6xl mx-auto text-center space-y-6">
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-extrabold tracking-wider uppercase animate-in fade-in">
-          <span>✨</span>
+          <Sparkles className="w-3.5 h-3.5 text-orange-600" />
           <span>THE APP THAT TRAVELS WITH YOU</span>
         </div>
 
@@ -204,12 +216,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="relative pt-6 max-w-xl mx-auto">
           {/* Floating Callout Badges (matching Screenshot 1) */}
           <div className="absolute -top-1 left-2 sm:-left-12 z-20 hidden sm:flex items-center gap-2 px-3 py-1.5 bg-amber-500 text-white rounded-full text-xs font-extrabold shadow-lg shadow-amber-500/30 animate-bounce">
-            <span>⚠️</span>
+            <AlertTriangle className="w-3.5 h-3.5 text-amber-100" />
             <span>Visa expires in 13 days</span>
           </div>
 
           <div className="absolute top-16 right-2 sm:-right-12 z-20 hidden sm:flex items-center gap-2 px-3 py-1.5 bg-orange-600 text-white rounded-full text-xs font-extrabold shadow-lg shadow-orange-600/30">
-            <span>✈️</span>
+            <Plane className="w-3.5 h-3.5 text-orange-100" />
             <span>Next: Mexico City in 28d</span>
           </div>
 
@@ -230,12 +242,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs">
-                        🌐
+                        <Globe className="w-4 h-4" />
                       </div>
                       <span className="font-extrabold text-stone-900 text-sm">NomadOS</span>
                     </div>
-                    <span className="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-extrabold rounded-full">
-                      👑 PRO
+                    <span className="px-2.5 py-0.5 bg-amber-100 text-amber-800 text-[10px] font-extrabold rounded-full flex items-center gap-1">
+                      <Crown className="w-3 h-3 text-amber-700" />
+                      <span>PRO</span>
                     </span>
                   </div>
 
@@ -243,7 +256,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <div className="grid grid-cols-2 gap-2.5">
                     <div className="bg-stone-50 rounded-2xl p-3 border border-stone-200 flex flex-col justify-between h-24">
                       <div className="flex items-center justify-between text-[11px] font-bold text-stone-500 uppercase">
-                        <span>📍 Location</span>
+                        <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-orange-600" /> Location</span>
                         <ChevronRight className="w-3 h-3 text-stone-400" />
                       </div>
                       <div>
@@ -254,29 +267,35 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                     <div className="bg-stone-50 rounded-2xl p-3 border border-stone-200 flex flex-col justify-between h-24">
                       <div className="flex items-center justify-between text-[11px] font-bold text-stone-500 uppercase">
-                        <span>✈️ Next Trip</span>
+                        <span className="flex items-center gap-1"><Plane className="w-3 h-3 text-orange-600" /> Next Trip</span>
                         <ChevronRight className="w-3 h-3 text-stone-400" />
                       </div>
                       <div>
                         <h4 className="font-extrabold text-stone-900 text-sm">28 days</h4>
-                        <p className="text-[11px] text-stone-400">🇲🇽 Mexico City</p>
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <CountryFlag code="MX" name="Mexico" size="xs" />
+                          <p className="text-[11px] text-stone-400">Mexico City</p>
+                        </div>
                       </div>
                     </div>
 
                     <div className="bg-stone-50 rounded-2xl p-3 border border-stone-200 flex flex-col justify-between h-24">
                       <div className="flex items-center justify-between text-[11px] font-bold text-stone-500 uppercase">
-                        <span>🕒 Visa</span>
+                        <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-orange-600" /> Visa</span>
                         <ChevronRight className="w-3 h-3 text-stone-400" />
                       </div>
                       <div>
                         <h4 className="font-extrabold text-rose-600 text-sm">13 days</h4>
-                        <p className="text-[11px] text-stone-400">🔴 e-Visa (90 days)</p>
+                        <div className="flex items-center gap-1.5 mt-0.5">
+                          <div className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                          <p className="text-[11px] text-stone-400">e-Visa (90 days)</p>
+                        </div>
                       </div>
                     </div>
 
                     <div className="bg-stone-50 rounded-2xl p-3 border border-stone-200 flex flex-col justify-between h-24">
                       <div className="flex items-center justify-between text-[11px] font-bold text-stone-500 uppercase">
-                        <span>💰 Spent</span>
+                        <span className="flex items-center gap-1"><DollarSign className="w-3 h-3 text-orange-600" /> Spent</span>
                         <ChevronRight className="w-3 h-3 text-stone-400" />
                       </div>
                       <div>
@@ -289,17 +308,17 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   {/* 4 days streak widget (matching Screenshot 1) */}
                   <div className="bg-stone-50 rounded-2xl p-3 border border-stone-200 flex items-center justify-between text-xs">
                     <div className="flex items-center gap-2">
-                      <span className="text-base">🔥</span>
+                      <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
                       <span className="font-extrabold text-stone-900">4 days streak</span>
                     </div>
-                    <span className="text-stone-400 font-medium text-[11px]">Best: 4 days · ℹ️</span>
+                    <span className="text-stone-400 font-medium text-[11px]">Best: 4 days · Verified</span>
                   </div>
 
                   {/* Alerts accordion (matching Screenshot 1) */}
                   <div className="space-y-2">
                     <div className="flex items-center justify-between text-xs font-extrabold text-stone-800">
                       <div className="flex items-center gap-1.5">
-                        <span>⚠️</span>
+                        <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
                         <span>Alerts</span>
                       </div>
                       <span className="text-stone-400 text-[11px]">Show less ▾</span>
@@ -338,7 +357,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       </div>
                     </div>
                     <div className="w-7 h-7 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs">
-                      💬
+                      <MessageSquare className="w-3.5 h-3.5" />
                     </div>
                   </div>
                 </div>
@@ -441,19 +460,33 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <div className="space-y-3 text-xs">
                   <div className="flex items-center justify-between">
                     <h4 className="font-black text-stone-900 text-sm">Nomad Meetups</h4>
-                    <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded-full text-[10px]">
-                      👋 12 nearby
+                    <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 font-bold rounded-full text-[10px] flex items-center gap-1">
+                      <Users className="w-3 h-3" />
+                      <span>12 nearby</span>
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-1.5">
-                    {['☕ Coffee', '💻 Laptop', '🍻 Drinks', '🌴 Beach', '🧘 Yoga'].map((tag) => (
-                      <span key={tag} className="px-2 py-1 bg-stone-100 rounded-lg font-bold text-stone-700 text-[11px]">
-                        {tag}
-                      </span>
-                    ))}
+                    {[
+                      { label: 'Coffee', icon: Coffee },
+                      { label: 'Laptop', icon: Laptop },
+                      { label: 'Drinks', icon: Beer },
+                      { label: 'Beach', icon: Palmtree },
+                      { label: 'Yoga', icon: Activity }
+                    ].map((item) => {
+                      const ItemIcon = item.icon;
+                      return (
+                        <span key={item.label} className="px-2 py-1 bg-stone-100 rounded-lg font-bold text-stone-700 text-[11px] flex items-center gap-1">
+                          <ItemIcon className="w-3 h-3 text-stone-500" />
+                          <span>{item.label}</span>
+                        </span>
+                      );
+                    })}
                   </div>
                   <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-1">
-                    <h5 className="font-extrabold text-stone-900">☕ Cowork & Specialty Coffee</h5>
+                    <h5 className="font-extrabold text-stone-900 flex items-center gap-1.5">
+                      <Coffee className="w-3.5 h-3.5 text-amber-600" />
+                      <span>Cowork & Specialty Coffee</span>
+                    </h5>
                     <p className="text-[11px] text-stone-500">Today · 14:00 · Zenita Specialty Cafe Canggu</p>
                     <span className="inline-block text-[10px] font-bold text-orange-600">8 nomads attending</span>
                   </div>
@@ -528,7 +561,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
                 <span className="text-xs font-bold text-stone-400 block">NEXT TRIP</span>
                 <h4 className="text-lg font-black text-stone-900 mt-1">28 days</h4>
-                <span className="text-xs text-orange-600 font-bold">🇲🇽 Mexico City</span>
+                <div className="flex items-center gap-1 mt-0.5">
+                  <CountryFlag code="MX" name="Mexico" size="xs" />
+                  <span className="text-xs text-orange-600 font-bold">Mexico City</span>
+                </div>
               </div>
               <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
                 <span className="text-xs font-bold text-stone-400 block">VISA</span>
@@ -538,13 +574,16 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
                 <span className="text-xs font-bold text-stone-400 block">SPENT THIS MONTH</span>
                 <h4 className="text-lg font-black text-stone-900 mt-1">€586</h4>
-                <span className="text-xs text-emerald-600 font-bold">Within budget ✓</span>
+                <span className="text-xs text-emerald-600 font-bold flex items-center gap-1">
+                  <Check className="w-3.5 h-3.5 text-emerald-600" />
+                  <span>Within budget</span>
+                </span>
               </div>
             </div>
 
             <div className="bg-white p-4 rounded-2xl border border-stone-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className="text-xl">🔥</span>
+                <Flame className="w-5 h-5 text-orange-500 fill-orange-500" />
                 <div>
                   <h5 className="font-extrabold text-xs text-stone-900">4 days streak</h5>
                   <p className="text-[11px] text-stone-400">Logged expenses and itinerary daily</p>
@@ -564,8 +603,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="order-2 md:order-1 bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black uppercase text-orange-700">Visas & Vault</span>
-              <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full">
-                ⚠️ 2 days left in Indonesia
+              <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full flex items-center gap-1">
+                <AlertTriangle className="w-3 h-3 text-rose-600" />
+                <span>2 days left in Indonesia</span>
               </span>
             </div>
 
@@ -741,7 +781,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <div className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-1 bg-stone-200 text-stone-700 font-bold rounded-lg">Trip</span>
-                <span className="font-extrabold text-stone-900">📍 Europe Summer Workation ▾</span>
+                <div className="flex items-center gap-1.5">
+                  <MapPin className="w-3.5 h-3.5 text-orange-600" />
+                  <span className="font-extrabold text-stone-900">Europe Summer Workation</span>
+                  <span className="text-[10px] text-stone-400">▾</span>
+                </div>
               </div>
               <span className="font-extrabold text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full">
                 €4,410 left
@@ -816,14 +860,27 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm max-w-3xl mx-auto space-y-5">
             {/* Filter tags matching Screenshot 6 */}
             <div className="flex flex-wrap items-center gap-2">
-              {['☕ Coffee', '💻 Laptop', '🍻 Drinks', '🎉 Party', '🌴 Beach', '🧘 Yoga', '🌐 Co-living', '📍 Meetups'].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1.5 bg-stone-50 hover:bg-orange-50 border border-stone-200 rounded-full text-xs font-bold text-stone-700 transition-colors cursor-pointer"
-                >
-                  {tag}
-                </span>
-              ))}
+              {[
+                { label: 'Coffee', icon: Coffee },
+                { label: 'Laptop', icon: Laptop },
+                { label: 'Drinks', icon: Beer },
+                { label: 'Party', icon: PartyPopper },
+                { label: 'Beach', icon: Palmtree },
+                { label: 'Yoga', icon: Activity },
+                { label: 'Co-living', icon: Building2 },
+                { label: 'Meetups', icon: Users }
+              ].map((item) => {
+                const ItemIcon = item.icon;
+                return (
+                  <span
+                    key={item.label}
+                    className="px-3 py-1.5 bg-stone-50 hover:bg-orange-50 border border-stone-200 rounded-full text-xs font-bold text-stone-700 transition-colors cursor-pointer flex items-center gap-1.5"
+                  >
+                    <ItemIcon className="w-3.5 h-3.5 text-stone-500" />
+                    <span>{item.label}</span>
+                  </span>
+                );
+              })}
             </div>
 
             {/* Simulated interactive map graphic */}
@@ -839,11 +896,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               {/* Map pins */}
               <div className="relative flex-1 flex items-center justify-center">
                 <div className="absolute top-6 left-12 p-2 bg-orange-600 rounded-xl shadow-lg flex items-center gap-1.5 text-xs font-bold animate-bounce">
-                  <span>☕</span>
+                  <Coffee className="w-3.5 h-3.5" />
                   <span>Specialty Cafe Meet</span>
                 </div>
                 <div className="absolute bottom-4 right-16 p-2 bg-orange-500 rounded-xl shadow-lg flex items-center gap-1.5 text-xs font-bold">
-                  <span>💻</span>
+                  <Laptop className="w-3.5 h-3.5" />
                   <span>Coworking Sprint</span>
                 </div>
                 <div className="w-12 h-12 rounded-full border-4 border-white/40 bg-orange-500/50 flex items-center justify-center">
@@ -852,7 +909,10 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               </div>
 
               <div className="flex items-center justify-between text-xs text-stone-300 pt-2 border-t border-white/10">
-                <span>📍 Currently synced to: {state.currentCity}</span>
+                <span className="flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-orange-400" />
+                  <span>Currently synced to: {state.currentCity}</span>
+                </span>
                 <button
                   onClick={() => onLaunchApp('social')}
                   className="text-orange-300 hover:text-white font-extrabold flex items-center gap-1"
@@ -966,7 +1026,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-orange-600/20">
-              🌐
+              <Globe className="w-4 h-4 text-white" />
             </div>
             <div>
               <span className="font-extrabold text-stone-900 text-sm block">NomadOS</span>

@@ -21,13 +21,21 @@ import {
   ShieldCheck,
   ChevronDown,
   ChevronUp,
-  Crown
+  Crown,
+  Wifi,
+  Coffee,
+  Star,
+  Zap,
+  X,
+  Sun
 } from 'lucide-react';
 import { NomadState, NearbyNomad, NomadEvent } from '../types';
+import { Logo } from './Logo';
+import { CountryFlag } from './CountryFlag';
 
 interface HomeDashboardProps {
   state: NomadState;
-  onNavigateTab: (tab: 'home' | 'travel' | 'explore' | 'social' | 'me') => void;
+  onNavigateTab: (tab: 'home' | 'travel' | 'finance' | 'explore' | 'social' | 'me') => void;
   onOpenPricing: () => void;
   onOpenOnboarding: () => void;
   onToggleEventRSVP: (eventId: string) => void;
@@ -74,48 +82,26 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   // Find founder nomad (Eva) or first nearby nomad
   const founderNomad = state.nearbyNomads.find(n => n.name.includes('Eva')) || state.nearbyNomads[0];
 
+  const totalSpentUSD = state.expenses.reduce((acc, e) => acc + e.amountUSD, 0);
+  const budgetPercentage = Math.min(100, Math.round((totalSpentUSD / (state.monthlyBudgetUSD || 2800)) * 100));
+  const totalSavingsUSD = state.savingsTotalUSD || 28400;
+  const runwayMonths = ((totalSavingsUSD) / (state.monthlyBudgetUSD || 2800)).toFixed(1);
+
   return (
     <div id="home-dashboard-view" className="space-y-4 pb-28 max-w-2xl mx-auto px-4 pt-3">
-      {/* 1. Contextual In-App Dashboard Header (No duplicate NomadOS logo or outer toolbar button) */}
-      <div className="flex items-center justify-between pt-1">
+      {/* Greeting & Live Base Status */}
+      <div className="flex items-center justify-between bg-white px-4 py-3 rounded-2xl border border-slate-200/80 shadow-xs">
         <div>
-          <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight font-display">
-            Welcome back, {state.user.name.split(' ')[0]} 👋
+          <h1 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight font-display">
+            Welcome back, {state.user.name.split(' ')[0]}
           </h1>
-          <div className="flex items-center gap-2 text-xs text-slate-500 font-medium mt-0.5">
-            <span className="inline-flex items-center gap-1.5 text-indigo-600 font-bold">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>{state.currentCity}, {state.currentCountry}</span>
-            </span>
-            <span className="text-slate-300">·</span>
-            <span className="text-slate-400">Live Base</span>
-          </div>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">
+            Everything is in order for your nomad journey today.
+          </p>
         </div>
-
-        <div className="flex items-center gap-2">
-          {!state.user.isPro ? (
-            <button
-              id="home-upgrade-pill-btn"
-              onClick={onOpenPricing}
-              className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold rounded-full shadow-sm shadow-indigo-600/20 flex items-center gap-1.5 transition-all transform active:scale-95"
-            >
-              <Crown className="w-3.5 h-3.5 text-indigo-200" />
-              <span>Upgrade Pro</span>
-            </button>
-          ) : (
-            <span className="px-2.5 py-1 bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-[11px] font-bold rounded-full flex items-center gap-1">
-              <Crown className="w-3 h-3 text-indigo-600" />
-              <span>PRO</span>
-            </span>
-          )}
-
-          <button
-            onClick={() => onNavigateTab('me')}
-            className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-slate-200 hover:ring-indigo-500 transition-all shadow-xs"
-            title="Passport & Settings"
-          >
-            <img src={state.user.avatarUrl} alt={state.user.name} className="w-full h-full object-cover" />
-          </button>
+        <div className="flex items-center gap-2 text-xs font-bold px-3 py-1.5 bg-orange-50 text-orange-700 rounded-xl border border-orange-200/60 shrink-0">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>{state.currentCity}, {state.currentCountry}</span>
         </div>
       </div>
 
@@ -127,7 +113,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         <img 
           src={currentTrip?.coverUrl || "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80"}
           alt="Current Destination - Bali"
-          className="w-full h-44 sm:h-48 object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
+          className="w-full h-44 sm:h-52 object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
         />
         {/* Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-black/20" />
@@ -136,11 +122,15 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between">
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-bold">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span>Active Base · 🇮🇩 Canggu, Bali</span>
+            <div className="flex items-center gap-1">
+              <span>Active Base ·</span>
+              <CountryFlag code="ID" name="Indonesia" size="xs" />
+              <span>Canggu, Bali</span>
+            </div>
           </div>
 
           <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium">
-            <span>☀️ 29°C</span>
+            <span className="flex items-center gap-1"><Sun className="w-3.5 h-3.5 text-amber-400" /> 29°C</span>
             <span className="text-white/40">·</span>
             <span>15:45 WITA</span>
           </div>
@@ -161,35 +151,35 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             </p>
           </div>
 
-          <span className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 backdrop-blur-md text-white font-bold text-xs border border-white/30 flex items-center gap-1 group-hover:translate-x-0.5 transition-all">
+          <span className="px-3 py-1.5 rounded-xl bg-orange-500 hover:bg-orange-600 backdrop-blur-md text-white font-bold text-xs shadow-sm flex items-center gap-1 group-hover:translate-x-0.5 transition-all">
             <span>Nomad Radar</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </span>
         </div>
       </div>
 
-      {/* 3. 4-STAT CARDS 2x2 GRID (Unified Design Language & Brand Palette) */}
+      {/* 3. 4-STAT CARDS 2x2 GRID (Unified Warm Orange & Clean Neutrals) */}
       <div className="grid grid-cols-2 gap-2.5">
         {/* Location Card */}
         <div 
           onClick={() => onNavigateTab('social')}
-          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-orange-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-orange-50/40 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5">
-              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
                 <MapPin className="w-3.5 h-3.5" />
               </div>
               <span className="text-slate-500 font-bold">Location</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <h4 className="text-lg font-black text-slate-900 leading-tight font-display">{state.currentCity}</h4>
             <p className="text-xs text-slate-500 font-medium flex items-center gap-1 mt-0.5">
               <span>{state.currentCountry}</span>
-              <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.2 rounded">UTC+8</span>
+              <span className="text-[10px] text-orange-700 font-bold bg-orange-50 px-1.5 py-0.2 rounded">UTC+8</span>
             </p>
           </div>
         </div>
@@ -197,41 +187,44 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Next Trip Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-orange-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-orange-50/40 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5">
-              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
                 <Plane className="w-3.5 h-3.5" />
               </div>
               <span className="text-slate-500 font-bold">Next Trip</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
               <h4 className="text-lg font-black text-slate-900 leading-tight font-display">28 days</h4>
-              <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.2 rounded">Oct 5</span>
+              <span className="text-[10px] text-orange-700 font-bold bg-orange-50 px-1.5 py-0.2 rounded">Oct 5</span>
             </div>
-            <p className="text-xs text-slate-600 font-bold mt-0.5">🇲🇽 Mexico City</p>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <CountryFlag code="MX" name="Mexico" size="xs" />
+              <p className="text-xs text-slate-600 font-bold">Mexico City</p>
+            </div>
           </div>
         </div>
 
         {/* Visa Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-orange-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-orange-50/40 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5">
-              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
                 <Clock className="w-3.5 h-3.5" />
               </div>
               <span className="text-slate-500 font-bold">Visa Window</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <div className="flex items-baseline gap-1.5">
@@ -244,36 +237,74 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
         {/* Spent Card */}
         <div 
-          onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-indigo-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
+          onClick={() => onNavigateTab('finance')}
+          className="bg-white rounded-3xl p-3.5 sm:p-4 border border-slate-200/90 shadow-sm hover:border-orange-200 hover:shadow-md transition-all cursor-pointer flex flex-col justify-between min-h-[7.5rem] group relative overflow-hidden"
         >
-          <div className="absolute top-0 right-0 w-16 h-16 bg-slate-50/70 rounded-full -mr-6 -mt-6 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-16 h-16 bg-orange-50/40 rounded-full -mr-6 -mt-6 pointer-events-none" />
           <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5">
-              <div className="w-6 h-6 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+              <div className="w-6 h-6 rounded-lg bg-orange-50 text-orange-600 flex items-center justify-center">
                 <DollarSign className="w-3.5 h-3.5" />
               </div>
-              <span className="text-slate-500 font-bold">Spend / Cap</span>
+              <span className="text-slate-500 font-bold">Spent / Budget</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-indigo-600 group-hover:translate-x-0.5 transition-all" />
+            <ChevronRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-orange-600 group-hover:translate-x-0.5 transition-all" />
           </div>
           <div>
             <div className="flex items-baseline justify-between">
-              <h4 className="text-lg font-black text-slate-900 leading-tight font-display">€586</h4>
-              <span className="text-[10px] text-indigo-700 font-bold bg-indigo-50 px-1.5 py-0.2 rounded">21%</span>
+              <h4 className="text-lg font-black text-slate-900 leading-tight font-display">${totalSpentUSD.toLocaleString()}</h4>
+              <span className="text-[10px] text-orange-700 font-bold bg-orange-50 px-1.5 py-0.2 rounded">{budgetPercentage}%</span>
             </div>
             <div className="w-full bg-slate-100 rounded-full h-1.5 mt-1.5 overflow-hidden">
-              <div className="bg-indigo-600 h-full rounded-full" style={{ width: '21%' }} />
+              <div className="bg-orange-500 h-full rounded-full" style={{ width: `${budgetPercentage}%` }} />
             </div>
           </div>
         </div>
       </div>
 
-      {/* 4. 4 DAYS STREAK WIDGET (Clean Balanced Card) */}
+      {/* 4. FINANCIAL PLANNING & RUNWAY SPOTLIGHT (High-Resolution Visual) */}
+      <div 
+        onClick={() => onNavigateTab('finance')}
+        className="group relative rounded-3xl overflow-hidden border border-slate-200/90 shadow-md cursor-pointer bg-slate-900"
+      >
+        <img 
+          src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80" 
+          alt="Nomad Financial Planning & Runway"
+          className="w-full h-32 sm:h-36 object-cover opacity-75 group-hover:scale-105 transition-transform duration-700"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent" />
+        
+        <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+          <span className="px-2.5 py-0.5 rounded-full bg-orange-500 text-white text-[10px] font-black uppercase tracking-wider">
+            Financial Freedom Engine
+          </span>
+          <span className="text-xs font-bold text-emerald-300 flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span>{runwayMonths} Mo Runway</span>
+          </span>
+        </div>
+
+        <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between text-white">
+          <div>
+            <h4 className="text-sm sm:text-base font-black font-display leading-tight">
+              Nomad Financial Planning & Runway
+            </h4>
+            <p className="text-[11px] text-white/80 mt-0.5 font-medium">
+              Track remote income, full expenses, tax reserves & global runway
+            </p>
+          </div>
+          <button className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white text-white hover:text-slate-900 text-xs font-bold backdrop-blur-md transition-all flex items-center gap-1 shrink-0">
+            <span>Open</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+
+      {/* 5. 4 DAYS STREAK WIDGET (Clean Balanced Card) */}
       <div className="bg-white rounded-3xl p-3.5 border border-slate-200/90 shadow-sm flex items-center justify-between text-xs">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center text-sm font-black">
-            🔥
+          <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-600 flex items-center justify-center font-black">
+            <Flame className="w-4 h-4 text-amber-500 fill-amber-500" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
@@ -296,7 +327,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="flex h-5 w-5 items-center justify-center rounded-lg bg-rose-50 text-rose-600 font-bold text-xs">
-              ⚠️
+              <AlertTriangle className="w-3.5 h-3.5 text-rose-600" />
             </span>
             <h4 className="text-sm font-black text-slate-900 font-display">
               Smart Nomad Alerts <span className="text-xs text-slate-400 font-medium">(4)</span>
@@ -364,17 +395,17 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             {/* INFO: Mexico trip */}
             <div 
               onClick={() => onNavigateTab('travel')}
-              className="p-3 bg-indigo-50/70 hover:bg-indigo-50 border border-indigo-200/80 rounded-2xl flex items-center justify-between text-xs cursor-pointer transition-all"
+              className="p-3 bg-orange-50/70 hover:bg-orange-50 border border-orange-200/80 rounded-2xl flex items-center justify-between text-xs cursor-pointer transition-all"
             >
               <div className="flex items-center gap-2.5">
-                <span className="px-2 py-0.5 bg-indigo-600 text-white font-black text-[10px] rounded-md tracking-wider">
+                <span className="px-2 py-0.5 bg-orange-500 text-white font-black text-[10px] rounded-md tracking-wider">
                   INFO
                 </span>
-                <span className="font-bold text-indigo-950 text-xs">
+                <span className="font-bold text-orange-950 text-xs">
                   Your trip to Mexico City starts in 28 days
                 </span>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+              <ChevronRight className="w-3.5 h-3.5 text-orange-400 shrink-0" />
             </div>
           </div>
         )}
@@ -384,14 +415,16 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       <div className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-base">👋</span>
+            <div className="w-6 h-6 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
+              <Users className="w-3.5 h-3.5" />
+            </div>
             <h4 className="text-sm font-black text-slate-900 font-display">
-              Nomads in {state.currentCity} <span className="text-xs text-indigo-600 font-bold bg-indigo-50 px-1.5 py-0.5 rounded-full">1 nearby</span>
+              Nomads in {state.currentCity} <span className="text-xs text-orange-600 font-bold bg-orange-50 px-1.5 py-0.5 rounded-full">1 nearby</span>
             </h4>
           </div>
           <button
             onClick={() => onNavigateTab('social')}
-            className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1"
+            className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
           >
             <span>Live Radar</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -399,24 +432,24 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         </div>
 
         {founderNomad && (
-          <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/80 flex items-center justify-between hover:border-indigo-300 hover:bg-white transition-all shadow-xs">
+          <div className="p-3.5 bg-slate-50/80 rounded-2xl border border-slate-200/80 flex items-center justify-between hover:border-orange-300 hover:bg-white transition-all shadow-xs">
             <div className="flex items-center gap-3">
               <div className="relative">
                 <img
                   src={founderNomad.avatarUrl}
                   alt={founderNomad.name}
-                  className="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-500/40"
+                  className="w-12 h-12 rounded-full object-cover ring-2 ring-orange-500/40"
                 />
                 <span className="absolute bottom-0 right-0 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white" />
               </div>
               <div>
                 <div className="flex items-center gap-1.5">
                   <h5 className="font-black text-slate-900 text-xs">{founderNomad.name}</h5>
-                  <span className="px-1.5 py-0.2 bg-indigo-100 text-indigo-700 text-[9px] font-black rounded">
+                  <span className="px-1.5 py-0.2 bg-orange-100 text-orange-700 text-[9px] font-black rounded">
                     FOUNDER
                   </span>
                 </div>
-                <p className="text-[11px] text-indigo-600 font-bold">
+                <p className="text-[11px] text-orange-600 font-bold">
                   NomadOS Creator · {founderNomad.currentCity || founderNomad.location}
                 </p>
                 <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5">
@@ -427,7 +460,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
             <button
               onClick={() => setSelectedNomad(founderNomad)}
-              className="px-3 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm shadow-indigo-600/20"
+              className="px-3 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs flex items-center gap-1.5 transition-all shadow-sm shadow-orange-500/20"
               title="Chat with Eva"
             >
               <MessageSquare className="w-3.5 h-3.5" />
@@ -437,7 +470,190 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         )}
       </div>
 
-      {/* 7. QUICK LAUNCH MODULES WITH VISUAL PHOTOGRAPHY */}
+      {/* 7. VISUAL DESTINATION GALLERY (Add more high-res images) */}
+      <div className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Compass className="w-4 h-4 text-orange-500" />
+            <h4 className="text-sm font-black text-slate-900 font-display">
+              Upcoming Stops & Trending Nomad Hubs
+            </h4>
+          </div>
+          <button
+            onClick={() => onNavigateTab('explore')}
+            className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+          >
+            <span>Explore All</span>
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+          {/* Mexico City */}
+          <div
+            onClick={() => onNavigateTab('travel')}
+            className="group relative rounded-2xl overflow-hidden border border-slate-200 cursor-pointer shadow-xs"
+          >
+            <div className="h-28 overflow-hidden relative">
+              <img
+                src="https://images.unsplash.com/photo-1518105779142-d975f22f1b0a?auto=format&fit=crop&w=600&q=80"
+                alt="Mexico City"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-orange-500 text-white text-[9px] font-black tracking-wide">
+                NEXT STOP
+              </span>
+              <div className="absolute bottom-2 left-2 right-2 text-white">
+                <div className="flex items-center gap-1.5">
+                  <CountryFlag code="MX" name="Mexico" size="xs" />
+                  <h5 className="font-black text-xs leading-tight">Mexico City</h5>
+                </div>
+                <p className="text-[10px] text-orange-200 font-semibold">Oct 5 · Roma Norte</p>
+              </div>
+            </div>
+            <div className="p-2 bg-white flex items-center justify-between text-[10px] font-bold text-slate-500">
+              <span>$1,450/mo</span>
+              <span className="text-emerald-600 flex items-center gap-0.5">
+                <Wifi className="w-2.5 h-2.5" /> 120 Mbps
+              </span>
+            </div>
+          </div>
+
+          {/* Lisbon */}
+          <div
+            onClick={() => onNavigateTab('explore')}
+            className="group relative rounded-2xl overflow-hidden border border-slate-200 cursor-pointer shadow-xs"
+          >
+            <div className="h-28 overflow-hidden relative">
+              <img
+                src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=600&q=80"
+                alt="Lisbon"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-md text-white text-[9px] font-bold border border-white/20">
+                SCHENGEN
+              </span>
+              <div className="absolute bottom-2 left-2 right-2 text-white">
+                <div className="flex items-center gap-1.5">
+                  <CountryFlag code="PT" name="Portugal" size="xs" />
+                  <h5 className="font-black text-xs leading-tight">Lisbon</h5>
+                </div>
+                <p className="text-[10px] text-amber-200 font-semibold">Dec 1 · Alfama Hub</p>
+              </div>
+            </div>
+            <div className="p-2 bg-white flex items-center justify-between text-[10px] font-bold text-slate-500">
+              <span>€2,100/mo</span>
+              <span className="text-emerald-600 flex items-center gap-0.5">
+                <Wifi className="w-2.5 h-2.5" /> 150 Mbps
+              </span>
+            </div>
+          </div>
+
+          {/* Tokyo */}
+          <div
+            onClick={() => onNavigateTab('explore')}
+            className="group relative rounded-2xl overflow-hidden border border-slate-200 cursor-pointer shadow-xs col-span-2 sm:col-span-1"
+          >
+            <div className="h-28 overflow-hidden relative">
+              <img
+                src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=600&q=80"
+                alt="Tokyo"
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+              <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-amber-500 text-white text-[9px] font-black tracking-wide">
+                POPULAR
+              </span>
+              <div className="absolute bottom-2 left-2 right-2 text-white">
+                <div className="flex items-center gap-1.5">
+                  <CountryFlag code="JP" name="Japan" size="xs" />
+                  <h5 className="font-black text-xs leading-tight">Tokyo</h5>
+                </div>
+                <p className="text-[10px] text-slate-200 font-semibold">Spring 2027 · Shibuya</p>
+              </div>
+            </div>
+            <div className="p-2 bg-white flex items-center justify-between text-[10px] font-bold text-slate-500">
+              <span>$2,300/mo</span>
+              <span className="text-emerald-600 flex items-center gap-0.5">
+                <Wifi className="w-2.5 h-2.5" /> 220 Mbps
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 8. NOMAD WORKSPACES & LOCAL HOTSPOTS (High-Res Photography) */}
+      <div className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Coffee className="w-4 h-4 text-orange-500" />
+            <h4 className="text-sm font-black text-slate-900 font-display">
+              Curated Workspaces & Community Hotspots
+            </h4>
+          </div>
+          <span className="text-xs text-slate-400 font-semibold">Verified by nomads</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {/* Dojo Coworking Pool */}
+          <div className="flex items-center gap-3 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:border-orange-200 transition-all">
+            <img
+              src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80"
+              alt="Coworking space"
+              className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-xs"
+            />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h5 className="text-xs font-black text-slate-900 truncate font-display">Dojo Garden & Pool</h5>
+                <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded">98 Mbps</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-0.5 truncate">Echo Beach, Canggu · Poolside desks</p>
+              <div className="text-[10px] text-orange-600 font-bold mt-0.5 flex items-center gap-1.5">
+                <span className="flex items-center gap-1">
+                  <Coffee className="w-3 h-3 text-amber-600" />
+                  <span>Free cold brew</span>
+                </span>
+                <span>·</span>
+                <span className="flex items-center gap-1">
+                  <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+                  <span>4.9</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Specialty Roastery */}
+          <div className="flex items-center gap-3 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:border-orange-200 transition-all">
+            <img
+              src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80"
+              alt="Coffee shop"
+              className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-xs"
+            />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h5 className="text-xs font-black text-slate-900 truncate font-display">Batur Roastery & Labs</h5>
+                <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded">140 Mbps</span>
+              </div>
+              <p className="text-[11px] text-slate-500 mt-0.5 truncate">Pererenan · AC quiet work lounge</p>
+              <div className="text-[10px] text-orange-600 font-bold mt-0.5 flex items-center gap-1.5">
+                <span className="flex items-center gap-1">
+                  <Zap className="w-3 h-3 text-amber-600" />
+                  <span>Power at every seat</span>
+                </span>
+                <span>·</span>
+                <span className="flex items-center gap-1">
+                  <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+                  <span>4.8</span>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 9. QUICK LAUNCH MODULES WITH VISUAL PHOTOGRAPHY */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 pt-1">
         {/* Multi-Stop Trips */}
         <div
@@ -447,13 +663,20 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           <img 
             src="https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=600&q=80" 
             alt="Multi-Stop Trips"
-            className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
           <div className="absolute bottom-2.5 left-3 right-3">
-            <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider block">Itinerary</span>
+            <span className="text-[10px] font-bold text-orange-300 uppercase tracking-wider block">Itinerary</span>
             <h5 className="text-xs font-black text-white leading-tight font-display">Multi-Stop Trips</h5>
-            <span className="text-[10px] text-slate-300">TH 🇹🇭 → VN 🇻🇳 → ID 🇮🇩</span>
+            <div className="flex items-center gap-1 text-[10px] text-slate-300 mt-0.5">
+              <span>TH</span>
+              <CountryFlag code="TH" name="Thailand" size="xs" />
+              <span>→ VN</span>
+              <CountryFlag code="VN" name="Vietnam" size="xs" />
+              <span>→ ID</span>
+              <CountryFlag code="ID" name="Indonesia" size="xs" />
+            </div>
           </div>
         </div>
 
@@ -465,7 +688,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           <img 
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80" 
             alt="Day Schedule"
-            className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
           <div className="absolute bottom-2.5 left-3 right-3">
@@ -483,13 +706,16 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           <img 
             src="https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=600&q=80" 
             alt="Schengen Visa"
-            className="w-full h-full object-cover opacity-70 group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform duration-500"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />
           <div className="absolute bottom-2.5 left-3 right-3">
             <span className="text-[10px] font-bold text-emerald-300 uppercase tracking-wider block">Compliance</span>
             <h5 className="text-xs font-black text-white leading-tight font-display">Schengen 90/180</h5>
-            <span className="text-[10px] text-emerald-400 font-bold">80 days safe in EU 🇪🇺</span>
+            <div className="flex items-center gap-1 text-[10px] text-emerald-400 font-bold mt-0.5">
+              <span>80 days safe in EU</span>
+              <CountryFlag code="EU" name="European Union" size="xs" />
+            </div>
           </div>
         </div>
       </div>
@@ -503,24 +729,25 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                 <img
                   src={selectedNomad.avatarUrl}
                   alt={selectedNomad.name}
-                  className="w-11 h-11 rounded-full object-cover ring-2 ring-indigo-500"
+                  className="w-11 h-11 rounded-full object-cover ring-2 ring-orange-500"
                 />
                 <div>
                   <h4 className="font-extrabold text-slate-900 text-sm font-display">{selectedNomad.name}</h4>
-                  <p className="text-[10px] text-indigo-600 font-bold">{selectedNomad.currentCity || selectedNomad.location}</p>
+                  <p className="text-[10px] text-orange-600 font-bold">{selectedNomad.currentCity || selectedNomad.location}</p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedNomad(null)}
                 className="w-7 h-7 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center font-bold"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
             </div>
 
             {messageSent ? (
-              <div className="p-4 bg-emerald-50 text-emerald-800 rounded-2xl text-center text-xs font-bold border border-emerald-200">
-                Message delivered to {selectedNomad.name}! 🚀
+              <div className="p-4 bg-emerald-50 text-emerald-800 rounded-2xl text-center text-xs font-bold border border-emerald-200 flex items-center justify-center gap-1.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                <span>Message delivered to {selectedNomad.name}!</span>
               </div>
             ) : (
               <form onSubmit={handleSendMessage} className="space-y-3">
@@ -530,11 +757,11 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                   value={chatMessage}
                   onChange={(e) => setChatMessage(e.target.value)}
                   placeholder={`Hey ${selectedNomad.name.split(' ')[0]}, want to grab a coffee or cowork today?`}
-                  className="w-full p-3 rounded-2xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-slate-50 focus:bg-white"
+                  className="w-full p-3 rounded-2xl border border-slate-200 text-xs focus:outline-none focus:ring-2 focus:ring-orange-500 bg-slate-50 focus:bg-white"
                 />
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-indigo-600/30 transition-all"
+                  className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-500/30 transition-all"
                 >
                   Send Message
                 </button>

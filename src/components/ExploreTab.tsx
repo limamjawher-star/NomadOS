@@ -14,10 +14,15 @@ import {
   SlidersHorizontal,
   Lock,
   Sparkles,
-  MapPin
+  MapPin,
+  Zap,
+  Compass,
+  Star,
+  X
 } from 'lucide-react';
 import { NomadCity, TripDestination } from '../types';
 import { EXPLORE_CITIES } from '../data/defaultData';
+import { CountryFlag } from './CountryFlag';
 
 interface ExploreTabProps {
   onAddCityToTrip: (city: NomadCity) => void;
@@ -66,7 +71,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
-          <Building2 className={`w-4 h-4 ${activeSubTab === 'cities' ? 'text-indigo-600' : 'text-slate-400'}`} />
+          <Building2 className={`w-4 h-4 ${activeSubTab === 'cities' ? 'text-orange-500' : 'text-slate-400'}`} />
           <span>Nomad Hubs & Cities</span>
         </button>
         <button
@@ -77,7 +82,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
-          <Globe className={`w-4 h-4 ${activeSubTab === 'countries' ? 'text-indigo-600' : 'text-slate-400'}`} />
+          <Globe className={`w-4 h-4 ${activeSubTab === 'countries' ? 'text-orange-500' : 'text-slate-400'}`} />
           <span>Visa & Country Guides</span>
         </button>
       </div>
@@ -95,50 +100,70 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
       <div className="grid grid-cols-2 gap-2.5">
         <div 
           onClick={() => setSearchQuery('Pokhara')}
-          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
+          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-orange-300 hover:shadow-md transition-all cursor-pointer group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-base">💰</span>
+            <div className="w-7 h-7 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              <DollarSign className="w-4 h-4" />
+            </div>
             <span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded-md">$650/mo</span>
           </div>
           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2">Best for budget</p>
-          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">Pokhara 🇳🇵</h4>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-orange-600 transition-colors flex items-center gap-1.5 mt-0.5">
+            <span>Pokhara</span>
+            <CountryFlag code="NP" name="Nepal" size="xs" />
+          </h4>
         </div>
 
         <div 
           onClick={() => setSearchQuery('Seoul')}
-          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
+          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-orange-300 hover:shadow-md transition-all cursor-pointer group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-base">⚡</span>
+            <div className="w-7 h-7 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center font-bold">
+              <Zap className="w-4 h-4" />
+            </div>
             <span className="text-[10px] font-bold text-sky-600 bg-sky-50 px-1.5 py-0.5 rounded-md">180 Mbps</span>
           </div>
           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2">Fastest 5G & WiFi</p>
-          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">Seoul 🇰🇷</h4>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-orange-600 transition-colors flex items-center gap-1.5 mt-0.5">
+            <span>Seoul</span>
+            <CountryFlag code="KR" name="South Korea" size="xs" />
+          </h4>
         </div>
 
         <div 
           onClick={() => setSearchQuery('New York')}
-          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
+          className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm hover:border-orange-300 hover:shadow-md transition-all cursor-pointer group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-base">📍</span>
-            <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-1.5 py-0.5 rounded-md">220+ Spaces</span>
+            <div className="w-7 h-7 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold">
+              <MapPin className="w-4 h-4" />
+            </div>
+            <span className="text-[10px] font-bold text-orange-600 bg-orange-50 px-1.5 py-0.5 rounded-md">220+ Spaces</span>
           </div>
           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mt-2">Top Coworking Hub</p>
-          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">New York 🇺🇸</h4>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-orange-600 transition-colors flex items-center gap-1.5 mt-0.5">
+            <span>New York</span>
+            <CountryFlag code="US" name="United States" size="xs" />
+          </h4>
         </div>
 
         <div 
           onClick={() => setSearchQuery('Canggu')}
-          className="bg-white rounded-2xl p-3 border border-indigo-100 bg-gradient-to-br from-indigo-50/40 to-sky-50/20 shadow-sm hover:border-indigo-300 hover:shadow-md transition-all cursor-pointer group"
+          className="bg-white rounded-2xl p-3 border border-orange-100 bg-gradient-to-br from-orange-50/40 to-amber-50/20 shadow-sm hover:border-orange-300 hover:shadow-md transition-all cursor-pointer group"
         >
           <div className="flex items-center justify-between">
-            <span className="text-base">🏄‍♂️</span>
-            <span className="text-[10px] font-bold text-indigo-700 bg-indigo-100/80 px-1.5 py-0.5 rounded-md">Top Hub</span>
+            <div className="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
+              <Compass className="w-4 h-4" />
+            </div>
+            <span className="text-[10px] font-bold text-orange-700 bg-orange-100/80 px-1.5 py-0.5 rounded-md">Top Hub</span>
           </div>
-          <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider mt-2">Best Community</p>
-          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-indigo-600 transition-colors">Canggu, Bali 🇮🇩</h4>
+          <p className="text-[10px] text-orange-600 font-bold uppercase tracking-wider mt-2">Best Community</p>
+          <h4 className="text-sm font-black text-slate-900 font-display group-hover:text-orange-600 transition-colors flex items-center gap-1.5 mt-0.5">
+            <span>Canggu, Bali</span>
+            <CountryFlag code="ID" name="Indonesia" size="xs" />
+          </h4>
         </div>
       </div>
 
@@ -151,7 +176,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search cities, countries, visa types..."
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/90 rounded-2xl text-xs font-medium text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/90 rounded-2xl text-xs font-medium text-slate-900 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
           />
           {searchQuery && (
             <button
@@ -200,7 +225,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
         {filteredCities.map((city, index) => (
           <div
             key={city.id}
-            className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md hover:border-indigo-300 transition-all group"
+            className="bg-white rounded-3xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-md hover:border-orange-300 transition-all group"
           >
             {/* Visual Cover Photo Banner */}
             <div className="relative h-40 sm:h-44 w-full bg-slate-900 overflow-hidden">
@@ -217,8 +242,8 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
                   #{index + 1}
                 </span>
 
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-indigo-600/90 backdrop-blur-md text-white text-xs font-black shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-orange-500/90 backdrop-blur-md text-white text-xs font-black shadow-sm">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-200" />
                   <span>{city.nomadScore}/100 Score</span>
                 </div>
               </div>
@@ -245,7 +270,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
               {/* Quick Metrics */}
               <div className="grid grid-cols-3 gap-2 py-2 border-b border-slate-100 text-xs">
                 <div className="flex items-center gap-1.5 text-slate-700">
-                  <Wifi className="w-3.5 h-3.5 text-indigo-600" />
+                  <Wifi className="w-3.5 h-3.5 text-orange-500" />
                   <span className="font-bold">{city.internetSpeedMbps} Mbps</span>
                 </div>
                 <div className="flex items-center gap-1.5 text-slate-700">
@@ -261,8 +286,9 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
               {/* Highlights tags */}
               <div className="flex flex-wrap gap-1.5">
                 {city.bestTag && (
-                  <span className="text-[10px] font-black uppercase tracking-wider bg-indigo-50 border border-indigo-100 text-indigo-700 px-2.5 py-0.5 rounded-md">
-                    ★ Best for {city.bestTag}
+                  <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-wider bg-orange-50 border border-orange-100 text-orange-700 px-2.5 py-0.5 rounded-md">
+                    <Star className="w-3 h-3 text-orange-500 fill-orange-500" />
+                    <span>Best for {city.bestTag}</span>
                   </span>
                 )}
                 {city.highlights.map((h, i) => (
@@ -282,7 +308,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
                   className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-extrabold transition-all flex items-center justify-center gap-1.5 ${
                     addedCityId === city.id
                       ? 'bg-emerald-600 text-white'
-                      : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-600/20 active:scale-98'
+                      : 'bg-orange-500 hover:bg-orange-600 text-white shadow-md shadow-orange-500/20 active:scale-98'
                   }`}
                 >
                   {addedCityId === city.id ? (
@@ -325,10 +351,10 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
                 onClick={() => setSelectedCityForModal(null)}
                 className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/50 text-white hover:bg-black/70 flex items-center justify-center text-sm font-bold backdrop-blur-md"
               >
-                ✕
+                <X className="w-4 h-4" />
               </button>
               <div className="absolute bottom-3 left-4 right-4">
-                <span className="text-[10px] font-black uppercase text-indigo-300 tracking-wider">
+                <span className="text-[10px] font-black uppercase text-orange-300 tracking-wider">
                   Verified Destination Intelligence
                 </span>
                 <h3 className="text-2xl font-black text-white font-display">
@@ -349,7 +375,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
                 </div>
                 <div className="p-3 bg-slate-50 rounded-2xl border border-slate-100">
                   <span className="text-[11px] text-slate-400 font-bold uppercase">Average Internet Speed</span>
-                  <p className="text-lg font-black text-indigo-600 mt-1 font-display">{selectedCityForModal.internetSpeedMbps} Mbps</p>
+                  <p className="text-lg font-black text-orange-600 mt-1 font-display">{selectedCityForModal.internetSpeedMbps} Mbps</p>
                   <span className="text-[10px] text-emerald-600 font-bold">Fast enough for 4K video calls</span>
                 </div>
               </div>
@@ -369,7 +395,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
                     handleAddStop(selectedCityForModal);
                     setSelectedCityForModal(null);
                   }}
-                  className="flex-1 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md shadow-indigo-600/20"
+                  className="flex-1 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20"
                 >
                   Add {selectedCityForModal.name} to my next trip
                 </button>

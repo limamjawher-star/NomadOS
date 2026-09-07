@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { 
   Bell, 
   AlertTriangle, 
+  AlertCircle,
   Clock, 
   FileText, 
   Plane, 
@@ -9,16 +10,17 @@ import {
   ChevronLeft, 
   ChevronRight,
   ExternalLink,
-  CheckCircle2
+  CheckCircle2,
+  Globe
 } from 'lucide-react';
+
+export type AlertBadgeIconType = 'schengen' | 'visa' | 'doc' | 'trip' | 'passport';
 
 export interface SmartAlertItem {
   id: string;
   category: 'visa' | 'schengen' | 'doc' | 'trip' | 'passport';
   pillLabel: string;
-  pillIcon: string;
-  pillColor: string;
-  badgeType: '🔴' | '⚠️' | '📋' | '✈️' | '🛡️';
+  badgeType: AlertBadgeIconType;
   title: string;
   message: string;
   timeLabel: string;
@@ -30,9 +32,7 @@ export const SMART_ALERTS_DATA: SmartAlertItem[] = [
     id: 'alert-schengen',
     category: 'schengen',
     pillLabel: 'Schengen overstay',
-    pillIcon: '🔴',
-    pillColor: 'text-rose-600 bg-rose-50 border-rose-200',
-    badgeType: '🔴',
+    badgeType: 'schengen',
     title: 'Schengen overstay risk',
     message: "You'll exceed the 90/180 limit by 5 days at your next entry. Adjust your plans.",
     timeLabel: 'now',
@@ -42,9 +42,7 @@ export const SMART_ALERTS_DATA: SmartAlertItem[] = [
     id: 'alert-visa-expiry',
     category: 'visa',
     pillLabel: 'Visa expiry',
-    pillIcon: '⚠️',
-    pillColor: 'text-amber-600 bg-amber-50 border-amber-200',
-    badgeType: '⚠️',
+    badgeType: 'visa',
     title: 'Vietnam e-Visa expires in 13 days',
     message: 'Your 90-day single entry visa expires on May 20. Renew online or confirm international flight departure.',
     timeLabel: '2m ago',
@@ -54,9 +52,7 @@ export const SMART_ALERTS_DATA: SmartAlertItem[] = [
     id: 'alert-pending-docs',
     category: 'doc',
     pillLabel: 'Pending docs',
-    pillIcon: '📋',
-    pillColor: 'text-orange-600 bg-orange-50 border-orange-200',
-    badgeType: '📋',
+    badgeType: 'doc',
     title: '6 documents pending across 3 visas',
     message: 'Missing onward flight ticket for Bali B213 VoA and proof of funds for DTV renewal.',
     timeLabel: '1h ago',
@@ -66,9 +62,7 @@ export const SMART_ALERTS_DATA: SmartAlertItem[] = [
     id: 'alert-trip-reminders',
     category: 'trip',
     pillLabel: 'Trip reminders',
-    pillIcon: '✈️',
-    pillColor: 'text-stone-700 bg-stone-100 border-stone-300',
-    badgeType: '✈️',
+    badgeType: 'trip',
     title: 'Mexico City workation starts in 28 days',
     message: 'Check Roma Norte coliving reservation and FMM immigration waiver validity.',
     timeLabel: '3h ago',
@@ -78,15 +72,30 @@ export const SMART_ALERTS_DATA: SmartAlertItem[] = [
     id: 'alert-passport',
     category: 'passport',
     pillLabel: 'Passport alerts',
-    pillIcon: '🛡️',
-    pillColor: 'text-teal-600 bg-teal-50 border-teal-200',
-    badgeType: '🛡️',
+    badgeType: 'passport',
     title: 'Passport validity verified (2.5 years remaining)',
     message: 'All ASEAN and Schengen borders require minimum 6 months validity. Your document is safe.',
     timeLabel: 'Yesterday',
     actionText: 'View Passport Card',
   },
 ];
+
+const renderAlertIcon = (type: AlertBadgeIconType, className = 'w-4 h-4') => {
+  switch (type) {
+    case 'schengen':
+      return <AlertCircle className={`${className} text-rose-500`} />;
+    case 'visa':
+      return <AlertTriangle className={`${className} text-amber-500`} />;
+    case 'doc':
+      return <FileText className={`${className} text-orange-500`} />;
+    case 'trip':
+      return <Plane className={`${className} text-sky-400`} />;
+    case 'passport':
+      return <ShieldCheck className={`${className} text-emerald-400`} />;
+    default:
+      return <Bell className={`${className} text-orange-500`} />;
+  }
+};
 
 interface SmartAlertsCarouselProps {
   onActionClick?: (item: SmartAlertItem) => void;
@@ -115,21 +124,21 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
 
   return (
     <div className={`space-y-6 max-w-xl mx-auto ${className}`}>
-      {/* Interactive Push Notification Banner (matching screenshot 7) */}
+      {/* Interactive Push Notification Banner */}
       <div className="relative group">
         <div 
           id="smart-push-notification-card"
-          className="bg-[#18181b] text-white rounded-3xl p-5 sm:p-6 shadow-2xl border border-stone-800 transition-all duration-300 transform hover:scale-[1.01]"
+          className="bg-slate-950 text-white rounded-3xl p-5 sm:p-6 shadow-2xl border border-slate-800 transition-all duration-300 transform hover:scale-[1.01]"
         >
           {/* Header row */}
-          <div className="flex items-center justify-between text-xs text-stone-400 mb-3">
+          <div className="flex items-center justify-between text-xs text-slate-400 mb-3">
             <div className="flex items-center gap-2.5">
               <div className="w-6 h-6 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-md shadow-orange-600/30">
-                🌐
+                <Globe className="w-3.5 h-3.5" />
               </div>
-              <span className="font-bold text-stone-200 text-sm">NomadOS</span>
-              <span className="text-stone-500">•</span>
-              <span className="text-stone-400">{activeAlert.timeLabel}</span>
+              <span className="font-bold text-slate-200 text-sm tracking-tight">NomadOS</span>
+              <span className="text-slate-600">•</span>
+              <span className="text-slate-400 font-medium">{activeAlert.timeLabel}</span>
               <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
             </div>
 
@@ -137,14 +146,14 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
               <button
                 onClick={handlePrev}
                 aria-label="Previous alert"
-                className="w-7 h-7 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 flex items-center justify-center transition-colors"
+                className="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors"
               >
                 <ChevronLeft className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={handleNext}
                 aria-label="Next alert"
-                className="w-7 h-7 rounded-full bg-stone-800 hover:bg-stone-700 text-stone-300 flex items-center justify-center transition-colors"
+                className="w-7 h-7 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center justify-center transition-colors"
               >
                 <ChevronRight className="w-3.5 h-3.5" />
               </button>
@@ -152,22 +161,24 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
           </div>
 
           {/* Content */}
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-2">
-              <span className="text-sm">{activeAlert.badgeType}</span>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2.5">
+              <div className="p-1 rounded-lg bg-slate-900 border border-slate-800 shrink-0">
+                {renderAlertIcon(activeAlert.badgeType, 'w-4 h-4')}
+              </div>
               <h4 className="text-base font-extrabold text-white tracking-tight">
                 {activeAlert.title}
               </h4>
             </div>
-            <p className="text-xs text-stone-300 leading-relaxed font-normal">
+            <p className="text-xs text-slate-300 leading-relaxed font-normal pl-8">
               {activeAlert.message}
             </p>
           </div>
 
           {/* Action button */}
           {activeAlert.actionText && (
-            <div className="mt-4 pt-3 border-t border-stone-800/80 flex items-center justify-between">
-              <span className="text-[11px] text-stone-400 font-medium">Auto-synced from live trip rules</span>
+            <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
+              <span className="text-[11px] text-slate-400 font-medium">Auto-synced from live trip rules</span>
               <button
                 onClick={() => onActionClick && onActionClick(activeAlert)}
                 className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1 transition-colors"
@@ -190,13 +201,13 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
             className={`transition-all duration-300 rounded-full ${
               idx === currentIndex
                 ? 'w-6 h-2 bg-orange-600'
-                : 'w-2 h-2 bg-stone-300 hover:bg-stone-400'
+                : 'w-2 h-2 bg-slate-300 hover:bg-slate-400'
             }`}
           />
         ))}
       </div>
 
-      {/* Pill buttons (matching Screenshot 7) */}
+      {/* Pill buttons */}
       <div className="flex flex-wrap items-center justify-center gap-2">
         {SMART_ALERTS_DATA.map((item, idx) => {
           const isActive = idx === currentIndex;
@@ -207,10 +218,10 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
               className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all border flex items-center gap-1.5 ${
                 isActive
                   ? 'bg-orange-600 text-white border-orange-600 shadow-md shadow-orange-500/25 scale-105'
-                  : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
+                  : 'bg-white hover:bg-slate-50 text-slate-700 border-slate-200'
               }`}
             >
-              <span>{item.pillIcon}</span>
+              <span className="shrink-0">{renderAlertIcon(item.badgeType, 'w-3.5 h-3.5')}</span>
               <span>{item.pillLabel}</span>
             </button>
           );

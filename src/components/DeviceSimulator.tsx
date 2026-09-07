@@ -38,7 +38,7 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
           </div>
 
           {/* Screen Content Container with inner scroll */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#FBF9F5]">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#fafafa]">
             {children}
           </div>
 
@@ -68,7 +68,7 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
         </div>
 
         {/* Screen Content Container with inner scroll */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#FBF9F5]">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#fafafa]">
           {children}
         </div>
 

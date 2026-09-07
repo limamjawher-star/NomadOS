@@ -47,10 +47,49 @@ export interface NomadExpense {
   id: string;
   date: string;
   description: string;
-  category: 'Accommodation' | 'Flights & Transit' | 'Food & Groceries' | 'Coworking & Cafes' | 'Health & Visas' | 'Activities';
+  category: 'Accommodation' | 'Flights & Transit' | 'Food & Groceries' | 'Coworking & Cafes' | 'Health & Visas' | 'Tech & Subscriptions' | 'Gear & Equipment' | 'Wellness & Leisure' | 'Activities' | 'Taxes & Legal';
   amount: number;
   currency: string;
   amountUSD: number;
+  isDeductible?: boolean;
+  notes?: string;
+  receiptUrl?: string;
+}
+
+export interface NomadIncomeStream {
+  id: string;
+  source: string;
+  type: 'salary' | 'retainer' | 'freelance' | 'saas' | 'passive';
+  monthlyAmountUSD: number;
+  currency: string;
+  originalAmount: number;
+  clientCountry?: string;
+  taxable: boolean;
+  notes?: string;
+}
+
+export interface NomadFinancialGoal {
+  id: string;
+  title: string;
+  targetUSD: number;
+  currentUSD: number;
+  deadline: string;
+  category: 'emergency' | 'visa' | 'gear' | 'flights' | 'tax';
+  imageUrl: string;
+}
+
+export interface NomadCostEstimate {
+  city: string;
+  country: string;
+  flag: string;
+  imageUrl: string;
+  monthlyBurnUSD: number;
+  rentUSD: number;
+  coworkingUSD: number;
+  foodUSD: number;
+  visasUSD: number;
+  leisureUSD: number;
+  runwayMonths?: number;
 }
 
 export interface NomadDocCheck {
@@ -192,6 +231,10 @@ export interface NomadState {
   teamTimezones: TeamTimezone[];
   expenses: NomadExpense[];
   monthlyBudgetUSD: number;
+  incomes: NomadIncomeStream[];
+  savingsTotalUSD: number;
+  taxBufferPercentage: number;
+  financialGoals: NomadFinancialGoal[];
   documents: NomadDocCheck[];
   events: NomadEvent[];
   nearbyNomads: NearbyNomad[];

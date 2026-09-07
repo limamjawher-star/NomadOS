@@ -34,15 +34,15 @@ export const TopBar: React.FC<TopBarProps> = ({
           onClick={() => onSetViewMode('landing')}
           className="flex items-center gap-2.5 cursor-pointer group"
         >
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-indigo-600 via-indigo-700 to-sky-500 text-white flex items-center justify-center font-black text-base shadow-lg shadow-indigo-500/25 group-hover:scale-105 transition-all">
-            🌐
+          <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-500 text-white flex items-center justify-center font-black text-base shadow-lg shadow-orange-500/25 group-hover:scale-105 transition-all">
+            <Globe className="w-5 h-5" />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-lg font-black text-slate-900 tracking-tight font-display">
-                Nomad<span className="text-indigo-600">OS</span>
+                Nomad<span className="text-orange-500">OS</span>
               </span>
-              <span className="px-1.5 py-0.5 bg-indigo-50 border border-indigo-100/80 text-indigo-700 text-[10px] font-black rounded-md uppercase tracking-wider">
+              <span className="px-1.5 py-0.5 bg-orange-50 border border-orange-100/80 text-orange-700 text-[10px] font-black rounded-md uppercase tracking-wider">
                 {viewMode === 'landing' ? '2026' : 'App'}
               </span>
             </div>
@@ -58,11 +58,11 @@ export const TopBar: React.FC<TopBarProps> = ({
             onClick={() => onSetViewMode('landing')}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'landing'
-                ? 'bg-indigo-600 text-white shadow-sm font-black'
+                ? 'bg-orange-500 text-white shadow-sm font-black'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>✨</span>
+            <Sparkles className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Landing</span>
           </button>
 
@@ -73,7 +73,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'app' && deviceMode === 'web'
-                ? 'bg-indigo-600 text-white shadow-sm font-black'
+                ? 'bg-orange-500 text-white shadow-sm font-black'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -88,7 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'app' && deviceMode === 'ios'
-                ? 'bg-indigo-600 text-white shadow-sm font-black'
+                ? 'bg-orange-500 text-white shadow-sm font-black'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
@@ -103,11 +103,11 @@ export const TopBar: React.FC<TopBarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'app' && deviceMode === 'android'
-                ? 'bg-indigo-600 text-white shadow-sm font-black'
+                ? 'bg-orange-500 text-white shadow-sm font-black'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>📱</span>
+            <Smartphone className="w-3.5 h-3.5" />
             <span>Pixel 9</span>
           </button>
         </div>
@@ -115,15 +115,15 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Right Actions: Account & Cloud Sync Status (No duplicate Upgrade Pro button) */}
         <div className="flex items-center gap-2">
           {user.isPro && (
-            <span className="px-2.5 py-1 bg-indigo-50 border border-indigo-200/80 text-indigo-700 text-[11px] font-black rounded-full flex items-center gap-1">
-              <Crown className="w-3 h-3 text-indigo-600" />
+            <span className="px-2.5 py-1 bg-orange-50 border border-orange-200/80 text-orange-700 text-[11px] font-black rounded-full flex items-center gap-1">
+              <Crown className="w-3 h-3 text-orange-600" />
               <span>PRO</span>
             </span>
           )}
 
           <button
             onClick={onOpenAuth}
-            className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-slate-200/90 hover:border-indigo-400 bg-white hover:bg-slate-50 transition-all shadow-sm group"
+            className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-slate-200/90 hover:border-orange-400 bg-white hover:bg-slate-50 transition-all shadow-sm group"
             title="Account & Cloud Sync"
           >
             <span className="text-xs font-bold text-slate-800 truncate max-w-[80px]">
@@ -133,7 +133,7 @@ export const TopBar: React.FC<TopBarProps> = ({
               <img
                 src={user.avatarUrl}
                 alt={user.name}
-                className="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200 group-hover:ring-indigo-500 transition-all"
+                className="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200 group-hover:ring-orange-500 transition-all"
               />
               <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-white" />
             </div>

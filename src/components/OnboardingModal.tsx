@@ -13,7 +13,10 @@ import {
   Users, 
   Clock, 
   Bell, 
-  ArrowRight
+  ArrowRight,
+  RefreshCw,
+  Lightbulb,
+  Compass
 } from 'lucide-react';
 import { NomadState, NomadUser } from '../types';
 
@@ -158,17 +161,17 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     onChange={(e) => setNationality(e.target.value)}
                     className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all text-sm"
                   >
-                    <option value="Argentina">🇦🇷 Argentina</option>
-                    <option value="United States">🇺🇸 United States</option>
-                    <option value="Portugal">🇵🇹 Portugal</option>
-                    <option value="United Kingdom">🇬🇧 United Kingdom</option>
-                    <option value="Germany">🇩🇪 Germany</option>
-                    <option value="France">🇫🇷 France</option>
-                    <option value="Spain">🇪🇸 Spain</option>
-                    <option value="Canada">🇨🇦 Canada</option>
-                    <option value="Australia">🇦🇺 Australia</option>
-                    <option value="Brazil">🇧🇷 Brazil</option>
-                    <option value="Italy">🇮🇹 Italy</option>
+                    <option value="Argentina">Argentina</option>
+                    <option value="United States">United States</option>
+                    <option value="Portugal">Portugal</option>
+                    <option value="United Kingdom">United Kingdom</option>
+                    <option value="Germany">Germany</option>
+                    <option value="France">France</option>
+                    <option value="Spain">Spain</option>
+                    <option value="Canada">Canada</option>
+                    <option value="Australia">Australia</option>
+                    <option value="Brazil">Brazil</option>
+                    <option value="Italy">Italy</option>
                   </select>
                 </div>
 
@@ -244,15 +247,17 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     const next = randomAvatars[(randomAvatars.indexOf(avatarUrl) + 1) % randomAvatars.length];
                     setAvatarUrl(next);
                   }}
-                  className="text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-full transition-colors"
+                  className="text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5"
                 >
-                  🔄 Shuffle photo avatar
+                  <RefreshCw className="w-3 h-3 text-orange-600" />
+                  <span>Shuffle photo avatar</span>
                 </button>
                 <span className="text-[11px] text-stone-400">JPG, PNG or WebP · Max 5MB</span>
               </div>
 
-              <div className="bg-orange-50/60 border border-orange-200/60 rounded-2xl p-4 text-xs text-orange-900 leading-relaxed">
-                💡 <span className="font-semibold">Pro tip:</span> Nomads with photos get 3x more replies to local coffee chats and coworking invitations.
+              <div className="bg-orange-50/60 border border-orange-200/60 rounded-2xl p-4 text-xs text-orange-900 leading-relaxed flex items-start gap-2.5">
+                <Lightbulb className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                <span><span className="font-semibold">Pro tip:</span> Nomads with photos get 3x more replies to local coffee chats and coworking invitations.</span>
               </div>
 
               {/* Step indicator & button */}
@@ -432,15 +437,17 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/25">
                   <MapPin className="w-7 h-7" />
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Join the nomad map 🗺️</h2>
+                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Join the nomad map</h2>
                 <p className="text-sm text-stone-500 max-w-sm leading-relaxed">
                   Tell us where you are to connect with nomads nearby.
                 </p>
               </div>
 
               <div className="space-y-3 pt-2">
-                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider">
-                  📍 Where are you right now? <span className="text-orange-500">*</span>
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                  <span>Where are you right now?</span>
+                  <span className="text-orange-500">*</span>
                 </label>
                 <input
                   id="onboarding-location-input"
@@ -478,7 +485,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-bold mb-1">
                   <Check className="w-3.5 h-3.5" /> You're on the map as {currentLocation}!
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Create a meetup 🎉</h2>
+                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Create a meetup</h2>
                 <p className="text-sm text-stone-500 max-w-sm leading-relaxed">
                   Invite nomads in your city to meet up IRL for coffee, coworking, or sunset drinks.
                 </p>
@@ -516,7 +523,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   onClick={handleCreateMeetup}
                   className="w-full flex items-center justify-center gap-2 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all text-sm"
                 >
-                  Create meetup 🎉
+                  Create meetup
                 </button>
                 <button
                   onClick={() => setStep(7)}
@@ -543,7 +550,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               <div className="bg-stone-50 border border-stone-200 rounded-2xl p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold text-sm">
-                    🗺️
+                    <Compass className="w-5 h-5 text-orange-600" />
                   </div>
                   <div>
                     <h5 className="text-xs font-bold text-stone-800">On the nomad map</h5>
@@ -573,7 +580,8 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   onClick={handleFinish}
                   className="w-full flex items-center justify-center gap-2 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all text-sm"
                 >
-                  Go to Dashboard 🚀
+                  <span>Go to Dashboard</span>
+                  <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </div>

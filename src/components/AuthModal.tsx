@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Mail, Lock, AtSign, Check, X, Shield, ArrowRight } from 'lucide-react';
+import { User, Mail, Lock, AtSign, Check, X, Shield, ArrowRight, Globe } from 'lucide-react';
 import { NomadUser } from '../types';
 
 interface AuthModalProps {
@@ -30,7 +30,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       name: name || 'Jawher',
       tag: tag.startsWith('@') ? tag : `@${tag}`,
     });
-    setSuccessMsg(isSignUp ? 'Account created successfully! 🎉' : 'Signed in! Welcome back.');
+    setSuccessMsg(isSignUp ? 'Account created successfully!' : 'Signed in! Welcome back.');
     setTimeout(() => {
       setSuccessMsg('');
       onClose();
@@ -46,7 +46,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         <div className="flex items-center justify-between px-6 pt-5 pb-2">
           <div className="flex items-center gap-2">
             <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-orange-600 text-white font-black text-xs shadow-md shadow-orange-600/30">
-              🌐
+              <Globe className="w-4 h-4 text-white" />
             </span>
             <span className="text-sm font-bold text-stone-900 tracking-tight">NomadOS Account</span>
           </div>
