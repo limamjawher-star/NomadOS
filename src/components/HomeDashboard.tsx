@@ -77,7 +77,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       {/* 1. Header bar matching Screenshot 1 */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-purple-600/30">
+          <div className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-orange-600/30">
             🌐
           </div>
           <span className="font-extrabold text-stone-900 text-base tracking-tight">
@@ -90,7 +90,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             <button
               id="home-upgrade-pill-btn"
               onClick={onOpenPricing}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-black rounded-full shadow-md shadow-purple-600/25 flex items-center gap-1.5 transition-all transform active:scale-95"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-700 text-white text-xs font-black rounded-full shadow-md shadow-orange-600/25 flex items-center gap-1.5 transition-all transform active:scale-95"
             >
               👑 <span>Upgrade Pro</span>
             </button>
@@ -102,7 +102,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
           <button
             onClick={() => onNavigateTab('me')}
-            className="w-8 h-8 rounded-full overflow-hidden border-2 border-purple-500/40 hover:border-purple-600 transition-colors"
+            className="w-8 h-8 rounded-full overflow-hidden border-2 border-orange-500/40 hover:border-orange-600 transition-colors"
           >
             <img src={state.user.avatarUrl} alt={state.user.name} className="w-full h-full object-cover" />
           </button>
@@ -114,14 +114,14 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Location Card */}
         <div 
           onClick={() => onNavigateTab('social')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
           <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5 text-stone-500">
-              <MapPin className="w-3.5 h-3.5 text-purple-600" />
+              <MapPin className="w-3.5 h-3.5 text-orange-600" />
               <span>Location</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-orange-600 transition-colors" />
           </div>
           <div>
             <h4 className="text-lg font-black text-stone-900 leading-tight">{state.currentCity}</h4>
@@ -132,14 +132,14 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Next Trip Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
           <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5 text-stone-500">
-              <Plane className="w-3.5 h-3.5 text-purple-600" />
+              <Plane className="w-3.5 h-3.5 text-orange-600" />
               <span>Next Trip</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-orange-600 transition-colors" />
           </div>
           <div>
             <h4 className="text-lg font-black text-stone-900 leading-tight">28 days</h4>
@@ -150,14 +150,14 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Visa Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
           <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5 text-stone-500">
-              <Clock className="w-3.5 h-3.5 text-purple-600" />
+              <Clock className="w-3.5 h-3.5 text-orange-600" />
               <span>Visa</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-orange-600 transition-colors" />
           </div>
           <div>
             <h4 className="text-lg font-black text-rose-600 leading-tight">13 days</h4>
@@ -168,18 +168,18 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Spent Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
           <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
             <div className="flex items-center gap-1.5 text-stone-500">
-              <DollarSign className="w-3.5 h-3.5 text-purple-600" />
+              <DollarSign className="w-3.5 h-3.5 text-orange-600" />
               <span>Spent</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-orange-600 transition-colors" />
           </div>
           <div>
             <h4 className="text-lg font-black text-stone-900 leading-tight">€586</h4>
-            <p className="text-xs text-purple-600 font-bold group-hover:underline">
+            <p className="text-xs text-orange-600 font-bold group-hover:underline">
               View insights →
             </p>
           </div>
@@ -261,16 +261,16 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             </div>
 
             {/* INFO: Mexico trip */}
-            <div className="p-3 bg-blue-50 border border-blue-200/90 rounded-2xl flex items-center justify-between text-xs">
+            <div className="p-3 bg-stone-100 border border-stone-300/90 rounded-2xl flex items-center justify-between text-xs">
               <div className="flex items-center gap-2.5">
-                <span className="px-2 py-0.5 bg-blue-600 text-white font-black text-[10px] rounded-md tracking-wider">
+                <span className="px-2 py-0.5 bg-stone-800 text-white font-black text-[10px] rounded-md tracking-wider">
                   INFO
                 </span>
-                <span className="font-bold text-blue-950 text-xs">
+                <span className="font-bold text-stone-900 text-xs">
                   Your trip to Mexico City, Mexico starts in 28 days
                 </span>
               </div>
-              <ChevronRight className="w-3.5 h-3.5 text-blue-400" />
+              <ChevronRight className="w-3.5 h-3.5 text-stone-400" />
             </div>
           </div>
         )}
@@ -287,7 +287,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           </div>
           <button
             onClick={() => onNavigateTab('social')}
-            className="text-xs font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1"
+            className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
           >
             <span>Radar map</span>
             <ChevronRight className="w-3.5 h-3.5" />
@@ -295,19 +295,19 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         </div>
 
         {founderNomad && (
-          <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80 flex items-center justify-between hover:border-purple-200 transition-all">
+          <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80 flex items-center justify-between hover:border-orange-200 transition-all">
             <div className="flex items-center gap-3">
               <div className="relative">
                 <img
                   src={founderNomad.avatarUrl}
                   alt={founderNomad.name}
-                  className="w-11 h-11 rounded-full object-cover border-2 border-purple-500/40"
+                  className="w-11 h-11 rounded-full object-cover border-2 border-orange-500/40"
                 />
                 <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white" />
               </div>
               <div>
                 <h5 className="font-black text-stone-900 text-xs">{founderNomad.name}</h5>
-                <p className="text-[11px] text-purple-600 font-bold">
+                <p className="text-[11px] text-orange-600 font-bold">
                   NomadOS Founder · {founderNomad.currentCity || founderNomad.location}
                 </p>
                 <p className="text-[10px] text-stone-400 line-clamp-1 mt-0.5">
@@ -318,7 +318,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
             <button
               onClick={() => setSelectedNomad(founderNomad)}
-              className="w-9 h-9 rounded-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center transition-colors shadow-md shadow-purple-600/20"
+              className="w-9 h-9 rounded-full bg-orange-600 hover:bg-orange-700 text-white flex items-center justify-center transition-colors shadow-md shadow-orange-600/20"
               title="Chat with Eva"
             >
               <MessageSquare className="w-4 h-4" />
@@ -331,9 +331,9 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
         <button
           onClick={() => onNavigateTab('travel')}
-          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-purple-300 text-left transition-all shadow-sm group"
+          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-orange-300 text-left transition-all shadow-sm group"
         >
-          <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold mb-2 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-bold mb-2 group-hover:scale-105 transition-transform">
             🗺️
           </div>
           <span className="text-xs font-black text-stone-900 block">Multi-Stop Trips</span>
@@ -342,7 +342,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
         <button
           onClick={() => onNavigateTab('travel')}
-          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-purple-300 text-left transition-all shadow-sm group"
+          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-orange-300 text-left transition-all shadow-sm group"
         >
           <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold mb-2 group-hover:scale-105 transition-transform">
             📅
@@ -353,7 +353,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
 
         <button
           onClick={() => onNavigateTab('travel')}
-          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-purple-300 text-left transition-all shadow-sm group col-span-2 sm:col-span-1"
+          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-orange-300 text-left transition-all shadow-sm group col-span-2 sm:col-span-1"
         >
           <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-2 group-hover:scale-105 transition-transform">
             🛡️
@@ -372,11 +372,11 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                 <img
                   src={selectedNomad.avatarUrl}
                   alt={selectedNomad.name}
-                  className="w-10 h-10 rounded-full object-cover border-2 border-purple-500"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-orange-500"
                 />
                 <div>
                   <h4 className="font-extrabold text-stone-900 text-sm">{selectedNomad.name}</h4>
-                  <p className="text-[10px] text-purple-600 font-bold">{selectedNomad.currentCity || selectedNomad.location}</p>
+                  <p className="text-[10px] text-orange-600 font-bold">{selectedNomad.currentCity || selectedNomad.location}</p>
                 </div>
               </div>
               <button
@@ -399,11 +399,11 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                   value={chatMessage}
                   onChange={(e) => setChatMessage(e.target.value)}
                   placeholder={`Hey ${selectedNomad.name.split(' ')[0]}, want to grab a coffee or cowork today?`}
-                  className="w-full p-3 rounded-2xl border border-stone-200 text-xs focus:outline-none focus:border-purple-500"
+                  className="w-full p-3 rounded-2xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500"
                 />
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30 transition-colors"
+                  className="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-600/30 transition-colors"
                 >
                   Send Message
                 </button>

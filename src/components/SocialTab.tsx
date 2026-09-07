@@ -108,7 +108,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
           onClick={() => setSocialSubTab('meet')}
           className={`flex-1 py-2 rounded-xl text-xs font-black transition-all ${
             socialSubTab === 'meet'
-              ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20'
+              ? 'bg-orange-600 text-white shadow-md shadow-orange-600/20'
               : 'text-stone-500 hover:text-stone-900'
           }`}
         >
@@ -138,7 +138,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 onClick={() => setSelectedTag(tag.label)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border ${
                   selectedTag === tag.label
-                    ? 'bg-purple-600 text-white border-purple-600 shadow-sm'
+                    ? 'bg-orange-600 text-white border-orange-600 shadow-sm'
                     : 'bg-white text-stone-700 border-stone-200 hover:bg-stone-50'
                 }`}
               >
@@ -185,7 +185,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
           {/* Visual Interactive Map (matching Screenshot 6) */}
           <div className="relative h-72 sm:h-80 rounded-3xl bg-slate-900 overflow-hidden border border-stone-800 shadow-inner">
             {/* Map styling grid & visual terrain */}
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:16px_16px]" />
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#EA580C_1px,transparent_1px)] [background-size:16px_16px]" />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent" />
 
             {/* GPS Header Badge */}
@@ -198,11 +198,11 @@ export const SocialTab: React.FC<SocialTabProps> = ({
 
             {/* Map Pin 1: Zenita Cafe */}
             <div className="absolute top-12 left-10 z-10 group cursor-pointer">
-              <div className="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-extrabold transition-transform transform group-hover:scale-105">
+              <div className="px-2.5 py-1 bg-orange-600 hover:bg-orange-700 text-white rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-extrabold transition-transform transform group-hover:scale-105">
                 <span>☕</span>
                 <span>Zenita Specialty Cafe</span>
               </div>
-              <div className="w-3 h-3 bg-purple-600 rotate-45 mx-auto -mt-1.5" />
+              <div className="w-3 h-3 bg-orange-600 rotate-45 mx-auto -mt-1.5" />
             </div>
 
             {/* Map Pin 2: Sunset Drinks */}
@@ -216,16 +216,16 @@ export const SocialTab: React.FC<SocialTabProps> = ({
 
             {/* Map Pin 3: Coworking Hub Sukhumvit */}
             <div className="absolute bottom-20 left-24 z-10 group cursor-pointer">
-              <div className="px-2.5 py-1 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-extrabold transition-transform transform group-hover:scale-105">
+              <div className="px-2.5 py-1 bg-orange-500 hover:bg-orange-700 text-white rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-extrabold transition-transform transform group-hover:scale-105">
                 <span>💻</span>
                 <span>Dojo Coworking Hub</span>
               </div>
-              <div className="w-3 h-3 bg-indigo-600 rotate-45 mx-auto -mt-1.5" />
+              <div className="w-3 h-3 bg-orange-500 rotate-45 mx-auto -mt-1.5" />
             </div>
 
             {/* User Location Pulse Center */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full border-4 border-white/60 bg-purple-600/80 shadow-2xl flex items-center justify-center animate-pulse">
+              <div className="w-12 h-12 rounded-full border-4 border-white/60 bg-orange-600/80 shadow-2xl flex items-center justify-center animate-pulse">
                 <img src={state.user.avatarUrl} alt="You" className="w-9 h-9 rounded-full object-cover" />
               </div>
               <span className="text-[10px] font-black text-white bg-black/60 px-2 py-0.5 rounded-full mt-1">
@@ -235,7 +235,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
 
             {/* Bottom floating badge matching Screenshot 6 */}
             <div className="absolute bottom-3 right-3 z-10">
-              <span className="px-3 py-1 bg-purple-600/90 backdrop-blur-md text-white rounded-full text-xs font-extrabold shadow-lg">
+              <span className="px-3 py-1 bg-orange-600/90 backdrop-blur-md text-white rounded-full text-xs font-extrabold shadow-lg">
                 👋 12 nearby
               </span>
             </div>
@@ -249,7 +249,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
             >
               <div className="flex items-center gap-2">
                 <span className="text-sm font-black text-stone-900">Upcoming Events & Meetups</span>
-                <span className="px-2 py-0.5 bg-purple-50 text-purple-700 text-[10px] font-black rounded-full">
+                <span className="px-2 py-0.5 bg-orange-50 text-orange-700 text-[10px] font-black rounded-full">
                   {filteredEvents.length}
                 </span>
               </div>
@@ -264,11 +264,11 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 {filteredEvents.map((ev) => (
                   <div
                     key={ev.id}
-                    className="bg-stone-50 rounded-2xl p-4 border border-stone-200/80 hover:border-purple-200 transition-all flex items-start justify-between gap-3"
+                    className="bg-stone-50 rounded-2xl p-4 border border-stone-200/80 hover:border-orange-200 transition-all flex items-start justify-between gap-3"
                   >
                     <div className="space-y-1">
                       <div className="flex items-center gap-2">
-                        <span className="px-2 py-0.5 bg-purple-100 text-purple-700 text-[10px] font-black rounded-md">
+                        <span className="px-2 py-0.5 bg-orange-100 text-orange-700 text-[10px] font-black rounded-md">
                           {ev.category}
                         </span>
                         <h5 className="font-extrabold text-stone-900 text-xs">{ev.title}</h5>
@@ -280,7 +280,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                           {ev.date} · {ev.time}
                         </span>
                         <span className="flex items-center gap-1 text-stone-600">
-                          <MapPin className="w-3 h-3 text-purple-500" />
+                          <MapPin className="w-3 h-3 text-orange-500" />
                           {ev.location}
                         </span>
                       </div>
@@ -294,7 +294,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                       onClick={() => onToggleEventRSVP(ev.id)}
                       className={`px-3 py-1.5 rounded-xl text-xs font-black transition-all shrink-0 ${
                         ev.isAttending
-                          ? 'bg-purple-600 text-white shadow-sm'
+                          ? 'bg-orange-600 text-white shadow-sm'
                           : 'bg-white hover:bg-stone-100 text-stone-700 border border-stone-200'
                       }`}
                     >
@@ -311,7 +311,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
             <button
               onClick={() => setIsCreateMeetupOpen(true)}
               id="social-host-meetup-btn"
-              className="w-12 h-12 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-xl shadow-purple-600/30 flex items-center justify-center transition-all transform active:scale-95"
+              className="w-12 h-12 rounded-full bg-orange-600 hover:bg-orange-700 text-white shadow-xl shadow-orange-600/30 flex items-center justify-center transition-all transform active:scale-95"
               title="Host Meetup"
             >
               <Plus className="w-6 h-6" />
@@ -338,7 +338,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                     <img
                       src={nomad.avatarUrl}
                       alt={nomad.name}
-                      className="w-12 h-12 rounded-full object-cover border-2 border-purple-500/30"
+                      className="w-12 h-12 rounded-full object-cover border-2 border-orange-500/30"
                     />
                     {nomad.isOnline && (
                       <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white" />
@@ -346,7 +346,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                   </div>
                   <div>
                     <h5 className="text-xs font-black text-stone-900">{nomad.name}</h5>
-                    <p className="text-[11px] text-purple-600 font-bold">{nomad.profession}</p>
+                    <p className="text-[11px] text-orange-600 font-bold">{nomad.profession}</p>
                     <p className="text-[10px] text-stone-400">{nomad.currentCity || nomad.location}</p>
                   </div>
                 </div>
@@ -357,7 +357,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
 
                 <button
                   onClick={() => setActiveNomadMessage(nomad)}
-                  className="w-full py-2 bg-stone-100 hover:bg-purple-50 hover:text-purple-600 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
+                  className="w-full py-2 bg-stone-100 hover:bg-orange-50 hover:text-orange-600 font-bold text-xs rounded-xl flex items-center justify-center gap-1.5 transition-colors"
                 >
                   <MessageSquare className="w-3.5 h-3.5" />
                   <span>Send Direct Message</span>
@@ -377,7 +377,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
               <div
                 key={nomad.id}
                 onClick={() => setActiveNomadMessage(nomad)}
-                className="p-3 bg-stone-50 hover:bg-purple-50 rounded-2xl border border-stone-200/80 flex items-center justify-between cursor-pointer transition-colors"
+                className="p-3 bg-stone-50 hover:bg-orange-50 rounded-2xl border border-stone-200/80 flex items-center justify-between cursor-pointer transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <img src={nomad.avatarUrl} alt={nomad.name} className="w-10 h-10 rounded-full object-cover" />
@@ -418,7 +418,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 placeholder="e.g. ☕ Sunset Coffee & Cowork at Zenita"
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
               />
             </div>
 
@@ -429,7 +429,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                   type="date"
                   value={newDate}
                   onChange={(e) => setNewDate(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
                 />
               </div>
               <div>
@@ -437,7 +437,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 <select
                   value={newCategory}
                   onChange={(e) => setNewCategory(e.target.value as any)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
                 >
                   <option value="Coffee">Coffee & Work</option>
                   <option value="Coworking">Coworking Sprint</option>
@@ -455,7 +455,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 placeholder="e.g. Zenita Specialty Cafe Canggu"
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
               />
             </div>
 
@@ -469,7 +469,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
+                className="flex-1 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-600/30"
               >
                 Publish Meetup
               </button>
@@ -487,7 +487,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 <img src={activeNomadMessage.avatarUrl} alt={activeNomadMessage.name} className="w-10 h-10 rounded-full object-cover" />
                 <div>
                   <h4 className="font-extrabold text-stone-900 text-xs">{activeNomadMessage.name}</h4>
-                  <p className="text-[10px] text-purple-600 font-bold">{activeNomadMessage.profession}</p>
+                  <p className="text-[10px] text-orange-600 font-bold">{activeNomadMessage.profession}</p>
                 </div>
               </div>
               <button
@@ -510,11 +510,11 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                   value={msgText}
                   onChange={(e) => setMsgText(e.target.value)}
                   placeholder={`Hi ${activeNomadMessage.name.split(' ')[0]}, let's connect!`}
-                  className="w-full p-3 rounded-2xl border border-stone-200 text-xs focus:outline-none focus:border-purple-500"
+                  className="w-full p-3 rounded-2xl border border-stone-200 text-xs focus:outline-none focus:border-orange-500"
                 />
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
+                  className="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-600/30"
                 >
                   Send
                 </button>

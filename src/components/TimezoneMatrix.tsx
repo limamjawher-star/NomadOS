@@ -229,7 +229,7 @@ export const TimezoneMatrix: React.FC<TimezoneMatrixProps> = ({
                     Working Hours
                   </span>
                 ) : isLateNight ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] text-indigo-400">
+                  <span className="inline-flex items-center gap-1 text-[11px] text-orange-400">
                     <Moon className="h-3 w-3" />
                     Asleep / Off
                   </span>

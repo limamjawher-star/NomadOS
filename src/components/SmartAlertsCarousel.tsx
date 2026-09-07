@@ -55,7 +55,7 @@ export const SMART_ALERTS_DATA: SmartAlertItem[] = [
     category: 'doc',
     pillLabel: 'Pending docs',
     pillIcon: '📋',
-    pillColor: 'text-purple-600 bg-purple-50 border-purple-200',
+    pillColor: 'text-orange-600 bg-orange-50 border-orange-200',
     badgeType: '📋',
     title: '6 documents pending across 3 visas',
     message: 'Missing onward flight ticket for Bali B213 VoA and proof of funds for DTV renewal.',
@@ -67,7 +67,7 @@ export const SMART_ALERTS_DATA: SmartAlertItem[] = [
     category: 'trip',
     pillLabel: 'Trip reminders',
     pillIcon: '✈️',
-    pillColor: 'text-blue-600 bg-blue-50 border-blue-200',
+    pillColor: 'text-stone-700 bg-stone-100 border-stone-300',
     badgeType: '✈️',
     title: 'Mexico City workation starts in 28 days',
     message: 'Check Roma Norte coliving reservation and FMM immigration waiver validity.',
@@ -124,7 +124,7 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
           {/* Header row */}
           <div className="flex items-center justify-between text-xs text-stone-400 mb-3">
             <div className="flex items-center gap-2.5">
-              <div className="w-6 h-6 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold text-xs shadow-md shadow-purple-600/30">
+              <div className="w-6 h-6 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs shadow-md shadow-orange-600/30">
                 🌐
               </div>
               <span className="font-bold text-stone-200 text-sm">NomadOS</span>
@@ -170,7 +170,7 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
               <span className="text-[11px] text-stone-400 font-medium">Auto-synced from live trip rules</span>
               <button
                 onClick={() => onActionClick && onActionClick(activeAlert)}
-                className="text-xs font-bold text-purple-400 hover:text-purple-300 flex items-center gap-1 transition-colors"
+                className="text-xs font-bold text-orange-400 hover:text-orange-300 flex items-center gap-1 transition-colors"
               >
                 <span>{activeAlert.actionText}</span>
                 <ChevronRight className="w-3 h-3" />
@@ -189,7 +189,7 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
             aria-label={`Go to alert ${idx + 1}`}
             className={`transition-all duration-300 rounded-full ${
               idx === currentIndex
-                ? 'w-6 h-2 bg-purple-600'
+                ? 'w-6 h-2 bg-orange-600'
                 : 'w-2 h-2 bg-stone-300 hover:bg-stone-400'
             }`}
           />
@@ -206,7 +206,7 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
               onClick={() => handleSelectCategory(idx)}
               className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all border flex items-center gap-1.5 ${
                 isActive
-                  ? 'bg-purple-600 text-white border-purple-600 shadow-md shadow-purple-500/25 scale-105'
+                  ? 'bg-orange-600 text-white border-orange-600 shadow-md shadow-orange-500/25 scale-105'
                   : 'bg-white hover:bg-stone-50 text-stone-700 border-stone-200'
               }`}
             >

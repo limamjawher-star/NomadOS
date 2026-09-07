@@ -45,7 +45,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       >
         <div className="flex items-center justify-between px-6 pt-5 pb-2">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-purple-600 text-white font-black text-xs shadow-md shadow-purple-600/30">
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-orange-600 text-white font-black text-xs shadow-md shadow-orange-600/30">
               🌐
             </span>
             <span className="text-sm font-bold text-stone-900 tracking-tight">NomadOS Account</span>
@@ -107,7 +107,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Jawher"
-                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
+                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
                     />
                   </div>
                 </div>
@@ -124,7 +124,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={tag}
                       onChange={(e) => setTag(e.target.value)}
                       placeholder="@canggu"
-                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
+                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
                     />
                   </div>
                 </div>
@@ -143,7 +143,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="nomad@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
                 />
               </div>
             </div>
@@ -160,7 +160,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
                 />
               </div>
             </div>
@@ -174,7 +174,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               id="auth-submit-btn"
               type="submit"
-              className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 text-xs transition-all"
+              className="w-full py-3 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl shadow-lg shadow-orange-600/30 flex items-center justify-center gap-2 text-xs transition-all"
             >
               {isSignUp ? 'Create Account & Start Travelling' : 'Sign In'} <ArrowRight className="w-4 h-4" />
             </button>

@@ -34,14 +34,14 @@ export const TopBar: React.FC<TopBarProps> = ({
           onClick={() => onSetViewMode('landing')}
           className="flex items-center gap-2.5 cursor-pointer group"
         >
-          <div className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-purple-600/30 group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-orange-600/30 group-hover:scale-105 transition-transform">
             🌐
           </div>
           <div>
             <div className="flex items-center gap-1.5">
               <span className="text-base font-black text-stone-900 tracking-tight">NomadOS</span>
               {viewMode === 'app' && (
-                <span className="px-1.5 py-0.5 bg-purple-50 text-purple-700 text-[10px] font-black rounded">
+                <span className="px-1.5 py-0.5 bg-orange-50 text-orange-700 text-[10px] font-black rounded">
                   APP
                 </span>
               )}
@@ -58,7 +58,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             onClick={() => onSetViewMode('landing')}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'landing'
-                ? 'bg-white text-purple-700 shadow-sm font-black'
+                ? 'bg-white text-orange-700 shadow-sm font-black'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -73,7 +73,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'app' && deviceMode === 'web'
-                ? 'bg-purple-600 text-white shadow-sm font-black'
+                ? 'bg-orange-600 text-white shadow-sm font-black'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -88,7 +88,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'app' && deviceMode === 'ios'
-                ? 'bg-purple-600 text-white shadow-sm font-black'
+                ? 'bg-orange-600 text-white shadow-sm font-black'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -103,7 +103,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             }}
             className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
               viewMode === 'app' && deviceMode === 'android'
-                ? 'bg-purple-600 text-white shadow-sm font-black'
+                ? 'bg-orange-600 text-white shadow-sm font-black'
                 : 'text-stone-600 hover:text-stone-900'
             }`}
           >
@@ -117,7 +117,7 @@ export const TopBar: React.FC<TopBarProps> = ({
           {!user.isPro ? (
             <button
               onClick={onOpenPricing}
-              className="px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-black rounded-full shadow-md shadow-purple-600/20 flex items-center gap-1.5 transition-all transform active:scale-95"
+              className="px-3 py-1.5 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-700 text-white text-xs font-black rounded-full shadow-md shadow-orange-600/20 flex items-center gap-1.5 transition-all transform active:scale-95"
             >
               <Crown className="w-3.5 h-3.5 text-amber-300" />
               <span>Pro</span>
@@ -130,7 +130,7 @@ export const TopBar: React.FC<TopBarProps> = ({
 
           <button
             onClick={onOpenAuth}
-            className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-stone-200 hover:border-purple-400 bg-stone-50 hover:bg-white transition-all shadow-sm"
+            className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-stone-200 hover:border-orange-400 bg-stone-50 hover:bg-white transition-all shadow-sm"
             title="Account & Auth"
           >
             <span className="text-xs font-bold text-stone-800 truncate max-w-[80px]">
@@ -139,7 +139,7 @@ export const TopBar: React.FC<TopBarProps> = ({
             <img
               src={user.avatarUrl}
               alt={user.name}
-              className="w-6 h-6 rounded-full object-cover ring-1 ring-purple-500"
+              className="w-6 h-6 rounded-full object-cover ring-1 ring-orange-500"
             />
           </button>
         </div>

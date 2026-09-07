@@ -241,7 +241,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f8f9fc] text-stone-900 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+    <div className="min-h-screen bg-[#FBF9F5] text-stone-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
       {/* Top Application Header with Mode & Device Toggles */}
       <TopBar
         user={state.user}
@@ -362,7 +362,7 @@ export function App() {
           id="global-toast-notification"
           className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-stone-900/95 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 backdrop-blur-md border border-stone-700/50"
         >
-          <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
           <span>{toastMessage}</span>
         </div>
       )}

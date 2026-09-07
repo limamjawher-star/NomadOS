@@ -50,11 +50,11 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   return (
-    <div id="nomados-landing-page" className="min-h-screen bg-[#fafaf9] text-stone-900 selection:bg-purple-600 selection:text-white">
+    <div id="nomados-landing-page" className="min-h-screen bg-[#fafaf9] text-stone-900 selection:bg-orange-600 selection:text-white">
       {/* 1. Header (matching Screenshot 1 & 9) */}
       <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-stone-200/80 px-4 sm:px-8 py-3.5 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-lg shadow-md shadow-purple-600/30">
+          <div className="w-9 h-9 rounded-xl bg-orange-600 text-white flex items-center justify-center font-black text-lg shadow-md shadow-orange-600/30">
             🌐
           </div>
           <span className="text-lg font-black tracking-tight text-stone-900">
@@ -64,19 +64,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         {/* Navigation links */}
         <nav className="hidden md:flex items-center gap-6 text-xs font-bold text-stone-600">
-          <button onClick={() => scrollToSection('section-command')} className="hover:text-purple-600 transition-colors">
+          <button onClick={() => scrollToSection('section-command')} className="hover:text-orange-600 transition-colors">
             Features
           </button>
-          <button onClick={() => scrollToSection('section-how-it-works')} className="hover:text-purple-600 transition-colors">
+          <button onClick={() => scrollToSection('section-how-it-works')} className="hover:text-orange-600 transition-colors">
             How it works
           </button>
-          <button onClick={() => scrollToSection('section-community')} className="hover:text-purple-600 transition-colors">
+          <button onClick={() => scrollToSection('section-community')} className="hover:text-orange-600 transition-colors">
             Community
           </button>
-          <button onClick={() => scrollToSection('section-alerts')} className="hover:text-purple-600 transition-colors">
+          <button onClick={() => scrollToSection('section-alerts')} className="hover:text-orange-600 transition-colors">
             Security & Alerts
           </button>
-          <button onClick={onOpenPricing} className="hover:text-purple-600 transition-colors">
+          <button onClick={onOpenPricing} className="hover:text-orange-600 transition-colors">
             Pricing
           </button>
         </nav>
@@ -92,7 +92,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <button
             onClick={() => onLaunchApp('home')}
             id="landing-launch-app-btn"
-            className="px-4 sm:px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-black rounded-full shadow-md shadow-purple-600/25 flex items-center gap-1.5 transition-all transform active:scale-95"
+            className="px-4 sm:px-5 py-2 bg-orange-600 hover:bg-orange-700 text-white text-xs font-black rounded-full shadow-md shadow-orange-600/25 flex items-center gap-1.5 transition-all transform active:scale-95"
           >
             <span>Launch App</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -102,13 +102,13 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
       {/* 2. Hero Section (matching Screenshot 1 & 9) */}
       <section className="pt-12 sm:pt-20 pb-16 px-4 sm:px-8 max-w-6xl mx-auto text-center space-y-6">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-purple-50 border border-purple-200/80 text-purple-700 text-xs font-extrabold tracking-wider uppercase animate-in fade-in">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200/80 text-orange-700 text-xs font-extrabold tracking-wider uppercase animate-in fade-in">
           <span>✨</span>
           <span>THE APP THAT TRAVELS WITH YOU</span>
         </div>
 
         <h1 className="text-3xl sm:text-5xl md:text-6xl font-black text-stone-900 tracking-tight max-w-4xl mx-auto leading-[1.15]">
-          One app . <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-600">Every country</span> . <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600">Every visa</span> . <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-amber-500">Every adventure</span> .
+          One app . <span className="text-orange-600">Every country</span> . <span className="text-stone-900">Every visa</span> . <span className="text-orange-600">Every adventure</span> .
         </h1>
 
         <p className="text-sm sm:text-base text-stone-500 max-w-2xl mx-auto font-normal leading-relaxed">
@@ -120,7 +120,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <button
             onClick={() => onLaunchApp('home')}
             id="hero-get-app-btn"
-            className="px-6 py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-sm rounded-full shadow-xl shadow-purple-600/30 flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95"
+            className="px-6 py-3.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-sm rounded-full shadow-xl shadow-orange-600/30 flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95"
           >
             <span>Get the app</span>
             <span className="text-base">↓</span>
@@ -141,7 +141,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => setActiveFeatureTab('command')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activeFeatureTab === 'command'
-                  ? 'bg-white text-purple-700 shadow-sm'
+                  ? 'bg-white text-orange-700 shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -151,7 +151,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => setActiveFeatureTab('visas')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activeFeatureTab === 'visas'
-                  ? 'bg-white text-purple-700 shadow-sm'
+                  ? 'bg-white text-orange-700 shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -161,7 +161,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => setActiveFeatureTab('trips')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activeFeatureTab === 'trips'
-                  ? 'bg-white text-purple-700 shadow-sm'
+                  ? 'bg-white text-orange-700 shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -171,7 +171,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => setActiveFeatureTab('daily')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activeFeatureTab === 'daily'
-                  ? 'bg-white text-purple-700 shadow-sm'
+                  ? 'bg-white text-orange-700 shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -181,7 +181,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => setActiveFeatureTab('expenses')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activeFeatureTab === 'expenses'
-                  ? 'bg-white text-purple-700 shadow-sm'
+                  ? 'bg-white text-orange-700 shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -191,7 +191,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               onClick={() => setActiveFeatureTab('community')}
               className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all ${
                 activeFeatureTab === 'community'
-                  ? 'bg-white text-purple-700 shadow-sm'
+                  ? 'bg-white text-orange-700 shadow-sm'
                   : 'text-stone-600 hover:text-stone-900'
               }`}
             >
@@ -208,7 +208,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             <span>Visa expires in 13 days</span>
           </div>
 
-          <div className="absolute top-16 right-2 sm:-right-12 z-20 hidden sm:flex items-center gap-2 px-3 py-1.5 bg-purple-600 text-white rounded-full text-xs font-extrabold shadow-lg shadow-purple-600/30">
+          <div className="absolute top-16 right-2 sm:-right-12 z-20 hidden sm:flex items-center gap-2 px-3 py-1.5 bg-orange-600 text-white rounded-full text-xs font-extrabold shadow-lg shadow-orange-600/30">
             <span>✈️</span>
             <span>Next: Mexico City in 28d</span>
           </div>
@@ -229,7 +229,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   {/* Top Bar inside mockup */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-purple-600 text-white flex items-center justify-center font-bold text-xs">
+                      <div className="w-7 h-7 rounded-lg bg-orange-600 text-white flex items-center justify-center font-bold text-xs">
                         🌐
                       </div>
                       <span className="font-extrabold text-stone-900 text-sm">NomadOS</span>
@@ -281,7 +281,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       </div>
                       <div>
                         <h4 className="font-extrabold text-stone-900 text-sm">€586</h4>
-                        <p className="text-[10px] text-purple-600 font-bold">View insights →</p>
+                        <p className="text-[10px] text-orange-600 font-bold">View insights →</p>
                       </div>
                     </div>
                   </div>
@@ -330,14 +330,14 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                       <img
                         src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80"
                         alt="Eva"
-                        className="w-9 h-9 rounded-full object-cover border border-purple-300"
+                        className="w-9 h-9 rounded-full object-cover border border-orange-300"
                       />
                       <div>
                         <h5 className="text-xs font-black text-stone-900">Eva Fernandez</h5>
-                        <p className="text-[10px] text-purple-600 font-bold">NomadOS Founder · Bali</p>
+                        <p className="text-[10px] text-orange-600 font-bold">NomadOS Founder · Bali</p>
                       </div>
                     </div>
-                    <div className="w-7 h-7 rounded-full bg-purple-600 text-white flex items-center justify-center text-xs">
+                    <div className="w-7 h-7 rounded-full bg-orange-600 text-white flex items-center justify-center text-xs">
                       💬
                     </div>
                   </div>
@@ -355,9 +355,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
                   {/* 3 Status pills */}
                   <div className="grid grid-cols-3 gap-2 text-center text-xs">
-                    <div className="p-2 bg-purple-50 rounded-xl border border-purple-200">
+                    <div className="p-2 bg-orange-50 rounded-xl border border-orange-200">
                       <span className="text-stone-500 text-[10px] block">Active</span>
-                      <span className="font-black text-purple-700 text-sm">2</span>
+                      <span className="font-black text-orange-700 text-sm">2</span>
                     </div>
                     <div className="p-2 bg-amber-50 rounded-xl border border-amber-200">
                       <span className="text-stone-500 text-[10px] block">Expiring</span>
@@ -373,7 +373,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <div className="bg-stone-50 rounded-2xl p-3 border border-stone-200 space-y-1.5">
                     <div className="flex items-center justify-between text-xs">
                       <span className="font-extrabold text-stone-900">Schengen Calculator</span>
-                      <span className="px-2 py-0.5 bg-purple-600 text-white font-black text-[10px] rounded-full">
+                      <span className="px-2 py-0.5 bg-orange-600 text-white font-black text-[10px] rounded-full">
                         90/180
                       </span>
                     </div>
@@ -384,12 +384,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   </div>
 
                   {/* Pending docs card */}
-                  <div className="p-3 bg-purple-50/70 rounded-2xl border border-purple-200 flex items-center justify-between text-xs">
+                  <div className="p-3 bg-orange-50/70 rounded-2xl border border-orange-200 flex items-center justify-between text-xs">
                     <div>
-                      <h5 className="font-black text-purple-900">6 PENDING across 3 visa(s)</h5>
-                      <p className="text-[10px] text-purple-700">Flight out of Indonesia, bank statement for DTV</p>
+                      <h5 className="font-black text-stone-900">6 PENDING across 3 visa(s)</h5>
+                      <p className="text-[10px] text-orange-700">Flight out of Indonesia, bank statement for DTV</p>
                     </div>
-                    <span className="text-purple-700 text-xs">→</span>
+                    <span className="text-orange-700 text-xs">→</span>
                   </div>
                 </div>
               )}
@@ -406,7 +406,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-xs">
                     <span className="font-black text-stone-900">Europe Summer Workation</span>
-                    <span className="text-purple-600 font-bold">€4,410 left</span>
+                    <span className="text-orange-600 font-bold">€4,410 left</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div className="p-3 bg-stone-50 rounded-xl border border-stone-200">
@@ -455,7 +455,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <div className="p-3 bg-stone-50 rounded-xl border border-stone-200 space-y-1">
                     <h5 className="font-extrabold text-stone-900">☕ Cowork & Specialty Coffee</h5>
                     <p className="text-[11px] text-stone-500">Today · 14:00 · Zenita Specialty Cafe Canggu</p>
-                    <span className="inline-block text-[10px] font-bold text-purple-600">8 nomads attending</span>
+                    <span className="inline-block text-[10px] font-bold text-orange-600">8 nomads attending</span>
                   </div>
                 </div>
               )}
@@ -466,7 +466,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <span className="text-[11px] text-stone-400 font-medium">NomadOS v2.4 Live Sync</span>
               <button
                 onClick={() => onLaunchApp(activeFeatureTab === 'command' ? 'home' : 'travel')}
-                className="px-3.5 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs rounded-full flex items-center gap-1 transition-colors"
+                className="px-3.5 py-1.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs rounded-full flex items-center gap-1 transition-colors"
               >
                 <span>Try In-App</span>
                 <ArrowRight className="w-3 h-3" />
@@ -480,7 +480,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="section-command" className="py-16 px-4 sm:px-8 border-t border-stone-200/80 bg-white">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="space-y-4">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               COMMAND CENTER
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -491,26 +491,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </p>
             <div className="grid grid-cols-2 gap-2.5 pt-2">
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Visa status</span>
               </div>
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Next trip countdown</span>
               </div>
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Budget snapshot</span>
               </div>
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Smart alerts</span>
               </div>
             </div>
             <div className="pt-2">
               <button
                 onClick={() => onLaunchApp('home')}
-                className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs rounded-full shadow-md shadow-purple-600/20 flex items-center gap-2"
+                className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs rounded-full shadow-md shadow-orange-600/20 flex items-center gap-2"
               >
                 <span>Explore Command Center</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -528,7 +528,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
                 <span className="text-xs font-bold text-stone-400 block">NEXT TRIP</span>
                 <h4 className="text-lg font-black text-stone-900 mt-1">28 days</h4>
-                <span className="text-xs text-purple-600 font-bold">🇲🇽 Mexico City</span>
+                <span className="text-xs text-orange-600 font-bold">🇲🇽 Mexico City</span>
               </div>
               <div className="bg-white p-4 rounded-2xl border border-stone-200 shadow-sm">
                 <span className="text-xs font-bold text-stone-400 block">VISA</span>
@@ -550,7 +550,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <p className="text-[11px] text-stone-400">Logged expenses and itinerary daily</p>
                 </div>
               </div>
-              <span className="text-xs font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-full">
+              <span className="text-xs font-bold text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full">
                 Best: 4 days
               </span>
             </div>
@@ -563,24 +563,24 @@ export const LandingPage: React.FC<LandingPageProps> = ({
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="order-2 md:order-1 bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase text-purple-700">Visas & Vault</span>
+              <span className="text-xs font-black uppercase text-orange-700">Visas & Vault</span>
               <span className="text-xs font-bold text-rose-600 bg-rose-50 px-2.5 py-1 rounded-full">
                 ⚠️ 2 days left in Indonesia
               </span>
             </div>
 
-            <div className="bg-purple-50/80 rounded-2xl p-4 border border-purple-200/80 space-y-2">
+            <div className="bg-orange-50/80 rounded-2xl p-4 border border-orange-200/80 space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <h4 className="font-extrabold text-purple-900">Schengen 90/180 Day Counter</h4>
-                <span className="px-2 py-0.5 bg-purple-600 text-white font-black text-[10px] rounded-full">
+                <h4 className="font-extrabold text-stone-900">Schengen 90/180 Day Counter</h4>
+                <span className="px-2 py-0.5 bg-orange-600 text-white font-black text-[10px] rounded-full">
                   90/180
                 </span>
               </div>
-              <p className="text-xs text-purple-700 font-semibold">
+              <p className="text-xs text-orange-700 font-semibold">
                 80 days remaining in Schengen zone · 10 days used in Portugal
               </p>
-              <div className="w-full h-2 bg-purple-200 rounded-full overflow-hidden">
-                <div className="w-[11%] h-full bg-purple-600 rounded-full" />
+              <div className="w-full h-2 bg-orange-200 rounded-full overflow-hidden">
+                <div className="w-[11%] h-full bg-orange-600 rounded-full" />
               </div>
             </div>
 
@@ -608,7 +608,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           </div>
 
           <div className="order-1 md:order-2 space-y-4">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               NEVER OVERSTAY AGAIN
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -619,19 +619,19 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </p>
             <div className="grid grid-cols-2 gap-2.5 pt-2">
               <div className="p-3 bg-white rounded-2xl border border-stone-200 flex items-center gap-2 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Schengen calculator</span>
               </div>
               <div className="p-3 bg-white rounded-2xl border border-stone-200 flex items-center gap-2 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Auto expiry alerts</span>
               </div>
               <div className="p-3 bg-white rounded-2xl border border-stone-200 flex items-center gap-2 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Global coverage</span>
               </div>
               <div className="p-3 bg-white rounded-2xl border border-stone-200 flex items-center gap-2 shadow-sm">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Document storage</span>
               </div>
             </div>
@@ -643,7 +643,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="section-trips" className="py-16 px-4 sm:px-8 border-t border-stone-200/80 bg-white">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               TRIP PLANNING
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -671,7 +671,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="section-daily" className="py-16 px-4 sm:px-8 border-t border-stone-200/80 bg-[#fafaf9]">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               DAY-BY-DAY PLANNING
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -698,7 +698,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="section-expenses" className="py-16 px-4 sm:px-8 border-t border-stone-200/80 bg-white">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
           <div className="space-y-4">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               EXPENSE TRACKING
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -709,26 +709,26 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </p>
             <div className="grid grid-cols-2 gap-2.5 pt-2">
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">150+ currencies</span>
               </div>
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Category breakdown</span>
               </div>
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Per-country analytics</span>
               </div>
               <div className="p-3 bg-stone-50 rounded-2xl border border-stone-200 flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-purple-600" />
+                <span className="w-2 h-2 rounded-full bg-orange-600" />
                 <span className="text-xs font-bold text-stone-800">Trip-based tracking</span>
               </div>
             </div>
             <div className="pt-2">
               <button
                 onClick={() => onLaunchApp('travel')}
-                className="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-xs rounded-full shadow-md shadow-purple-600/20 flex items-center gap-2"
+                className="px-5 py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-xs rounded-full shadow-md shadow-orange-600/20 flex items-center gap-2"
               >
                 <span>Try Currency & Expenses</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -743,7 +743,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <span className="px-2.5 py-1 bg-stone-200 text-stone-700 font-bold rounded-lg">Trip</span>
                 <span className="font-extrabold text-stone-900">📍 Europe Summer Workation ▾</span>
               </div>
-              <span className="font-extrabold text-purple-700 bg-purple-50 px-2.5 py-1 rounded-full">
+              <span className="font-extrabold text-orange-700 bg-orange-50 px-2.5 py-1 rounded-full">
                 €4,410 left
               </span>
             </div>
@@ -795,7 +795,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="section-community" className="py-16 px-4 sm:px-8 border-t border-stone-200/80 bg-[#fafaf9]">
         <div className="max-w-5xl mx-auto space-y-8">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               COMMUNITY
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -819,7 +819,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
               {['☕ Coffee', '💻 Laptop', '🍻 Drinks', '🎉 Party', '🌴 Beach', '🧘 Yoga', '🌐 Co-living', '📍 Meetups'].map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-1.5 bg-stone-50 hover:bg-purple-50 border border-stone-200 rounded-full text-xs font-bold text-stone-700 transition-colors cursor-pointer"
+                  className="px-3 py-1.5 bg-stone-50 hover:bg-orange-50 border border-stone-200 rounded-full text-xs font-bold text-stone-700 transition-colors cursor-pointer"
                 >
                   {tag}
                 </span>
@@ -827,18 +827,18 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </div>
 
             {/* Simulated interactive map graphic */}
-            <div className="relative h-64 rounded-2xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 overflow-hidden p-6 flex flex-col justify-between text-white border border-stone-800">
+            <div className="relative h-64 rounded-2xl bg-gradient-to-br from-stone-900 via-slate-900 to-stone-900 overflow-hidden p-6 flex flex-col justify-between text-white border border-stone-800">
               <div className="flex items-center justify-between">
                 <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold flex items-center gap-1.5">
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
                   Live GPS Radar · Lisbon & Bali
                 </span>
-                <span className="text-xs font-bold text-purple-300">12 Nomads Nearby</span>
+                <span className="text-xs font-bold text-orange-300">12 Nomads Nearby</span>
               </div>
 
               {/* Map pins */}
               <div className="relative flex-1 flex items-center justify-center">
-                <div className="absolute top-6 left-12 p-2 bg-purple-600 rounded-xl shadow-lg flex items-center gap-1.5 text-xs font-bold animate-bounce">
+                <div className="absolute top-6 left-12 p-2 bg-orange-600 rounded-xl shadow-lg flex items-center gap-1.5 text-xs font-bold animate-bounce">
                   <span>☕</span>
                   <span>Specialty Cafe Meet</span>
                 </div>
@@ -846,7 +846,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   <span>💻</span>
                   <span>Coworking Sprint</span>
                 </div>
-                <div className="w-12 h-12 rounded-full border-4 border-white/40 bg-purple-500/50 flex items-center justify-center">
+                <div className="w-12 h-12 rounded-full border-4 border-white/40 bg-orange-500/50 flex items-center justify-center">
                   <div className="w-5 h-5 rounded-full bg-white animate-pulse" />
                 </div>
               </div>
@@ -855,7 +855,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                 <span>📍 Currently synced to: {state.currentCity}</span>
                 <button
                   onClick={() => onLaunchApp('social')}
-                  className="text-purple-300 hover:text-white font-extrabold flex items-center gap-1"
+                  className="text-orange-300 hover:text-white font-extrabold flex items-center gap-1"
                 >
                   <span>Open Radar & Meetups</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -870,7 +870,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="section-alerts" className="py-16 px-4 sm:px-8 border-t border-stone-200/80 bg-white">
         <div className="max-w-5xl mx-auto space-y-8 text-center">
           <div className="max-w-2xl mx-auto space-y-3">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               ALWAYS IN THE LOOP
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -890,7 +890,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <section id="section-how-it-works" className="py-16 px-4 sm:px-8 border-t border-stone-200/80 bg-[#fafaf9]">
         <div className="max-w-5xl mx-auto space-y-10">
           <div className="text-center max-w-2xl mx-auto space-y-3">
-            <span className="inline-block px-3 py-1 bg-purple-50 text-purple-700 text-xs font-black rounded-full uppercase tracking-wider">
+            <span className="inline-block px-3 py-1 bg-orange-50 text-orange-700 text-xs font-black rounded-full uppercase tracking-wider">
               GET STARTED IN MINUTES
             </span>
             <h2 className="text-2xl sm:text-4xl font-black text-stone-900 tracking-tight">
@@ -901,9 +901,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           {/* 3 Step Cards (matching Screenshot 8) */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Step 1 */}
-            <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-purple-300 transition-all">
+            <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-orange-300 transition-all">
               <div className="space-y-2">
-                <span className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-sm">
+                <span className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-black text-sm">
                   1
                 </span>
                 <h3 className="text-lg font-black text-stone-900">Download free</h3>
@@ -911,15 +911,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   Available on iOS and Android. Free forever plan — no credit card required to begin your travels.
                 </p>
               </div>
-              <div className="pt-4 border-t border-stone-100 flex items-center gap-2 text-xs font-bold text-purple-600">
+              <div className="pt-4 border-t border-stone-100 flex items-center gap-2 text-xs font-bold text-orange-600">
                 <span>iOS · Android · Web</span>
               </div>
             </div>
 
             {/* Step 2 */}
-            <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-purple-300 transition-all">
+            <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-orange-300 transition-all">
               <div className="space-y-2">
-                <span className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-sm">
+                <span className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-black text-sm">
                   2
                 </span>
                 <h3 className="text-lg font-black text-stone-900">Set your profile</h3>
@@ -927,15 +927,15 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   Your nationality and where you are right now. Takes 30 seconds. Automatic visa calculations configure immediately.
                 </p>
               </div>
-              <div className="pt-4 border-t border-stone-100 flex items-center gap-2 text-xs font-bold text-purple-600">
+              <div className="pt-4 border-t border-stone-100 flex items-center gap-2 text-xs font-bold text-orange-600">
                 <span>30-second setup</span>
               </div>
             </div>
 
             {/* Step 3 */}
-            <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-purple-300 transition-all">
+            <div className="bg-white rounded-3xl p-6 border border-stone-200 shadow-sm space-y-3 flex flex-col justify-between hover:border-orange-300 transition-all">
               <div className="space-y-2">
-                <span className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-black text-sm">
+                <span className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-black text-sm">
                   3
                 </span>
                 <h3 className="text-lg font-black text-stone-900">Start living</h3>
@@ -943,7 +943,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
                   Plan trips, track visas, log expenses, and connect with nomads around you. Everything in one seamless OS.
                 </p>
               </div>
-              <div className="pt-4 border-t border-stone-100 flex items-center gap-2 text-xs font-bold text-purple-600">
+              <div className="pt-4 border-t border-stone-100 flex items-center gap-2 text-xs font-bold text-orange-600">
                 <span>Never overstay again</span>
               </div>
             </div>
@@ -952,7 +952,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
           <div className="text-center pt-4">
             <button
               onClick={() => onLaunchApp('home')}
-              className="px-8 py-4 bg-purple-600 hover:bg-purple-700 text-white font-extrabold text-sm rounded-full shadow-xl shadow-purple-600/30 inline-flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95"
+              className="px-8 py-4 bg-orange-600 hover:bg-orange-700 text-white font-extrabold text-sm rounded-full shadow-xl shadow-orange-600/30 inline-flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95"
             >
               <span>Launch NomadOS Workspace</span>
               <ArrowRight className="w-4 h-4" />
@@ -965,7 +965,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
       <footer className="py-12 px-4 sm:px-8 bg-white border-t border-stone-200 text-stone-500 text-xs">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-purple-600/20">
+            <div className="w-8 h-8 rounded-xl bg-orange-600 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-orange-600/20">
               🌐
             </div>
             <div>

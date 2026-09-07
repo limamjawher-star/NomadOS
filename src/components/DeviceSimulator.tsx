@@ -28,7 +28,7 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
             <span className="text-[13px] font-black text-stone-900 tracking-tight">17:53</span>
             {/* Dynamic Island pill */}
             <div className="w-24 h-6 bg-stone-950 rounded-full flex items-center justify-center gap-2 px-2 shadow-inner">
-              <span className="w-2.5 h-2.5 rounded-full bg-purple-500/80" />
+              <span className="w-2.5 h-2.5 rounded-full bg-orange-500/80" />
               <div className="w-2 h-2 rounded-full bg-stone-800" />
             </div>
             <div className="flex items-center gap-1.5 text-[12px] font-bold text-stone-900">
@@ -38,7 +38,7 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
           </div>
 
           {/* Screen Content Container with inner scroll */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#f8f9fc]">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#FBF9F5]">
             {children}
           </div>
 
@@ -68,7 +68,7 @@ export const DeviceSimulator: React.FC<DeviceSimulatorProps> = ({
         </div>
 
         {/* Screen Content Container with inner scroll */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#f8f9fc]">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden relative bg-[#FBF9F5]">
           {children}
         </div>
 
