@@ -13,15 +13,24 @@ import {
   CheckCircle2, 
   Trash2,
   SlidersHorizontal,
-  ArrowRightLeft
+  ArrowRightLeft,
+  Sparkles,
+  ChevronRight,
+  ShieldCheck,
+  Building,
+  Upload,
+  ExternalLink
 } from 'lucide-react';
 import { 
   NomadState, 
   TripDestination, 
   SchengenStay, 
   TaxPresence, 
-  NomadExpense 
+  NomadExpense,
+  DayItineraryActivity
 } from '../types';
+import { MultiStopTripView } from './MultiStopTripView';
+import { DayItineraryView } from './DayItineraryView';
 
 interface TravelTabProps {
   state: NomadState;
@@ -46,10 +55,14 @@ export const TravelTab: React.FC<TravelTabProps> = ({
   onUpdateTaxPresence,
   onOpenPricing,
 }) => {
-  const [subTab, setSubTab] = useState<'trips' | 'visas' | 'expenses' | 'converter' | 'tax'>('trips');
+  const [subTab, setSubTab] = useState<'trips' | 'day' | 'visas' | 'expenses' | 'converter' | 'tax'>('trips');
+  const [visaSegment, setVisaSegment] = useState<'visas' | 'documents'>('visas');
+  const [expenseScope, setExpenseScope] = useState<'All' | 'Trip' | 'Stop'>('Trip');
+  
   const [isAddTripOpen, setIsAddTripOpen] = useState(false);
   const [isAddExpenseOpen, setIsAddExpenseOpen] = useState(false);
   const [isAddSchengenOpen, setIsAddSchengenOpen] = useState(false);
+  const [isAddVisaDocOpen, setIsAddVisaDocOpen] = useState(false);
 
   // New Trip form state
   const [newCity, setNewCity] = useState('');
@@ -152,646 +165,734 @@ export const TravelTab: React.FC<TravelTabProps> = ({
   };
 
   return (
-    <div id="travel-view" className="space-y-6 pb-24 max-w-2xl mx-auto px-4 pt-4">
+    <div id="travel-view" className="space-y-5 pb-24 max-w-2xl mx-auto px-4 pt-3">
       {/* Subtabs matching competitor screenshot */}
-      <div className="flex bg-stone-100 p-1.5 rounded-2xl overflow-x-auto gap-1 scrollbar-none">
+      <div className="flex bg-stone-100/90 p-1.5 rounded-2xl overflow-x-auto gap-1 no-scrollbar border border-stone-200/60">
         <button
           onClick={() => setSubTab('trips')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'trips' ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-900'
+            subTab === 'trips' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20' : 'text-stone-600 hover:text-stone-900'
           }`}
         >
-          <Plane className={`w-3.5 h-3.5 ${subTab === 'trips' ? 'text-orange-500' : 'text-stone-400'}`} />
+          <Plane className="w-3.5 h-3.5" />
           <span>Trips</span>
+        </button>
+
+        <button
+          onClick={() => setSubTab('day')}
+          className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
+            subTab === 'day' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20' : 'text-stone-600 hover:text-stone-900'
+          }`}
+        >
+          <Calendar className="w-3.5 h-3.5" />
+          <span>Day Plan</span>
         </button>
 
         <button
           onClick={() => setSubTab('visas')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'visas' ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-900'
+            subTab === 'visas' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20' : 'text-stone-600 hover:text-stone-900'
           }`}
         >
-          <FileText className={`w-3.5 h-3.5 ${subTab === 'visas' ? 'text-orange-500' : 'text-stone-400'}`} />
-          <span>Visas</span>
+          <FileText className="w-3.5 h-3.5" />
+          <span>Visas & Docs</span>
         </button>
 
         <button
           onClick={() => setSubTab('expenses')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'expenses' ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-900'
+            subTab === 'expenses' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20' : 'text-stone-600 hover:text-stone-900'
           }`}
         >
-          <DollarSign className={`w-3.5 h-3.5 ${subTab === 'expenses' ? 'text-orange-500' : 'text-stone-400'}`} />
+          <DollarSign className="w-3.5 h-3.5" />
           <span>Expenses</span>
         </button>
 
         <button
           onClick={() => setSubTab('converter')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'converter' ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-900'
+            subTab === 'converter' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20' : 'text-stone-600 hover:text-stone-900'
           }`}
         >
-          <Calculator className={`w-3.5 h-3.5 ${subTab === 'converter' ? 'text-orange-500' : 'text-stone-400'}`} />
-          <span>Converter</span>
+          <ArrowRightLeft className="w-3.5 h-3.5" />
+          <span>FX</span>
         </button>
 
         <button
           onClick={() => setSubTab('tax')}
           className={`flex-1 py-2 px-3 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 whitespace-nowrap transition-all ${
-            subTab === 'tax' ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-900'
+            subTab === 'tax' ? 'bg-purple-600 text-white shadow-md shadow-purple-600/20' : 'text-stone-600 hover:text-stone-900'
           }`}
         >
-          <Scale className={`w-3.5 h-3.5 ${subTab === 'tax' ? 'text-orange-500' : 'text-stone-400'}`} />
+          <Scale className="w-3.5 h-3.5" />
           <span>Tax</span>
         </button>
       </div>
 
-      {/* ================= TRIPS VIEW ================= */}
+      {/* ================= 1. TRIPS VIEW (Screenshot 3 Multi-Stop) ================= */}
       {subTab === 'trips' && (
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-lg font-black text-stone-900">Your Itinerary & Stops</h3>
-              <p className="text-xs text-stone-500">Track accommodation, visa limits, and dates</p>
+          <MultiStopTripView />
+
+          <div className="pt-2">
+            <div className="flex items-center justify-between pb-2">
+              <h4 className="text-xs font-extrabold uppercase text-stone-400 tracking-wider">
+                All Planned Relocations
+              </h4>
+              <button
+                onClick={() => setIsAddTripOpen(true)}
+                className="text-xs font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>Add Destination</span>
+              </button>
             </div>
+
+            <div className="space-y-3">
+              {state.trips.map((trip) => (
+                <div
+                  key={trip.id}
+                  className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm flex items-center justify-between"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-black text-stone-900">{trip.city}</h4>
+                      <span className="text-xs text-stone-400 font-semibold">{trip.country}</span>
+                    </div>
+                    <p className="text-xs text-stone-500 font-medium">
+                      {trip.arrivalDate} → {trip.departureDate} · {trip.visaType}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => onDeleteTrip(trip.id)}
+                    className="p-2 text-stone-300 hover:text-rose-500 rounded-lg"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ================= 2. DAY PLANNER VIEW (Screenshot 4) ================= */}
+      {subTab === 'day' && (
+        <div className="space-y-4">
+          <DayItineraryView activities={state.dayActivities || []} currentCity={state.currentCity} />
+        </div>
+      )}
+
+      {/* ================= 3. VISAS & DOCS VIEW (Screenshot 2) ================= */}
+      {subTab === 'visas' && (
+        <div className="space-y-4">
+          {/* Sub-segment toggle: Visas | My Documents */}
+          <div className="flex bg-stone-100 p-1 rounded-2xl border border-stone-200/60">
             <button
-              onClick={() => setIsAddTripOpen(true)}
-              className="px-3.5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20 flex items-center gap-1.5"
+              onClick={() => setVisaSegment('visas')}
+              className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all ${
+                visaSegment === 'visas'
+                  ? 'bg-white text-stone-900 shadow-sm'
+                  : 'text-stone-500 hover:text-stone-800'
+              }`}
             >
-              <Plus className="w-3.5 h-3.5" /> Add Trip
+              Visas
+            </button>
+            <button
+              onClick={() => setVisaSegment('documents')}
+              className={`flex-1 py-2 rounded-xl text-xs font-extrabold transition-all ${
+                visaSegment === 'documents'
+                  ? 'bg-white text-stone-900 shadow-sm'
+                  : 'text-stone-500 hover:text-stone-800'
+              }`}
+            >
+              My Documents
             </button>
           </div>
 
-          <div className="space-y-3">
-            {state.trips.map((trip) => (
-              <div
-                key={trip.id}
-                className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all space-y-3"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-black text-stone-900">{trip.city}</span>
-                      <span className="text-xs font-semibold text-stone-400">{trip.country}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs text-stone-500 mt-1 font-medium">
-                      <Calendar className="w-3.5 h-3.5 text-orange-500" />
-                      <span>{trip.arrivalDate} → {trip.departureDate}</span>
-                    </div>
-                  </div>
+          <p className="text-xs text-stone-500 font-medium">
+            Track your active visas and required documents.
+          </p>
 
-                  <span className={`px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                    trip.accommodationStatus === 'Booked'
-                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                      : 'bg-amber-50 text-amber-700 border border-amber-200'
-                  }`}>
-                    {trip.accommodationStatus}
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 pt-1 border-t border-stone-100 text-xs">
-                  <div>
-                    <span className="text-stone-400 block text-[10px] font-bold uppercase">Estimated Housing</span>
-                    <span className="font-bold text-stone-800">${trip.housingCostUSD}/mo</span>
-                  </div>
-                  <div>
-                    <span className="text-stone-400 block text-[10px] font-bold uppercase">Visa Entry</span>
-                    <span className="font-bold text-stone-800 truncate block">{trip.visaType}</span>
-                  </div>
-                </div>
-
-                {trip.notes && (
-                  <p className="text-[11px] text-stone-500 bg-stone-50 p-2 rounded-xl">
-                    {trip.notes}
-                  </p>
-                )}
-
-                <div className="flex justify-end pt-1">
-                  <button
-                    onClick={() => onDeleteTrip(trip.id)}
-                    className="text-stone-400 hover:text-rose-500 text-xs font-medium flex items-center gap-1 transition-colors"
-                  >
-                    <Trash2 className="w-3.5 h-3.5" /> Remove Stop
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* ================= VISAS VIEW ================= */}
-      {subTab === 'visas' && (
-        <div className="space-y-5">
-          {/* Schengen Countdown Banner */}
-          <div className="bg-gradient-to-br from-orange-500 to-amber-500 rounded-3xl p-6 text-white shadow-xl shadow-orange-500/20 space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-extrabold uppercase tracking-widest text-orange-100">
-                Schengen 90/180-Day Rule
-              </span>
-              <span className="px-2.5 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs font-bold">
-                {daysRemaining > 15 ? 'Safe Status' : 'Warning'}
-              </span>
+          {/* 3 Status Cards Grid matching Screenshot 2 */}
+          <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="bg-white rounded-2xl p-3 border border-stone-200/80 shadow-sm">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-purple-700 block">Active</span>
+              <span className="text-2xl font-black text-stone-900">2</span>
             </div>
+            <div className="bg-white rounded-2xl p-3 border border-stone-200/80 shadow-sm">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-amber-600 block">Expiring</span>
+              <span className="text-2xl font-black text-stone-900">1</span>
+            </div>
+            <div className="bg-white rounded-2xl p-3 border border-stone-200/80 shadow-sm">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider text-emerald-600 block">Overstay</span>
+              <span className="text-2xl font-black text-stone-900">0</span>
+            </div>
+          </div>
 
-            <div>
-              <h3 className="text-4xl font-black">{daysRemaining} Days Left</h3>
-              <p className="text-xs text-orange-100 mt-1">
-                You have spent {totalSchengenDays} out of 90 legal days across Schengen member countries.
+          {/* Urgent banner (matching Screenshot 2: "Indonesia: 2 days left") */}
+          <div className="p-3 bg-rose-50 border border-rose-200/90 rounded-2xl flex items-center justify-between text-xs">
+            <div className="flex items-center gap-2">
+              <span className="text-base">⚠️</span>
+              <span className="font-extrabold text-rose-950">Indonesia: 2 days left</span>
+            </div>
+            <span className="text-[10px] font-extrabold text-rose-700 bg-rose-100 px-2 py-0.5 rounded-full">
+              Extend / Exit
+            </span>
+          </div>
+
+          {/* Pending docs card (matching Screenshot 2: "6 PENDING across 3 visa(s)") */}
+          <div className="p-4 bg-purple-50/80 border border-purple-200/90 rounded-3xl flex items-center justify-between">
+            <div className="space-y-0.5">
+              <div className="flex items-center gap-2">
+                <span className="text-sm">📋</span>
+                <h5 className="font-black text-purple-950 text-xs uppercase tracking-wider">
+                  6 PENDING across 3 visa(s)
+                </h5>
+              </div>
+              <p className="text-[11px] text-purple-700">
+                Proof of onward travel, vaccination cert, bank statement
               </p>
             </div>
-
-            <div className="w-full h-2.5 bg-black/20 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-white rounded-full transition-all duration-500"
-                style={{ width: `${Math.min(100, (totalSchengenDays / 90) * 100)}%` }}
-              />
-            </div>
+            <ChevronRight className="w-4 h-4 text-purple-700" />
           </div>
 
-          {/* Stays list */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h4 className="text-sm font-black text-stone-900">Recorded Schengen Stays</h4>
-              <button
-                onClick={() => setIsAddSchengenOpen(true)}
-                className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
-              >
-                + Add Stay
-              </button>
-            </div>
-
-            <div className="space-y-2.5">
-              {state.schengenStays.map((stay) => (
-                <div
-                  key={stay.id}
-                  className="bg-white rounded-2xl p-4 border border-stone-200/80 shadow-sm flex items-center justify-between"
-                >
-                  <div>
-                    <h5 className="text-xs font-bold text-stone-900">{stay.country}</h5>
-                    <p className="text-[11px] text-stone-500 mt-0.5">
-                      {stay.entryDate} → {stay.exitDate}
-                    </p>
-                    {stay.notes && <p className="text-[10px] text-stone-400 mt-0.5">{stay.notes}</p>}
-                  </div>
-                  <button
-                    onClick={() => onDeleteSchengenStay(stay.id)}
-                    className="text-stone-300 hover:text-rose-500 p-1"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Nomad Visas Vault */}
+          {/* Schengen 90/180 Calculator Box (matching Screenshot 2) */}
           <div className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm space-y-3">
-            <h4 className="text-sm font-black text-stone-900">Digital Nomad Visas & Documents</h4>
-            <div className="space-y-2.5">
-              {state.documents.map((doc) => (
-                <div key={doc.id} className="p-3 bg-stone-50 rounded-2xl border border-stone-100 flex items-center justify-between">
-                  <div>
-                    <h5 className="text-xs font-bold text-stone-800">{doc.title}</h5>
-                    <p className="text-[11px] text-stone-500">Ref: {doc.referenceNumber} · Expires {doc.expirationDate}</p>
-                  </div>
-                  <span className="text-[10px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">
-                    Active
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ================= EXPENSES VIEW ================= */}
-      {subTab === 'expenses' && (
-        <div className="space-y-5">
-          {/* Burn rate summary */}
-          <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <div>
-                <span className="text-[11px] font-bold text-stone-400 uppercase tracking-wider">
-                  September Burn Rate
-                </span>
-                <h3 className="text-3xl font-black text-stone-900 mt-0.5">
-                  ${state.expenses.reduce((a, b) => a + b.amountUSD, 0).toLocaleString()}
-                </h3>
+              <div className="flex items-center gap-2">
+                <span className="text-sm">🇪🇺</span>
+                <h4 className="text-sm font-black text-stone-900">Schengen 90/180 Calculator</h4>
               </div>
-              <button
-                onClick={() => setIsAddExpenseOpen(true)}
-                className="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20 flex items-center gap-1.5"
-              >
-                <Plus className="w-3.5 h-3.5" /> Log Expense
-              </button>
-            </div>
-
-            <div className="flex items-center justify-between text-xs pt-2 border-t border-stone-100">
-              <span className="text-stone-500">Monthly Budget: ${state.monthlyBudgetUSD}</span>
-              <span className="font-bold text-orange-600">
-                {Math.round((state.expenses.reduce((a, b) => a + b.amountUSD, 0) / state.monthlyBudgetUSD) * 100)}% Used
+              <span className="px-2.5 py-0.5 bg-purple-600 text-white font-black text-xs rounded-full">
+                90/180
               </span>
             </div>
+
+            <div className="flex items-baseline justify-between text-xs">
+              <span className="text-base font-black text-emerald-600">80 D left</span>
+              <span className="text-stone-500 font-bold">10/90 used</span>
+            </div>
+
+            <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
+              <div className="w-[11%] h-full bg-emerald-500 rounded-full" />
+            </div>
+
+            <div className="pt-1 flex items-center justify-between text-xs text-stone-400">
+              <span>Next reset in 48 days</span>
+              <button
+                onClick={() => setIsAddSchengenOpen(true)}
+                className="text-purple-600 hover:text-purple-700 font-extrabold"
+              >
+                + Log Entry Date
+              </button>
+            </div>
           </div>
 
-          {/* Expense transactions */}
-          <div className="space-y-2.5">
-            <h4 className="text-sm font-black text-stone-900">Recent Transactions</h4>
-            {state.expenses.map((exp) => (
-              <div
-                key={exp.id}
-                className="bg-white rounded-2xl p-4 border border-stone-200/80 shadow-sm flex items-center justify-between hover:border-orange-300 transition-all"
-              >
-                <div>
-                  <h5 className="text-xs font-bold text-stone-900">{exp.description}</h5>
-                  <div className="flex items-center gap-2 mt-0.5">
-                    <span className="text-[11px] font-semibold text-orange-600">{exp.category}</span>
-                    <span className="text-stone-300">•</span>
-                    <span className="text-[11px] text-stone-400">{exp.date}</span>
-                  </div>
-                </div>
+          {/* List of Active Visas (matching Screenshot 2: Indonesia & Thailand) */}
+          <div className="space-y-3 pt-1">
+            <h4 className="text-xs font-extrabold uppercase text-stone-400 tracking-wider">
+              Tracked Visas
+            </h4>
 
-                <div className="flex items-center gap-3">
-                  <div className="text-right">
-                    <span className="text-sm font-black text-stone-900">${exp.amountUSD}</span>
-                    <span className="text-[10px] text-stone-400 block">{exp.amount} {exp.currency}</span>
+            {/* Indonesia */}
+            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-2">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl">🇮🇩</span>
+                  <div>
+                    <h5 className="font-black text-stone-900 text-sm">Indonesia</h5>
+                    <p className="text-xs text-stone-500 font-semibold">Visa on Arrival (B213)</p>
                   </div>
-                  <button
-                    onClick={() => onDeleteExpense(exp.id)}
-                    className="text-stone-300 hover:text-rose-500 p-1"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
                 </div>
+                <span className="px-2 py-0.5 bg-rose-50 text-rose-700 font-black text-[11px] rounded-md border border-rose-200">
+                  2d left
+                </span>
               </div>
-            ))}
+              <p className="text-xs text-stone-500">
+                Entry: 2026-04-06 · <strong>28/30 used</strong>
+              </p>
+              <div className="p-2.5 bg-stone-50 rounded-xl text-xs text-stone-600 font-medium">
+                2d left — consider extension or exit to avoid overstay penalty.
+              </div>
+            </div>
+
+            {/* Thailand */}
+            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-2">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-2.5">
+                  <span className="text-2xl">🇹🇭</span>
+                  <div>
+                    <h5 className="font-black text-stone-900 text-sm">Thailand</h5>
+                    <p className="text-xs text-stone-500 font-semibold">Visa Exemption (Tourist - 30 days)</p>
+                  </div>
+                </div>
+                <span className="px-2 py-0.5 bg-emerald-50 text-emerald-700 font-black text-[11px] rounded-md border border-emerald-200">
+                  Ready
+                </span>
+              </div>
+              <p className="text-xs text-stone-500">
+                Entry scheduled: 2026-06-18 · Valid until 2026-07-18
+              </p>
+            </div>
+          </div>
+
+          {/* Floating Purple Add Button */}
+          <div className="flex justify-end pt-2">
+            <button
+              onClick={() => setIsAddTripOpen(true)}
+              className="w-12 h-12 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-xl shadow-purple-600/30 flex items-center justify-center transition-all transform active:scale-95"
+              title="Add Visa or Document"
+            >
+              <Plus className="w-6 h-6" />
+            </button>
           </div>
         </div>
       )}
 
-      {/* ================= CONVERTER VIEW ================= */}
+      {/* ================= 4. EXPENSES VIEW (Screenshot 5) ================= */}
+      {subTab === 'expenses' && (
+        <div className="space-y-4">
+          {/* Scope Filter matching Screenshot 5 */}
+          <div className="flex items-center justify-between">
+            <div className="flex bg-stone-100 p-1 rounded-xl border border-stone-200/60 text-xs font-bold">
+              {(['All', 'Trip', 'Stop'] as const).map((sc) => (
+                <button
+                  key={sc}
+                  onClick={() => setExpenseScope(sc)}
+                  className={`px-3 py-1.5 rounded-lg transition-all ${
+                    expenseScope === sc ? 'bg-white text-stone-900 shadow-sm font-black' : 'text-stone-500'
+                  }`}
+                >
+                  {sc}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex items-center gap-1.5 text-xs font-extrabold text-stone-800 bg-white px-3 py-1.5 rounded-xl border border-stone-200 shadow-sm cursor-pointer">
+              <span>📍 Europe Summer Workation ▾</span>
+            </div>
+          </div>
+
+          {/* 4 Stat Cards matching Screenshot 5 */}
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-1">
+              <span className="text-[10px] font-extrabold text-stone-400 uppercase tracking-wider block">TRIP TOTAL</span>
+              <h4 className="text-xl font-black text-stone-900">€1,890</h4>
+              <span className="text-xs text-stone-400">12 expenses</span>
+            </div>
+
+            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-1">
+              <span className="text-[10px] font-extrabold text-stone-400 uppercase tracking-wider block">THIS MONTH</span>
+              <h4 className="text-xl font-black text-stone-900">€1,420</h4>
+              <span className="text-xs text-stone-400">7 expenses</span>
+            </div>
+
+            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-1">
+              <span className="text-[10px] font-extrabold text-stone-400 uppercase tracking-wider block">BUDGET</span>
+              <h4 className="text-xl font-black text-emerald-600">€4,410 left</h4>
+              <span className="text-xs text-stone-400">30% used</span>
+            </div>
+
+            <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-1">
+              <span className="text-[10px] font-extrabold text-stone-400 uppercase tracking-wider block">COUNTRY</span>
+              <h4 className="text-xl font-black text-stone-900">3</h4>
+              <span className="text-xs text-purple-600 font-bold">Top: Accommodation</span>
+            </div>
+          </div>
+
+          {/* Recent Expenses List matching Screenshot 5 */}
+          <div className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <h4 className="text-sm font-black text-stone-900">Recent Expenses</h4>
+              <button
+                onClick={() => setIsAddExpenseOpen(true)}
+                className="text-xs font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1"
+              >
+                <Plus className="w-3.5 h-3.5" /> Add expense
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              {state.expenses.map((exp) => (
+                <div
+                  key={exp.id}
+                  className="flex items-center justify-between pb-3 border-b border-stone-100 last:border-0 last:pb-0"
+                >
+                  <div className="space-y-0.5">
+                    <h5 className="font-extrabold text-stone-900 text-xs">{exp.description}</h5>
+                    <p className="text-[11px] text-stone-400 font-medium">
+                      {exp.category} · {exp.date}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <span className="font-black text-stone-900 text-xs">
+                      ${exp.amountUSD}
+                    </span>
+                    <button
+                      onClick={() => onDeleteExpense(exp.id)}
+                      className="text-stone-300 hover:text-rose-500"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Floating purple add button */}
+          <div className="flex justify-end pt-2">
+            <button
+              onClick={() => setIsAddExpenseOpen(true)}
+              className="w-12 h-12 rounded-full bg-purple-600 hover:bg-purple-700 text-white shadow-xl shadow-purple-600/30 flex items-center justify-center transition-all transform active:scale-95"
+              title="Add Expense"
+            >
+              <Plus className="w-6 h-6" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ================= 5. FX CONVERTER ================= */}
       {subTab === 'converter' && (
-        <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-6">
-          <div className="text-center space-y-1">
-            <h3 className="text-lg font-black text-stone-900">Live Currency Converter</h3>
-            <p className="text-xs text-stone-500">Real-time nomad exchange rate calculator</p>
+        <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-5">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+              <ArrowRightLeft className="w-4 h-4" />
+            </div>
+            <div>
+              <h3 className="font-black text-stone-900 text-base">Nomad Multi-Currency Converter</h3>
+              <p className="text-xs text-stone-500">Live exchange rates across 150+ countries</p>
+            </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1.5">
-                Amount
-              </label>
+              <label className="block text-xs font-bold text-stone-600 mb-1">Amount</label>
               <input
                 type="number"
                 value={calcAmount}
-                onChange={(e) => setCalcAmount(Number(e.target.value) || 0)}
-                className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-2xl text-lg font-black text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                onChange={(e) => setCalcAmount(Number(e.target.value))}
+                className="w-full px-4 py-3 rounded-2xl border border-stone-200 text-lg font-black focus:outline-none focus:border-purple-500"
               />
             </div>
 
-            <div className="grid grid-cols-2 gap-3 items-center">
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1">
-                  From
-                </label>
+                <label className="block text-xs font-bold text-stone-600 mb-1">From</label>
                 <select
                   value={calcFrom}
                   onChange={(e) => setCalcFrom(e.target.value)}
-                  className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-xs font-bold text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
                 >
-                  <option value="USD">USD ($)</option>
                   <option value="EUR">EUR (€)</option>
+                  <option value="USD">USD ($)</option>
                   <option value="GBP">GBP (£)</option>
                   <option value="THB">THB (฿)</option>
                   <option value="IDR">IDR (Rp)</option>
-                  <option value="BGN">BGN (лв)</option>
                   <option value="JPY">JPY (¥)</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-600 uppercase tracking-wider mb-1">
-                  To
-                </label>
+                <label className="block text-xs font-bold text-stone-600 mb-1">To</label>
                 <select
                   value={calcTo}
                   onChange={(e) => setCalcTo(e.target.value)}
-                  className="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-xs font-bold text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
                 >
                   <option value="USD">USD ($)</option>
                   <option value="EUR">EUR (€)</option>
                   <option value="GBP">GBP (£)</option>
                   <option value="THB">THB (฿)</option>
                   <option value="IDR">IDR (Rp)</option>
-                  <option value="BGN">BGN (лв)</option>
                   <option value="JPY">JPY (¥)</option>
                 </select>
               </div>
             </div>
 
-            {/* Result display */}
-            <div className="p-4 rounded-2xl bg-orange-50 border border-orange-200 text-center space-y-1">
-              <span className="text-xs text-orange-800 font-medium">Estimated Conversion</span>
-              <h4 className="text-2xl font-black text-orange-900">
+            <div className="p-4 bg-purple-50 rounded-2xl border border-purple-200 text-center">
+              <span className="text-xs text-purple-700 font-bold block">Converted Value</span>
+              <span className="text-2xl font-black text-purple-900 mt-1 block">
                 {convertedValue} {calcTo}
-              </h4>
+              </span>
             </div>
           </div>
         </div>
       )}
 
-      {/* ================= TAX VIEW ================= */}
+      {/* ================= 6. TAX VIEW ================= */}
       {subTab === 'tax' && (
         <div className="space-y-4">
-          <div className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm space-y-3">
-            <h3 className="text-lg font-black text-stone-900">Tax Residency & Physical Presence</h3>
-            <p className="text-xs text-stone-500 leading-relaxed">
-              Track days spent per country in 2026 to ensure you stay below the 183-day automatic tax residency trigger.
-            </p>
-          </div>
-
-          <div className="space-y-3">
-            {state.taxPresences.map((tax) => (
-              <div
-                key={tax.id}
-                className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm space-y-3"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-base font-black text-stone-900">{tax.country}</span>
-                    <span className="text-xs font-semibold text-stone-400">({tax.year})</span>
-                  </div>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    {tax.daysSpent} / {tax.maxSafeDays} Days
-                  </span>
-                </div>
-
-                <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-orange-500 rounded-full"
-                    style={{ width: `${Math.min(100, (tax.daysSpent / tax.maxSafeDays) * 100)}%` }}
-                  />
-                </div>
-
-                <div className="flex items-center justify-between text-xs text-stone-500">
-                  <span>{tax.notes}</span>
-                  <button
-                    onClick={() => onUpdateTaxPresence(tax.id, tax.daysSpent + 1)}
-                    className="text-orange-600 font-bold hover:underline"
-                  >
-                    +1 Day
-                  </button>
-                </div>
+          <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
+                <Scale className="w-4 h-4" />
               </div>
-            ))}
+              <div>
+                <h3 className="font-black text-stone-900 text-base">183-Day Tax Residency Tracker</h3>
+                <p className="text-xs text-stone-500">Ensure compliance and avoid unexpected tax liabilities</p>
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              {state.taxPresences.map((tp) => (
+                <div key={tp.id} className="p-4 bg-stone-50 rounded-2xl border border-stone-200 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-black text-stone-900 text-sm">{tp.country}</span>
+                    <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                      tp.daysSpent > 150 ? 'bg-rose-100 text-rose-800' : 'bg-emerald-100 text-emerald-800'
+                    }`}>
+                      {tp.daysSpent} / {tp.maxSafeDays || 183} days
+                    </span>
+                  </div>
+                  <div className="w-full h-2 bg-stone-200 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-purple-600 rounded-full" 
+                      style={{ width: `${(tp.daysSpent / (tp.maxSafeDays || 183)) * 100}%` }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       )}
 
-      {/* Floating Action Button (+) */}
-      <button
-        id="travel-fab-btn"
-        onClick={() => {
-          if (subTab === 'trips') setIsAddTripOpen(true);
-          else if (subTab === 'expenses') setIsAddExpenseOpen(true);
-          else if (subTab === 'visas') setIsAddSchengenOpen(true);
-          else setIsAddTripOpen(true);
-        }}
-        className="fixed bottom-24 right-5 w-14 h-14 rounded-full bg-gradient-to-tr from-orange-500 to-amber-500 text-white flex items-center justify-center shadow-xl shadow-orange-500/40 hover:scale-105 active:scale-95 transition-all z-40"
-      >
-        <Plus className="w-7 h-7 stroke-[2.5]" />
-      </button>
-
       {/* Add Trip Modal */}
       {isAddTripOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md bg-white rounded-3xl p-6 border border-stone-200 shadow-2xl space-y-4">
-            <h4 className="text-base font-black text-stone-900">Add New Trip Stop</h4>
-            <form onSubmit={handleSaveTrip} className="space-y-3">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <form onSubmit={handleSaveTrip} className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold text-stone-900 text-base">Add Trip Destination</h3>
+              <button
+                type="button"
+                onClick={() => setIsAddTripOpen(false)}
+                className="w-7 h-7 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">City</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">City</label>
                 <input
                   type="text"
                   required
                   value={newCity}
                   onChange={(e) => setNewCity(e.target.value)}
-                  placeholder="e.g. Bansko"
-                  className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-orange-500"
+                  placeholder="e.g. Mexico City"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
-
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Country</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Country</label>
                 <input
                   type="text"
                   required
                   value={newCountry}
                   onChange={(e) => setNewCountry(e.target.value)}
-                  placeholder="e.g. Bulgaria"
-                  className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-orange-500"
+                  placeholder="e.g. Mexico"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
+            </div>
 
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Arrival Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={newArrival}
-                    onChange={(e) => setNewArrival(e.target.value)}
-                    className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Departure Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={newDeparture}
-                    onChange={(e) => setNewDeparture(e.target.value)}
-                    className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
-                  />
-                </div>
-              </div>
-
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Housing Status</label>
-                <select
-                  value={newHousingStatus}
-                  onChange={(e) => setNewHousingStatus(e.target.value as any)}
-                  className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
-                >
-                  <option value="Booked">Booked</option>
-                  <option value="Searching">Searching</option>
-                  <option value="Co-living">Co-living</option>
-                  <option value="Friends/Family">Friends/Family</option>
-                </select>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Arrival Date</label>
+                <input
+                  type="date"
+                  value={newArrival}
+                  onChange={(e) => setNewArrival(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                />
               </div>
+              <div>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Departure Date</label>
+                <input
+                  type="date"
+                  value={newDeparture}
+                  onChange={(e) => setNewDeparture(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                />
+              </div>
+            </div>
 
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 bg-orange-500 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20"
-                >
-                  Add Stop
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsAddTripOpen(false)}
-                  className="px-4 py-2.5 bg-stone-100 text-stone-700 font-bold rounded-xl text-xs"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+            <div className="flex gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setIsAddTripOpen(false)}
+                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
+              >
+                Save Trip
+              </button>
+            </div>
+          </form>
         </div>
       )}
 
       {/* Add Expense Modal */}
       {isAddExpenseOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md bg-white rounded-3xl p-6 border border-stone-200 shadow-2xl space-y-4">
-            <h4 className="text-base font-black text-stone-900">Log Nomad Expense</h4>
-            <form onSubmit={handleSaveExpense} className="space-y-3">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <form onSubmit={handleSaveExpense} className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold text-stone-900 text-base">Log Travel Expense</h3>
+              <button
+                type="button"
+                onClick={() => setIsAddExpenseOpen(false)}
+                className="w-7 h-7 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Description</label>
+              <input
+                type="text"
+                required
+                value={expDesc}
+                onChange={(e) => setExpDesc(e.target.value)}
+                placeholder="e.g. Flight to BKK, Coworking pass, Dinner"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Description</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Amount</label>
                 <input
-                  type="text"
+                  type="number"
                   required
-                  value={expDesc}
-                  onChange={(e) => setExpDesc(e.target.value)}
-                  placeholder="e.g. Coworking desk monthly pass"
-                  className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
+                  value={expAmount}
+                  onChange={(e) => setExpAmount(Number(e.target.value))}
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Amount</label>
-                  <input
-                    type="number"
-                    required
-                    value={expAmount}
-                    onChange={(e) => setExpAmount(Number(e.target.value))}
-                    className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Currency</label>
-                  <select
-                    value={expCurrency}
-                    onChange={(e) => setExpCurrency(e.target.value)}
-                    className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
-                  >
-                    <option value="EUR">EUR (€)</option>
-                    <option value="USD">USD ($)</option>
-                    <option value="GBP">GBP (£)</option>
-                    <option value="THB">THB (฿)</option>
-                    <option value="IDR">IDR (Rp)</option>
-                  </select>
-                </div>
-              </div>
-
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Category</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Currency</label>
                 <select
-                  value={expCategory}
-                  onChange={(e) => setExpCategory(e.target.value as any)}
-                  className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
+                  value={expCurrency}
+                  onChange={(e) => setExpCurrency(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
                 >
-                  <option value="Accommodation">Accommodation</option>
-                  <option value="Flights & Transit">Flights & Transit</option>
-                  <option value="Food & Groceries">Food & Groceries</option>
-                  <option value="Coworking & Cafes">Coworking & Cafes</option>
-                  <option value="Health & Visas">Health & Visas</option>
-                  <option value="Activities">Activities</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="THB">THB (฿)</option>
+                  <option value="IDR">IDR (Rp)</option>
+                  <option value="GBP">GBP (£)</option>
                 </select>
               </div>
+            </div>
 
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 bg-orange-500 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20"
-                >
-                  Save Expense
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsAddExpenseOpen(false)}
-                  className="px-4 py-2.5 bg-stone-100 text-stone-700 font-bold rounded-xl text-xs"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+            <div>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Category</label>
+              <select
+                value={expCategory}
+                onChange={(e) => setExpCategory(e.target.value as any)}
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-purple-500"
+              >
+                <option value="Accommodation">Accommodation</option>
+                <option value="Transport">Transport / Flights</option>
+                <option value="Food & Dining">Food & Dining</option>
+                <option value="Coworking">Coworking</option>
+                <option value="Visa & Legal">Visa & Legal</option>
+                <option value="Entertainment">Entertainment</option>
+              </select>
+            </div>
+
+            <div className="flex gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setIsAddExpenseOpen(false)}
+                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
+              >
+                Save Expense
+              </button>
+            </div>
+          </form>
         </div>
       )}
 
       {/* Add Schengen Stay Modal */}
       {isAddSchengenOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md bg-white rounded-3xl p-6 border border-stone-200 shadow-2xl space-y-4">
-            <h4 className="text-base font-black text-stone-900">Add Schengen Stay</h4>
-            <form onSubmit={handleSaveSchengenStay} className="space-y-3">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <form onSubmit={handleSaveSchengenStay} className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between">
+              <h3 className="font-extrabold text-stone-900 text-base">Record Schengen Entry</h3>
+              <button
+                type="button"
+                onClick={() => setIsAddSchengenOpen(false)}
+                className="w-7 h-7 rounded-full bg-stone-100 text-stone-500 flex items-center justify-center"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-stone-700 mb-1">Country</label>
+              <input
+                type="text"
+                required
+                value={stayCountry}
+                onChange={(e) => setStayCountry(e.target.value)}
+                placeholder="e.g. Portugal, Spain, France"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+              />
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-600 mb-1">Country</label>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Entry Date</label>
                 <input
-                  type="text"
-                  required
-                  value={stayCountry}
-                  onChange={(e) => {
-                    setStayCountry(e.target.value);
-                    setStayCode(e.target.value.slice(0, 2).toUpperCase());
-                  }}
-                  className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
+                  type="date"
+                  value={stayEntry}
+                  onChange={(e) => setStayEntry(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
                 />
               </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Entry Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={stayEntry}
-                    onChange={(e) => setStayEntry(e.target.value)}
-                    className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-stone-600 mb-1">Exit Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={stayExit}
-                    onChange={(e) => setStayExit(e.target.value)}
-                    className="w-full p-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium"
-                  />
-                </div>
+              <div>
+                <label className="block text-xs font-bold text-stone-700 mb-1">Exit Date</label>
+                <input
+                  type="date"
+                  value={stayExit}
+                  onChange={(e) => setStayExit(e.target.value)}
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-purple-500"
+                />
               </div>
+            </div>
 
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 bg-orange-500 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20"
-                >
-                  Record Stay
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsAddSchengenOpen(false)}
-                  className="px-4 py-2.5 bg-stone-100 text-stone-700 font-bold rounded-xl text-xs"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
+            <div className="flex gap-2 pt-2">
+              <button
+                type="button"
+                onClick={() => setIsAddSchengenOpen(false)}
+                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="flex-1 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30"
+              >
+                Save Stay
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>

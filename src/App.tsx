@@ -5,7 +5,8 @@ import {
   NomadCity, 
   TripDestination, 
   SchengenStay, 
-  NomadExpense 
+  NomadExpense,
+  NomadEvent
 } from './types';
 import { INITIAL_NOMAD_DATA } from './data/defaultData';
 import { TopBar } from './components/TopBar';
@@ -18,8 +19,10 @@ import { SocialTab } from './components/SocialTab';
 import { OnboardingModal } from './components/OnboardingModal';
 import { PricingModal } from './components/PricingModal';
 import { AuthModal } from './components/AuthModal';
+import { LandingPage } from './components/LandingPage';
+import { DeviceSimulator } from './components/DeviceSimulator';
 
-const STORAGE_KEY = 'nomados_state_v2';
+const STORAGE_KEY = 'nomados_state_v3';
 
 export function App() {
   const [state, setState] = useState<NomadState>(() => {
@@ -27,9 +30,12 @@ export function App() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) {
         const parsed = JSON.parse(saved);
-        // Ensure user structure exists
         if (parsed && parsed.user) {
-          return parsed;
+          return {
+            ...INITIAL_NOMAD_DATA,
+            ...parsed,
+            user: { ...INITIAL_NOMAD_DATA.user, ...parsed.user },
+          };
         }
       }
     } catch (err) {
@@ -38,6 +44,8 @@ export function App() {
     return INITIAL_NOMAD_DATA;
   });
 
+  const [viewMode, setViewMode] = useState<'landing' | 'app'>('app');
+  const [deviceMode, setDeviceMode] = useState<'web' | 'ios' | 'android'>('web');
   const [activeTab, setActiveTab] = useState<'home' | 'travel' | 'explore' | 'social' | 'me'>('home');
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
@@ -87,7 +95,7 @@ export function App() {
         ...userData,
       },
     }));
-    showToast(`Welcome back, ${userData.name || 'Nomad'}!`);
+    showToast(`Welcome, ${userData.name || 'Nomad'}!`);
   };
 
   const handleAddCountryVisited = (code: string) => {
@@ -121,44 +129,53 @@ export function App() {
           return {
             ...ev,
             isAttending,
-            attendeesCount: isAttending ? ev.attendeesCount + 1 : Math.max(0, ev.attendeesCount - 1),
+            attendeesCount: isAttending ? ev.attendeesCount + 1 : ev.attendeesCount - 1,
           };
         }
         return ev;
       }),
     }));
-    showToast('RSVP status updated!');
+    const event = state.events.find((e) => e.id === eventId);
+    showToast(event?.isAttending ? 'RSVP cancelled' : 'RSVP confirmed! See you there 🎉');
   };
 
   const handleAddEvent = (title: string, date: string, city: string) => {
-    const newEvent = {
+    const newEvent: NomadEvent = {
       id: `ev-${Date.now()}`,
       title,
       city,
-      country: state.currentCountry || 'Portugal',
+      country: state.currentCountry,
       date,
       time: '18:00',
-      location: `${city} Nomad Coworking Cafe`,
+      location: `${city} Digital Nomad Hub`,
+      category: 'Coffee',
       attendeesCount: 1,
       isAttending: true,
       hostName: state.user.name,
       hostAvatar: state.user.avatarUrl,
-      category: 'Coffee' as const,
     };
     setState((prev) => ({
       ...prev,
       events: [newEvent, ...prev.events],
     }));
-    showToast('Meetup created! Nomads in your city can now join.');
+    showToast('Meetup published! Other nomads can now RSVP. 🚀');
   };
 
-  // Trips & Itinerary
-  const handleAddTrip = (trip: TripDestination) => {
+  // Trips Management
+  const handleAddTrip = (newTrip: TripDestination) => {
     setState((prev) => ({
       ...prev,
-      trips: [...prev.trips, trip],
+      trips: [...prev.trips, newTrip],
     }));
-    showToast(`Added ${trip.city} to your itinerary! ✈️`);
+    showToast(`Added ${newTrip.city} to your itinerary! ✈️`);
+  };
+
+  const handleDeleteTrip = (tripId: string) => {
+    setState((prev) => ({
+      ...prev,
+      trips: prev.trips.filter((t) => t.id !== tripId),
+    }));
+    showToast('Trip destination removed');
   };
 
   const handleAddCityToTrip = (city: NomadCity) => {
@@ -168,35 +185,25 @@ export function App() {
       country: city.country,
       countryCode: city.countryCode,
       arrivalDate: '2026-11-01',
-      departureDate: '2026-12-01',
+      departureDate: '2026-11-30',
       accommodationStatus: 'Searching',
-      housingCostUSD: Math.round(city.costPerMonthUSD * 0.6),
-      visaType: 'Tourist / Digital Nomad Visa',
+      housingCostUSD: city.costPerMonthUSD,
+      visaType: 'Digital Nomad Visa / Waiver',
       timezone: 'UTC',
-      notes: `Discovered from Explore tab. Nomad Score: ${city.nomadScore}/100`,
+      notes: `Planned stop via NomadOS Explore. Internet: ${city.internetSpeedMbps}Mbps`,
     };
-    setState((prev) => ({
-      ...prev,
-      trips: [...prev.trips, newTrip],
-    }));
-    showToast(`Added ${city.name} to your trips!`);
-  };
-
-  const handleDeleteTrip = (tripId: string) => {
-    setState((prev) => ({
-      ...prev,
-      trips: prev.trips.filter((t) => t.id !== tripId),
-    }));
-    showToast('Trip stop removed');
+    handleAddTrip(newTrip);
+    setActiveTab('travel');
+    setViewMode('app');
   };
 
   // Schengen Stays
   const handleAddSchengenStay = (stay: SchengenStay) => {
     setState((prev) => ({
       ...prev,
-      schengenStays: [stay, ...prev.schengenStays],
+      schengenStays: [...prev.schengenStays, stay],
     }));
-    showToast(`Recorded stay in ${stay.country}`);
+    showToast(`Recorded stay in ${stay.country} 🇪🇺`);
   };
 
   const handleDeleteSchengenStay = (id: string) => {
@@ -204,16 +211,16 @@ export function App() {
       ...prev,
       schengenStays: prev.schengenStays.filter((s) => s.id !== id),
     }));
-    showToast('Schengen stay removed');
+    showToast('Schengen stay entry removed');
   };
 
-  // Expenses
+  // Expenses Management
   const handleAddExpense = (expense: NomadExpense) => {
     setState((prev) => ({
       ...prev,
       expenses: [expense, ...prev.expenses],
     }));
-    showToast(`Logged $${expense.amountUSD} for ${expense.description}`);
+    showToast(`Expense logged: $${expense.amountUSD} 💳`);
   };
 
   const handleDeleteExpense = (id: string) => {
@@ -228,78 +235,102 @@ export function App() {
   const handleUpdateTaxPresence = (id: string, days: number) => {
     setState((prev) => ({
       ...prev,
-      taxPresences: prev.taxPresences.map((p) => (p.id === id ? { ...p, daysSpent: days } : p)),
+      taxPresences: prev.taxPresences.map((tp) => (tp.id === id ? { ...tp, daysSpent: days } : tp)),
     }));
-    showToast('Updated tax presence days');
+    showToast('Tax residency days updated');
   };
 
   return (
-    <div id="nomados-app-root" className="min-h-screen bg-[#f8f9fc] text-stone-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
-      {/* Top Header */}
+    <div className="min-h-screen bg-[#f8f9fc] text-stone-900 flex flex-col font-sans selection:bg-purple-500 selection:text-white">
+      {/* Top Application Header with Mode & Device Toggles */}
       <TopBar
         user={state.user}
+        viewMode={viewMode}
+        deviceMode={deviceMode}
+        onSetViewMode={setViewMode}
+        onSetDeviceMode={setDeviceMode}
         onOpenPricing={() => setIsPricingOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
         onOpenOnboarding={() => setIsOnboardingOpen(true)}
       />
 
-      {/* Main View Router */}
-      <main className="flex-1 w-full">
-        {activeTab === 'home' && (
-          <HomeDashboard
+      {/* Main View: Landing Page OR App Workspace */}
+      {viewMode === 'landing' ? (
+        <main className="flex-1 w-full">
+          <LandingPage
             state={state}
-            onNavigateTab={(tab) => setActiveTab(tab)}
-            onOpenPricing={() => setIsPricingOpen(true)}
-            onOpenOnboarding={() => setIsOnboardingOpen(true)}
-            onToggleEventRSVP={handleToggleEventRSVP}
-            onOpenCreateMeetup={() => setActiveTab('social')}
-          />
-        )}
-
-        {activeTab === 'travel' && (
-          <TravelTab
-            state={state}
-            onAddTrip={handleAddTrip}
-            onDeleteTrip={handleDeleteTrip}
-            onAddSchengenStay={handleAddSchengenStay}
-            onDeleteSchengenStay={handleDeleteSchengenStay}
-            onAddExpense={handleAddExpense}
-            onDeleteExpense={handleDeleteExpense}
-            onUpdateTaxPresence={handleUpdateTaxPresence}
-            onOpenPricing={() => setIsPricingOpen(true)}
-          />
-        )}
-
-        {activeTab === 'explore' && (
-          <ExploreTab
-            onAddCityToTrip={handleAddCityToTrip}
-            onOpenPricing={() => setIsPricingOpen(true)}
-            isPro={state.user.isPro}
-          />
-        )}
-
-        {activeTab === 'social' && (
-          <SocialTab
-            state={state}
-            onToggleEventRSVP={handleToggleEventRSVP}
-            onAddEvent={handleAddEvent}
-            onSetCity={handleSetCity}
-          />
-        )}
-
-        {activeTab === 'me' && (
-          <ProfileTab
-            state={state}
-            onUpdateUser={handleUpdateUser}
+            onLaunchApp={(tab) => {
+              setViewMode('app');
+              if (tab) setActiveTab(tab);
+            }}
             onOpenPricing={() => setIsPricingOpen(true)}
             onOpenAuth={() => setIsAuthOpen(true)}
-            onAddCountryVisited={handleAddCountryVisited}
+            onOpenOnboarding={() => setIsOnboardingOpen(true)}
           />
-        )}
-      </main>
+        </main>
+      ) : (
+        /* App Workspace rendered inside DeviceSimulator (Web / iOS / Android) */
+        <DeviceSimulator deviceMode={deviceMode}>
+          <div className="flex flex-col min-h-full">
+            <main className="flex-1 w-full">
+              {activeTab === 'home' && (
+                <HomeDashboard
+                  state={state}
+                  onNavigateTab={(tab) => setActiveTab(tab)}
+                  onOpenPricing={() => setIsPricingOpen(true)}
+                  onOpenOnboarding={() => setIsOnboardingOpen(true)}
+                  onToggleEventRSVP={handleToggleEventRSVP}
+                  onOpenCreateMeetup={() => setActiveTab('social')}
+                />
+              )}
 
-      {/* Bottom Tab Bar Navigation */}
-      <Navigation activeTab={activeTab} onSelectTab={(tab) => setActiveTab(tab)} />
+              {activeTab === 'travel' && (
+                <TravelTab
+                  state={state}
+                  onAddTrip={handleAddTrip}
+                  onDeleteTrip={handleDeleteTrip}
+                  onAddSchengenStay={handleAddSchengenStay}
+                  onDeleteSchengenStay={handleDeleteSchengenStay}
+                  onAddExpense={handleAddExpense}
+                  onDeleteExpense={handleDeleteExpense}
+                  onUpdateTaxPresence={handleUpdateTaxPresence}
+                  onOpenPricing={() => setIsPricingOpen(true)}
+                />
+              )}
+
+              {activeTab === 'explore' && (
+                <ExploreTab
+                  onAddCityToTrip={handleAddCityToTrip}
+                  onOpenPricing={() => setIsPricingOpen(true)}
+                  isPro={state.user.isPro}
+                />
+              )}
+
+              {activeTab === 'social' && (
+                <SocialTab
+                  state={state}
+                  onToggleEventRSVP={handleToggleEventRSVP}
+                  onAddEvent={handleAddEvent}
+                  onSetCity={handleSetCity}
+                />
+              )}
+
+              {activeTab === 'me' && (
+                <ProfileTab
+                  state={state}
+                  onUpdateUser={handleUpdateUser}
+                  onOpenPricing={() => setIsPricingOpen(true)}
+                  onOpenAuth={() => setIsAuthOpen(true)}
+                  onAddCountryVisited={handleAddCountryVisited}
+                />
+              )}
+            </main>
+
+            {/* Bottom Tab Bar Navigation */}
+            <Navigation activeTab={activeTab} onSelectTab={(tab) => setActiveTab(tab)} />
+          </div>
+        </DeviceSimulator>
+      )}
 
       {/* Modals */}
       <OnboardingModal
@@ -325,13 +356,13 @@ export function App() {
         onSignIn={handleSignIn}
       />
 
-      {/* Toast Notification Banner */}
+      {/* Global Toast Notification */}
       {toastMessage && (
         <div
           id="global-toast-notification"
-          className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-stone-900 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2"
+          className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-stone-900/95 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 backdrop-blur-md border border-stone-700/50"
         >
-          <span className="w-2 h-2 rounded-full bg-orange-500" />
+          <span className="w-2 h-2 rounded-full bg-purple-500 animate-pulse" />
           <span>{toastMessage}</span>
         </div>
       )}

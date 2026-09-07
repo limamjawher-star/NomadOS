@@ -18,7 +18,7 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onSelectTab }
   return (
     <nav
       id="bottom-navigation-bar"
-      className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-stone-200/80 shadow-lg py-1.5 px-4"
+      className="sticky bottom-0 z-40 bg-white/95 backdrop-blur-md border-t border-stone-200/80 shadow-lg py-1.5 px-4"
     >
       <div className="max-w-md mx-auto flex items-center justify-between">
         {tabs.map((tab) => {
@@ -32,17 +32,17 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onSelectTab }
               onClick={() => onSelectTab(tab.id)}
               className={`flex flex-col items-center justify-center flex-1 py-1 transition-all ${
                 isActive
-                  ? 'text-orange-500 font-bold scale-105'
+                  ? 'text-purple-600 font-bold scale-105'
                   : 'text-stone-400 hover:text-stone-600 font-medium'
               }`}
             >
               <div className="relative">
                 <Icon className={`w-5 h-5 ${isActive ? 'stroke-[2.5]' : 'stroke-[2]'}`} />
                 {isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-orange-500 rounded-full" />
+                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-purple-600 rounded-full" />
                 )}
               </div>
-              <span className="text-[10px] mt-1 tracking-tight">{tab.label}</span>
+              <span className="text-[10px] mt-1 tracking-tight font-extrabold">{tab.label}</span>
             </button>
           );
         })}

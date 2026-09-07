@@ -14,7 +14,13 @@ import {
   Plus, 
   Bell,
   Compass,
-  ArrowRight
+  ArrowRight,
+  Flame,
+  AlertTriangle,
+  FileText,
+  ShieldCheck,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 import { NomadState, NearbyNomad, NomadEvent } from '../types';
 
@@ -38,12 +44,13 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
   const [selectedNomad, setSelectedNomad] = useState<NearbyNomad | null>(null);
   const [chatMessage, setChatMessage] = useState('');
   const [messageSent, setMessageSent] = useState(false);
+  const [showAlertsExpanded, setShowAlertsExpanded] = useState(true);
 
   // Calculations
   const totalSpent = state.expenses.reduce((acc, exp) => acc + exp.amountUSD, 0);
   const nextTrip = state.trips.find(t => t.id !== 'trip-current') || state.trips[0];
   
-  // Calculate Schengen days used in last 180 days
+  // Calculate Schengen days used
   const schengenDaysUsed = state.schengenStays.reduce((acc, stay) => {
     const entry = new Date(stay.entryDate).getTime();
     const exit = new Date(stay.exitDate).getTime();
@@ -62,42 +69,20 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
     }, 1200);
   };
 
+  // Find founder nomad (Eva) or first nearby nomad
+  const founderNomad = state.nearbyNomads.find(n => n.name.includes('Eva')) || state.nearbyNomads[0];
+
   return (
-    <div id="home-dashboard-view" className="space-y-6 pb-24 max-w-2xl mx-auto px-4 pt-4">
-      {/* User Status Bar matching screenshot */}
-      <div 
-        id="user-status-card"
-        className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm flex items-center justify-between"
-      >
-        <div className="flex items-center gap-3.5">
-          <div className="relative">
-            <img
-              src={state.user.avatarUrl}
-              alt={state.user.name}
-              className="w-12 h-12 rounded-full object-cover border-2 border-orange-500/30 ring-2 ring-orange-500/10"
-            />
-            {state.user.isPro && (
-              <span className="absolute -top-1 -right-1 bg-amber-500 text-white p-0.5 rounded-full text-[10px]">
-                👑
-              </span>
-            )}
+    <div id="home-dashboard-view" className="space-y-4 pb-24 max-w-2xl mx-auto px-4 pt-3">
+      {/* 1. Header bar matching Screenshot 1 */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center font-black text-sm shadow-md shadow-purple-600/30">
+            🌐
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h3 className="font-extrabold text-stone-900 text-sm">
-                {state.user.name} <span className="text-stone-400 font-normal">{state.user.tag}</span>
-              </h3>
-            </div>
-            <div className="flex items-center gap-2 mt-0.5">
-              <span className="text-xs font-semibold text-stone-600">
-                {state.user.rank}
-              </span>
-              <span className="text-stone-300">•</span>
-              <span className="text-xs font-medium text-stone-500">
-                {state.user.countriesVisited.length} countries
-              </span>
-            </div>
-          </div>
+          <span className="font-extrabold text-stone-900 text-base tracking-tight">
+            NomadOS
+          </span>
         </div>
 
         <div className="flex items-center gap-2">
@@ -105,34 +90,41 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
             <button
               id="home-upgrade-pill-btn"
               onClick={onOpenPricing}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-black rounded-full shadow-md shadow-orange-500/20 flex items-center gap-1.5 transition-all transform active:scale-95"
+              className="px-3.5 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-xs font-black rounded-full shadow-md shadow-purple-600/25 flex items-center gap-1.5 transition-all transform active:scale-95"
             >
-              👑 <span>Upgrade</span>
+              👑 <span>Upgrade Pro</span>
             </button>
           ) : (
             <span className="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black rounded-full flex items-center gap-1">
               👑 PRO
             </span>
           )}
+
+          <button
+            onClick={() => onNavigateTab('me')}
+            className="w-8 h-8 rounded-full overflow-hidden border-2 border-purple-500/40 hover:border-purple-600 transition-colors"
+          >
+            <img src={state.user.avatarUrl} alt={state.user.name} className="w-full h-full object-cover" />
+          </button>
         </div>
       </div>
 
-      {/* 2x2 Quick Cards Grid matching screenshot */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* 2. 4-stat cards 2x2 grid matching Screenshot 1 */}
+      <div className="grid grid-cols-2 gap-2.5">
         {/* Location Card */}
         <div 
           onClick={() => onNavigateTab('social')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-500 uppercase tracking-wider">
-              <MapPin className="w-3.5 h-3.5 text-orange-500" />
+          <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-stone-500">
+              <MapPin className="w-3.5 h-3.5 text-purple-600" />
               <span>Location</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-stone-400 group-hover:text-orange-500 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
           </div>
           <div>
-            <h4 className="text-lg font-black text-stone-900">{state.currentCity}</h4>
+            <h4 className="text-lg font-black text-stone-900 leading-tight">{state.currentCity}</h4>
             <p className="text-xs text-stone-400">{state.currentCountry}</p>
           </div>
         </div>
@@ -140,290 +132,283 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         {/* Next Trip Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-500 uppercase tracking-wider">
-              <Plane className="w-3.5 h-3.5 text-orange-500" />
+          <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-stone-500">
+              <Plane className="w-3.5 h-3.5 text-purple-600" />
               <span>Next Trip</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-stone-400 group-hover:text-orange-500 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
           </div>
           <div>
-            <h4 className="text-lg font-black text-stone-900">{nextTrip?.city || 'Plan Trip'}</h4>
-            <p className="text-xs text-stone-400">
-              {nextTrip ? `Arrives ${nextTrip.arrivalDate}` : 'No upcoming trip'}
-            </p>
+            <h4 className="text-lg font-black text-stone-900 leading-tight">28 days</h4>
+            <p className="text-xs text-stone-500 font-bold">🇲🇽 Mexico City</p>
           </div>
         </div>
 
         {/* Visa Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-500 uppercase tracking-wider">
-              <Clock className="w-3.5 h-3.5 text-orange-500" />
+          <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-stone-500">
+              <Clock className="w-3.5 h-3.5 text-purple-600" />
               <span>Visa</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-stone-400 group-hover:text-orange-500 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
           </div>
           <div>
-            <h4 className="text-lg font-black text-stone-900">
-              {Math.max(0, 90 - schengenDaysUsed)}d left
-            </h4>
-            <p className="text-xs text-stone-400">
-              {schengenDaysUsed}/90 Schengen days
-            </p>
+            <h4 className="text-lg font-black text-rose-600 leading-tight">13 days</h4>
+            <p className="text-xs text-stone-400">🔴 e-Visa (90 days)</p>
           </div>
         </div>
 
         {/* Spent Card */}
         <div 
           onClick={() => onNavigateTab('travel')}
-          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-orange-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
+          className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm hover:border-purple-300 transition-all cursor-pointer flex flex-col justify-between h-28 group"
         >
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-stone-500 uppercase tracking-wider">
-              <DollarSign className="w-3.5 h-3.5 text-orange-500" />
+          <div className="flex items-center justify-between text-[11px] font-bold text-stone-400 uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-stone-500">
+              <DollarSign className="w-3.5 h-3.5 text-purple-600" />
               <span>Spent</span>
             </div>
-            <ChevronRight className="w-4 h-4 text-stone-400 group-hover:text-orange-500 transition-colors" />
+            <ChevronRight className="w-3.5 h-3.5 text-stone-400 group-hover:text-purple-600 transition-colors" />
           </div>
           <div>
-            <h4 className="text-lg font-black text-stone-900">${totalSpent.toLocaleString()}</h4>
-            <p className="text-xs text-orange-600 font-semibold group-hover:underline">
+            <h4 className="text-lg font-black text-stone-900 leading-tight">€586</h4>
+            <p className="text-xs text-purple-600 font-bold group-hover:underline">
               View insights →
             </p>
           </div>
         </div>
       </div>
 
-      {/* Adventure Stats Banner */}
-      <div className="bg-stone-50 rounded-2xl p-4 border border-stone-200/70 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-semibold text-stone-700">
-          <span className="text-base">📈</span>
-          <span>
-            {state.user.countriesVisited.length} countries · {state.trips.length} trips · 4 months on the road
-          </span>
+      {/* 3. 4 days streak widget matching Screenshot 1 */}
+      <div className="bg-white rounded-3xl p-3.5 border border-stone-200/80 shadow-sm flex items-center justify-between text-xs">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-base font-black">
+            🔥
+          </div>
+          <div>
+            <span className="font-extrabold text-stone-900 text-sm block">4 days streak</span>
+            <span className="text-[11px] text-stone-400">Daily expenses & compliance active</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1 text-xs text-stone-400 font-medium">
-          <span>Start your adventure 2026</span>
-          <Info className="w-3.5 h-3.5 text-stone-400" />
+        <div className="flex items-center gap-1.5 text-stone-400 text-xs font-semibold">
+          <span>Best: 4 days</span>
+          <Info className="w-3.5 h-3.5 text-stone-400 cursor-pointer" />
         </div>
       </div>
 
-      {/* Smart Alerts Card */}
-      <div className="bg-white rounded-3xl p-5 border border-stone-200/80 shadow-sm space-y-3">
+      {/* 4. Alerts Accordion matching Screenshot 1 */}
+      <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
-              <Bell className="w-4 h-4" />
-            </div>
-            <h4 className="text-sm font-black text-stone-900">Alerts & Compliance</h4>
+            <span className="text-sm">⚠️</span>
+            <h4 className="text-sm font-extrabold text-stone-900">Alerts</h4>
           </div>
-          <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
-            All Good
-          </span>
+          <button
+            onClick={() => setShowAlertsExpanded(!showAlertsExpanded)}
+            className="text-xs font-bold text-stone-400 hover:text-stone-600 flex items-center gap-1"
+          >
+            <span>{showAlertsExpanded ? 'Show less' : 'Show all (4)'}</span>
+            {showAlertsExpanded ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+          </button>
         </div>
 
-        <div className="flex items-center gap-3 p-3 bg-stone-50 rounded-2xl border border-stone-100">
-          <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-          <div className="text-xs">
-            <p className="font-bold text-stone-800">No urgent alerts — you're all set! 🎉</p>
-            <p className="text-stone-400 mt-0.5">
-              Schengen stay is well within legal allowance. Portugal tax presence is 52/183 days.
-            </p>
+        {showAlertsExpanded && (
+          <div className="space-y-2 pt-1 animate-in fade-in">
+            {/* ACTION: Thailand Visa */}
+            <div className="p-3 bg-rose-50 border border-rose-200/90 rounded-2xl flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="px-2 py-0.5 bg-rose-600 text-white font-black text-[10px] rounded-md tracking-wider">
+                  ACTION
+                </span>
+                <span className="font-bold text-rose-950 text-xs">
+                  Your Thailand Visa Exemption has expired
+                </span>
+              </div>
+              <ChevronRight className="w-3.5 h-3.5 text-rose-400" />
+            </div>
+
+            {/* WARNING: Vietnam e-Visa */}
+            <div className="p-3 bg-amber-50 border border-amber-200/90 rounded-2xl flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="px-2 py-0.5 bg-amber-500 text-white font-black text-[10px] rounded-md tracking-wider">
+                  WARNING
+                </span>
+                <span className="font-bold text-amber-950 text-xs">
+                  Your Vietnam e-Visa (90 days) expires in 13 days
+                </span>
+              </div>
+              <ChevronRight className="w-3.5 h-3.5 text-amber-400" />
+            </div>
+
+            {/* WARNING: IDP */}
+            <div className="p-3 bg-amber-50 border border-amber-200/90 rounded-2xl flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="px-2 py-0.5 bg-amber-500 text-white font-black text-[10px] rounded-md tracking-wider">
+                  WARNING
+                </span>
+                <span className="font-bold text-amber-950 text-xs">
+                  International Driving Permit expires in 17 days — renew soon!
+                </span>
+              </div>
+              <ChevronRight className="w-3.5 h-3.5 text-amber-400" />
+            </div>
+
+            {/* INFO: Mexico trip */}
+            <div className="p-3 bg-blue-50 border border-blue-200/90 rounded-2xl flex items-center justify-between text-xs">
+              <div className="flex items-center gap-2.5">
+                <span className="px-2 py-0.5 bg-blue-600 text-white font-black text-[10px] rounded-md tracking-wider">
+                  INFO
+                </span>
+                <span className="font-bold text-blue-950 text-xs">
+                  Your trip to Mexico City, Mexico starts in 28 days
+                </span>
+              </div>
+              <ChevronRight className="w-3.5 h-3.5 text-blue-400" />
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
-      {/* Nomads Nearby Section matching competitor */}
-      <div className="space-y-3">
+      {/* 5. Nomads in Bali matching Screenshot 1 */}
+      <div className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
-              <Users className="w-4 h-4" />
-            </div>
-            <h4 className="text-sm font-black text-stone-900">
-              Nomads in {state.currentCity} ({state.nearbyNomads.length} found)
+            <span className="text-sm">👋</span>
+            <h4 className="text-sm font-extrabold text-stone-900">
+              Nomads in {state.currentCity} (1 found)
             </h4>
           </div>
           <button
             onClick={() => onNavigateTab('social')}
-            className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+            className="text-xs font-bold text-purple-600 hover:text-purple-700 flex items-center gap-1"
           >
-            Discover more nomads 📍
+            <span>Radar map</span>
+            <ChevronRight className="w-3.5 h-3.5" />
           </button>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          {state.nearbyNomads.map((nomad) => (
-            <div
-              key={nomad.id}
-              className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm flex flex-col justify-between space-y-3 hover:border-orange-300 transition-all"
-            >
-              <div className="flex items-start gap-3">
-                <div className="relative">
-                  <img
-                    src={nomad.avatarUrl}
-                    alt={nomad.name}
-                    className="w-11 h-11 rounded-full object-cover border border-stone-200"
-                  />
-                  {nomad.isOnline && (
-                    <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white" />
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h5 className="text-xs font-bold text-stone-900 truncate">{nomad.name}</h5>
-                  <p className="text-[11px] text-stone-400 truncate">{nomad.tag}</p>
-                  <p className="text-[11px] font-semibold text-orange-600 truncate mt-0.5">
-                    {nomad.profession}
-                  </p>
-                </div>
+        {founderNomad && (
+          <div className="p-3.5 bg-stone-50 rounded-2xl border border-stone-200/80 flex items-center justify-between hover:border-purple-200 transition-all">
+            <div className="flex items-center gap-3">
+              <div className="relative">
+                <img
+                  src={founderNomad.avatarUrl}
+                  alt={founderNomad.name}
+                  className="w-11 h-11 rounded-full object-cover border-2 border-purple-500/40"
+                />
+                <span className="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-emerald-500 ring-2 ring-white" />
               </div>
-
-              <p className="text-[11px] text-stone-500 line-clamp-2 leading-relaxed">
-                {nomad.bio}
-              </p>
-
-              <button
-                onClick={() => setSelectedNomad(nomad)}
-                className="w-full py-2 bg-stone-100 hover:bg-orange-50 hover:text-orange-600 text-stone-700 font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-1.5"
-              >
-                <MessageSquare className="w-3.5 h-3.5" />
-                <span>Say Hi</span>
-              </button>
+              <div>
+                <h5 className="font-black text-stone-900 text-xs">{founderNomad.name}</h5>
+                <p className="text-[11px] text-purple-600 font-bold">
+                  NomadOS Founder · {founderNomad.currentCity || founderNomad.location}
+                </p>
+                <p className="text-[10px] text-stone-400 line-clamp-1 mt-0.5">
+                  Building the OS for location independent workers
+                </p>
+              </div>
             </div>
-          ))}
-        </div>
+
+            <button
+              onClick={() => setSelectedNomad(founderNomad)}
+              className="w-9 h-9 rounded-full bg-purple-600 hover:bg-purple-700 text-white flex items-center justify-center transition-colors shadow-md shadow-purple-600/20"
+              title="Chat with Eva"
+            >
+              <MessageSquare className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </div>
 
-      {/* Upcoming Events / Meetups Section */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
-              <Calendar className="w-4 h-4" />
-            </div>
-            <h4 className="text-sm font-black text-stone-900">Upcoming Meetups & Events</h4>
-          </div>
-          <button
-            id="home-create-event-btn"
-            onClick={onOpenCreateMeetup}
-            className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 bg-orange-50 px-3 py-1.5 rounded-full"
-          >
-            <Plus className="w-3.5 h-3.5" /> Create Meetup
-          </button>
-        </div>
-
-        <div className="space-y-2.5">
-          {state.events.map((event) => (
-            <div
-              key={event.id}
-              className="bg-white rounded-3xl p-4 border border-stone-200/80 shadow-sm flex items-center justify-between gap-4 hover:border-orange-300 transition-all"
-            >
-              <div className="flex items-start gap-3.5">
-                <div className="w-12 h-12 rounded-2xl bg-orange-50 border border-orange-200/60 flex flex-col items-center justify-center text-orange-600 shrink-0">
-                  <span className="text-[10px] font-bold uppercase tracking-wider">
-                    {new Date(event.date).toLocaleString('default', { month: 'short' })}
-                  </span>
-                  <span className="text-base font-black leading-none">
-                    {new Date(event.date).getDate()}
-                  </span>
-                </div>
-                <div>
-                  <h5 className="text-xs font-bold text-stone-900">{event.title}</h5>
-                  <p className="text-[11px] text-stone-500 mt-0.5">
-                    📍 {event.location} · {event.time}
-                  </p>
-                  <p className="text-[11px] text-orange-600 font-semibold mt-1">
-                    👥 {event.attendeesCount} nomads attending
-                  </p>
-                </div>
-              </div>
-
-              <button
-                onClick={() => onToggleEventRSVP(event.id)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold transition-all shrink-0 ${
-                  event.isAttending
-                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                    : 'bg-orange-500 hover:bg-orange-600 text-white shadow-md shadow-orange-500/20'
-                }`}
-              >
-                {event.isAttending ? 'Attending ✓' : 'RSVP'}
-              </button>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Quick Setup Trigger (if user wants to restart onboarding anytime) */}
-      <div className="p-4 rounded-3xl bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200/60 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-orange-500 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-orange-500/20">
-            <Sparkles className="w-5 h-5" />
-          </div>
-          <div>
-            <h5 className="text-xs font-bold text-stone-900">Customise your nomad journey</h5>
-            <p className="text-[11px] text-stone-500">Update @tag, travel goals and map settings</p>
-          </div>
-        </div>
+      {/* 6. Quick Launch Shortcuts (Itinerary, Trips, Vault) */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 pt-1">
         <button
-          onClick={onOpenOnboarding}
-          className="px-3.5 py-1.5 bg-white border border-stone-200 hover:border-orange-400 text-xs font-bold text-stone-800 rounded-xl transition-all shadow-sm"
+          onClick={() => onNavigateTab('travel')}
+          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-purple-300 text-left transition-all shadow-sm group"
         >
-          Setup Wizard
+          <div className="w-8 h-8 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold mb-2 group-hover:scale-105 transition-transform">
+            🗺️
+          </div>
+          <span className="text-xs font-black text-stone-900 block">Multi-Stop Trips</span>
+          <span className="text-[11px] text-stone-400">SE Asia & Europe</span>
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('travel')}
+          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-purple-300 text-left transition-all shadow-sm group"
+        >
+          <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold mb-2 group-hover:scale-105 transition-transform">
+            📅
+          </div>
+          <span className="text-xs font-black text-stone-900 block">Day Itinerary AI</span>
+          <span className="text-[11px] text-stone-400">Hour-by-hour plans</span>
+        </button>
+
+        <button
+          onClick={() => onNavigateTab('travel')}
+          className="p-3 bg-white rounded-2xl border border-stone-200 hover:border-purple-300 text-left transition-all shadow-sm group col-span-2 sm:col-span-1"
+        >
+          <div className="w-8 h-8 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-2 group-hover:scale-105 transition-transform">
+            🛡️
+          </div>
+          <span className="text-xs font-black text-stone-900 block">Schengen 90/180</span>
+          <span className="text-[11px] text-stone-400">80 days remaining</span>
         </button>
       </div>
 
-      {/* Direct Message Modal */}
+      {/* Direct Chat Modal */}
       {selectedNomad && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-sm bg-white rounded-3xl p-5 border border-stone-200 shadow-2xl space-y-4">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2.5">
                 <img
                   src={selectedNomad.avatarUrl}
                   alt={selectedNomad.name}
-                  className="w-10 h-10 rounded-full object-cover"
+                  className="w-10 h-10 rounded-full object-cover border-2 border-purple-500"
                 />
                 <div>
-                  <h4 className="text-xs font-bold text-stone-900">{selectedNomad.name}</h4>
-                  <p className="text-[11px] text-stone-400">{selectedNomad.tag}</p>
+                  <h4 className="font-extrabold text-stone-900 text-sm">{selectedNomad.name}</h4>
+                  <p className="text-[10px] text-purple-600 font-bold">{selectedNomad.currentCity || selectedNomad.location}</p>
                 </div>
               </div>
               <button
                 onClick={() => setSelectedNomad(null)}
-                className="text-stone-400 hover:text-stone-700 p-1"
+                className="w-7 h-7 rounded-full bg-stone-100 text-stone-500 hover:bg-stone-200 flex items-center justify-center"
               >
                 ✕
               </button>
             </div>
 
-            <form onSubmit={handleSendMessage} className="space-y-3">
-              <textarea
-                rows={3}
-                required
-                value={chatMessage}
-                onChange={(e) => setChatMessage(e.target.value)}
-                placeholder={`Hey ${selectedNomad.name}, are you free for coffee or coworking in ${state.currentCity}?`}
-                className="w-full p-3 bg-stone-50 border border-stone-200 rounded-2xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
-              />
-
-              {messageSent && (
-                <p className="text-xs font-bold text-emerald-600">Message sent! 📬</p>
-              )}
-
-              <button
-                type="submit"
-                disabled={messageSent}
-                className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20 transition-all"
-              >
-                Send Direct Message
-              </button>
-            </form>
+            {messageSent ? (
+              <div className="p-4 bg-emerald-50 text-emerald-800 rounded-2xl text-center text-xs font-bold">
+                Message delivered to {selectedNomad.name}! 🚀
+              </div>
+            ) : (
+              <form onSubmit={handleSendMessage} className="space-y-3">
+                <textarea
+                  required
+                  rows={3}
+                  value={chatMessage}
+                  onChange={(e) => setChatMessage(e.target.value)}
+                  placeholder={`Hey ${selectedNomad.name.split(' ')[0]}, want to grab a coffee or cowork today?`}
+                  className="w-full p-3 rounded-2xl border border-stone-200 text-xs focus:outline-none focus:border-purple-500"
+                />
+                <button
+                  type="submit"
+                  className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl text-xs shadow-md shadow-purple-600/30 transition-colors"
+                >
+                  Send Message
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}

@@ -14,6 +14,7 @@ export interface TaxPresence {
   daysSpent: number;
   year: number;
   maxSafeDays: number;
+  maxDaysAllowed?: number;
   taxResidencyRisk: 'low' | 'moderate' | 'high' | 'exceeded';
   notes?: string;
 }
@@ -112,12 +113,65 @@ export interface NomadEvent {
   category: 'Coworking' | 'Coffee' | 'Drinks' | 'Outdoor' | 'Workshop';
 }
 
+export interface DayItineraryActivity {
+  id: string;
+  dayDate: string; // e.g. "2026-05-17"
+  dayLabel: string; // e.g. "Sun, 17 May"
+  time: string; // e.g. "09:00"
+  timeRange: string; // e.g. "08:45 – 09:45"
+  title: string; // e.g. "Car rental"
+  category: 'transport' | 'activity' | 'culture' | 'food' | 'coworking' | 'sightseeing' | 'free';
+  icon?: string;
+  hasAttachment?: boolean;
+  attachmentName?: string;
+  attachmentCount?: number;
+  locationName?: string;
+  locationAddress?: string;
+  isFreeTime?: boolean;
+  notes?: string;
+}
+
+export interface MultiStopTrip {
+  id: string;
+  title: string;
+  dateRange: string;
+  status: 'Planning' | 'Active' | 'Completed';
+  countriesCount: number;
+  daysCount: number;
+  totalBudgetEUR: number;
+  stopsCount: number;
+  countries: { name: string; code: string; flag: string }[];
+  stops: {
+    id: string;
+    city: string;
+    country: string;
+    flag: string;
+    visaName: string;
+    durationDays: number;
+    dates: string;
+    coworking: string;
+    budgetEUR: number;
+    spentEUR: number;
+  }[];
+}
+
+export interface SmartNotificationAlert {
+  id: string;
+  type: 'action' | 'warning' | 'info';
+  title: string;
+  message: string;
+  category: 'visa' | 'schengen' | 'doc' | 'trip' | 'passport';
+  tag: string;
+  timestamp: string;
+}
+
 export interface NearbyNomad {
   id: string;
   name: string;
   tag: string;
   profession: string;
   currentCity: string;
+  location?: string;
   nationality: string;
   avatarUrl: string;
   isOnline: boolean;
@@ -139,4 +193,7 @@ export interface NomadState {
   events: NomadEvent[];
   nearbyNomads: NearbyNomad[];
   hasCompletedOnboarding: boolean;
+  dayActivities: DayItineraryActivity[];
+  multiStopTrips: MultiStopTrip[];
+  smartAlerts: SmartNotificationAlert[];
 }

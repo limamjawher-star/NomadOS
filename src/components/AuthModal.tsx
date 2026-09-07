@@ -45,8 +45,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
       >
         <div className="flex items-center justify-between px-6 pt-5 pb-2">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-orange-500 text-white font-black text-xs shadow-md shadow-orange-500/20">
-              N
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-purple-600 text-white font-black text-xs shadow-md shadow-purple-600/30">
+              🌐
             </span>
             <span className="text-sm font-bold text-stone-900 tracking-tight">NomadOS Account</span>
           </div>
@@ -65,8 +65,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </h3>
             <p className="text-xs text-stone-500">
               {isSignUp 
-                ? 'Sync your visa tracking, expenses, and trips across all your devices.' 
-                : 'Sign in to access your itinerary and local nomad networks.'}
+                ? 'Sync your visa tracking, multi-stop itineraries, and local meetups across devices.' 
+                : 'Sign in to access your itinerary, smart alerts, and nomad radar.'}
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={() => setIsSignUp(true)}
               className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                isSignUp ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-800'
+                isSignUp ? 'bg-white text-stone-900 shadow-sm font-black' : 'text-stone-500 hover:text-stone-800'
               }`}
             >
               Create Account
@@ -85,7 +85,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
               type="button"
               onClick={() => setIsSignUp(false)}
               className={`flex-1 py-1.5 text-xs font-bold rounded-lg transition-all ${
-                !isSignUp ? 'bg-white text-stone-900 shadow-sm' : 'text-stone-500 hover:text-stone-800'
+                !isSignUp ? 'bg-white text-stone-900 shadow-sm font-black' : 'text-stone-500 hover:text-stone-800'
               }`}
             >
               Sign In
@@ -107,7 +107,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       placeholder="e.g. Jawher"
-                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
                     />
                   </div>
                 </div>
@@ -124,7 +124,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                       value={tag}
                       onChange={(e) => setTag(e.target.value)}
                       placeholder="@canggu"
-                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                      className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
                     />
                   </div>
                 </div>
@@ -143,7 +143,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="nomad@example.com"
-                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
                 />
               </div>
             </div>
@@ -160,7 +160,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white"
+                  className="w-full pl-10 pr-4 py-2.5 bg-stone-50 border border-stone-200 rounded-xl text-xs font-medium text-stone-900 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:bg-white"
                 />
               </div>
             </div>
@@ -174,7 +174,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               id="auth-submit-btn"
               type="submit"
-              className="w-full py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2 text-xs transition-all"
+              className="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-lg shadow-purple-600/30 flex items-center justify-center gap-2 text-xs transition-all"
             >
               {isSignUp ? 'Create Account & Start Travelling' : 'Sign In'} <ArrowRight className="w-4 h-4" />
             </button>
@@ -182,7 +182,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
           <div className="pt-2 border-t border-stone-100 flex items-center justify-center gap-2 text-[11px] text-stone-400">
             <Shield className="w-3.5 h-3.5 text-stone-400" />
-            <span>Encrypted cloud storage · Supabase Auth ready</span>
+            <span>Encrypted cloud storage · Multi-device sync ready</span>
           </div>
         </div>
       </div>
