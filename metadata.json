@@ -1,0 +1,6 @@
+{
+  "name": "NomadOS",
+  "description": "The all-in-one digital nomad operating system for tracking Schengen visa limits, tax residency presence, itineraries, world time zones, and travel finances.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
