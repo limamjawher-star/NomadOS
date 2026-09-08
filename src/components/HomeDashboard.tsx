@@ -293,7 +293,11 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
               Track remote income, full expenses, tax reserves & global runway
             </p>
           </div>
-          <button className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white text-white hover:text-slate-900 text-xs font-bold backdrop-blur-md transition-all flex items-center gap-1 shrink-0">
+          <button 
+            type="button"
+            onClick={() => onNavigateTab('finance')}
+            className="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white text-white hover:text-slate-900 text-xs font-bold backdrop-blur-md transition-all flex items-center gap-1 shrink-0"
+          >
             <span>Open</span>
             <ChevronRight className="w-3.5 h-3.5" />
           </button>
@@ -590,53 +594,68 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           <div className="flex items-center gap-2">
             <Coffee className="w-4 h-4 text-orange-500" />
             <h4 className="text-sm font-black text-slate-900 font-display">
-              Curated Workspaces & Community Hotspots
+              Nearby Work Spaces & Work-Friendly Cafes
             </h4>
           </div>
-          <span className="text-xs text-slate-400 font-semibold">Verified by nomads</span>
+          <button
+            type="button"
+            onClick={() => onNavigateTab('explore')}
+            className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1 group"
+          >
+            <span>Live GPS Finder</span>
+            <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Dojo Coworking Pool */}
-          <div className="flex items-center gap-3 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:border-orange-200 transition-all">
+          <div 
+            onClick={() => onNavigateTab('explore')}
+            className="flex items-center gap-3 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:border-orange-300 hover:shadow-sm cursor-pointer transition-all group"
+            title="Open Live Workspot Recommendations"
+          >
             <img
               src="https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=400&q=80"
               alt="Coworking space"
-              className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-xs"
+              className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-xs group-hover:scale-105 transition-transform"
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <h5 className="text-xs font-black text-slate-900 truncate font-display">Dojo Garden & Pool</h5>
-                <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded">98 Mbps</span>
+                <h5 className="text-xs font-black text-slate-900 truncate font-display group-hover:text-orange-600 transition-colors">Dojo Garden & Pool</h5>
+                <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded">180 Mbps</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 truncate">Echo Beach, Canggu · Poolside desks</p>
+              <p className="text-[11px] text-slate-500 mt-0.5 truncate">Echo Beach, Canggu · 350m away</p>
               <div className="text-[10px] text-orange-600 font-bold mt-0.5 flex items-center gap-1.5">
                 <span className="flex items-center gap-1">
                   <Coffee className="w-3 h-3 text-amber-600" />
-                  <span>Free cold brew</span>
+                  <span>Dual Fiber</span>
                 </span>
                 <span>·</span>
                 <span className="flex items-center gap-1">
                   <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                  <span>4.9</span>
+                  <span>4.9 (384 reviews)</span>
                 </span>
               </div>
             </div>
           </div>
 
           {/* Specialty Roastery */}
-          <div className="flex items-center gap-3 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:border-orange-200 transition-all">
+          <div 
+            onClick={() => onNavigateTab('explore')}
+            className="flex items-center gap-3 p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-white hover:border-orange-300 hover:shadow-sm cursor-pointer transition-all group"
+            title="Open Live Workspot Recommendations"
+          >
             <img
               src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=400&q=80"
               alt="Coffee shop"
-              className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-xs"
+              className="w-16 h-16 rounded-xl object-cover shrink-0 shadow-xs group-hover:scale-105 transition-transform"
             />
             <div className="flex-1 min-w-0">
               <div className="flex items-center justify-between">
-                <h5 className="text-xs font-black text-slate-900 truncate font-display">Batur Roastery & Labs</h5>
+                <h5 className="text-xs font-black text-slate-900 truncate font-display group-hover:text-orange-600 transition-colors">Batur Roastery & Labs</h5>
                 <span className="text-[10px] text-emerald-700 font-bold bg-emerald-50 px-1.5 py-0.2 rounded">140 Mbps</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5 truncate">Pererenan · AC quiet work lounge</p>
+              <p className="text-[11px] text-slate-500 mt-0.5 truncate">Pererenan · 650m away</p>
               <div className="text-[10px] text-orange-600 font-bold mt-0.5 flex items-center gap-1.5">
                 <span className="flex items-center gap-1">
                   <Zap className="w-3 h-3 text-amber-600" />
@@ -645,7 +664,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
                 <span>·</span>
                 <span className="flex items-center gap-1">
                   <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                  <span>4.8</span>
+                  <span>4.8 (219 reviews)</span>
                 </span>
               </div>
             </div>

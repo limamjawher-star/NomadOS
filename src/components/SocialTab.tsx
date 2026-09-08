@@ -24,6 +24,7 @@ import {
   X
 } from 'lucide-react';
 import { NomadState, NearbyNomad, NomadEvent } from '../types';
+import { GoogleNomadMap } from './GoogleNomadMap';
 
 interface SocialTabProps {
   state: NomadState;
@@ -131,121 +132,14 @@ export const SocialTab: React.FC<SocialTabProps> = ({
         </button>
       </div>
 
-      {/* ================= MEET / MAP VIEW ================= */}
+      {/* ================= MEET / GOOGLE MAP VIEW ================= */}
       {socialSubTab === 'meet' && (
         <div className="space-y-3.5">
-          {/* Category Filter Pills */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-            {CATEGORY_TAGS.map((tag) => (
-              <button
-                key={tag.label}
-                onClick={() => setSelectedTag(tag.label)}
-                className={`px-3 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all flex items-center gap-1.5 border ${
-                  selectedTag === tag.label
-                    ? 'bg-orange-500 text-white border-orange-500 shadow-sm'
-                    : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-50'
-                }`}
-              >
-                <span>{tag.icon}</span>
-                <span>{tag.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Subfilter Pills: All | My Events | 📍 Nearby */}
-          <div className="flex items-center justify-between text-xs">
-            <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200/80 font-bold shadow-inner">
-              <button
-                onClick={() => setEventFilter('all')}
-                className={`px-3 py-1 rounded-lg transition-all ${
-                  eventFilter === 'all' ? 'bg-white text-slate-900 shadow-sm font-black' : 'text-slate-500'
-                }`}
-              >
-                All
-              </button>
-              <button
-                onClick={() => setEventFilter('my')}
-                className={`px-3 py-1 rounded-lg transition-all ${
-                  eventFilter === 'my' ? 'bg-white text-slate-900 shadow-sm font-black' : 'text-slate-500'
-                }`}
-              >
-                My Events
-              </button>
-              <button
-                onClick={() => setEventFilter('nearby')}
-                className={`px-3 py-1 rounded-lg transition-all flex items-center gap-1 ${
-                  eventFilter === 'nearby' ? 'bg-white text-slate-900 shadow-sm font-black' : 'text-slate-500'
-                }`}
-              >
-                <MapPin className="w-3 h-3 text-orange-500" />
-                <span>Nearby</span>
-              </button>
-            </div>
-
-            <span className="text-slate-400 font-bold">
-              {filteredEvents.length} events found
-            </span>
-          </div>
-
-          {/* Visual Interactive Map */}
-          <div className="relative h-72 sm:h-80 rounded-3xl bg-slate-950 overflow-hidden border border-slate-800 shadow-xl">
-            {/* Map styling grid & visual terrain */}
-            <div className="absolute inset-0 opacity-25 bg-[radial-gradient(#6366f1_1px,transparent_1px)] [background-size:16px_16px]" />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-transparent" />
-
-            {/* GPS Header Badge */}
-            <div className="absolute top-3 left-3 z-10">
-              <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-white/20 text-white rounded-full text-xs font-bold flex items-center gap-1.5 shadow-lg">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-                Live in {state.currentCity} · {state.nearbyNomads.length} Nomads
-              </span>
-            </div>
-
-            {/* Map Pin 1: Zenita Cafe */}
-            <div className="absolute top-12 left-10 z-10 group cursor-pointer">
-              <div className="px-2.5 py-1 bg-orange-500 hover:bg-orange-600 text-white rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-extrabold transition-transform transform group-hover:scale-105">
-                <Coffee className="w-3.5 h-3.5" />
-                <span>Zenita Specialty Cafe</span>
-              </div>
-              <div className="w-3 h-3 bg-orange-500 rotate-45 mx-auto -mt-1.5" />
-            </div>
-
-            {/* Map Pin 2: Sunset Drinks */}
-            <div className="absolute top-28 right-12 z-10 group cursor-pointer">
-              <div className="px-2.5 py-1 bg-amber-500 hover:bg-amber-600 text-white rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-extrabold transition-transform transform group-hover:scale-105">
-                <Palmtree className="w-3.5 h-3.5" />
-                <span>Echo Beach Sunset</span>
-              </div>
-              <div className="w-3 h-3 bg-amber-500 rotate-45 mx-auto -mt-1.5" />
-            </div>
-
-            {/* Map Pin 3: Coworking Hub Sukhumvit */}
-            <div className="absolute bottom-20 left-24 z-10 group cursor-pointer">
-              <div className="px-2.5 py-1 bg-sky-600 hover:bg-sky-700 text-white rounded-xl shadow-xl flex items-center gap-1.5 text-xs font-extrabold transition-transform transform group-hover:scale-105">
-                <Laptop className="w-3.5 h-3.5" />
-                <span>Dojo Coworking Hub</span>
-              </div>
-              <div className="w-3 h-3 bg-sky-600 rotate-45 mx-auto -mt-1.5" />
-            </div>
-
-            {/* User Location Pulse Center */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10 flex flex-col items-center">
-              <div className="w-12 h-12 rounded-full border-4 border-white/80 bg-orange-500 shadow-2xl flex items-center justify-center animate-pulse">
-                <img src={state.user.avatarUrl} alt="You" className="w-9 h-9 rounded-full object-cover" />
-              </div>
-              <span className="text-[10px] font-black text-white bg-black/70 backdrop-blur-sm px-2.5 py-0.5 rounded-full mt-1 border border-white/20">
-                You (Current Base)
-              </span>
-            </div>
-
-            {/* Bottom floating badge */}
-            <div className="absolute bottom-3 right-3 z-10">
-              <span className="px-3 py-1 bg-orange-500/90 backdrop-blur-md text-white rounded-full text-xs font-extrabold shadow-lg flex items-center gap-1.5">
-                <Users className="w-3 h-3" />
-                <span>12 nearby</span>
-              </span>
-            </div>
-          </div>
+          {/* Real Google Nomad Map Component */}
+          <GoogleNomadMap 
+            state={state} 
+            onRSVPEvent={onToggleEventRSVP} 
+          />
 
           {/* Slide-up Events Sheet */}
           <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-3">
@@ -259,7 +153,14 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                   {filteredEvents.length}
                 </span>
               </div>
-              <button className="text-slate-400 hover:text-slate-600 text-xs font-bold flex items-center gap-1">
+              <button 
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsEventsSheetOpen(!isEventsSheetOpen);
+                }}
+                className="text-slate-400 hover:text-slate-600 text-xs font-bold flex items-center gap-1"
+              >
                 <span>{isEventsSheetOpen ? 'Hide' : 'Expand'}</span>
                 {isEventsSheetOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronUp className="w-4 h-4" />}
               </button>

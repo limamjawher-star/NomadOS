@@ -363,6 +363,7 @@ export function App() {
 
               {activeTab === 'explore' && (
                 <ExploreTab
+                  state={state}
                   onAddCityToTrip={handleAddCityToTrip}
                   onOpenPricing={() => setIsPricingOpen(true)}
                   isPro={state.user.isPro}

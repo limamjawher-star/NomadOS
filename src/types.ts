@@ -220,6 +220,48 @@ export interface NearbyNomad {
   bio: string;
 }
 
+export interface WorkSpotReview {
+  id: string;
+  author: string;
+  avatarUrl: string;
+  rating: number;
+  wifiRating: number;
+  noiseLevel: 'Quiet Focus' | 'Silent / Focus' | 'Moderate / Cafe Ambience' | 'Lively' | 'Zoom Friendly';
+  comment: string;
+  date: string;
+  verifiedNomad?: boolean;
+}
+
+export interface WorkSpot {
+  id: string;
+  name: string;
+  category: 'coworking' | 'cafe' | 'restaurant';
+  city: string;
+  country: string;
+  lat: number;
+  lng: number;
+  address: string;
+  distanceKm?: number;
+  wifiSpeedMbps: number;
+  wifiSpeedText: string;
+  wifiReliability: 'Ultra Fast (150+ Mbps)' | 'Fast & Stable (80-150 Mbps)' | 'Good (40-80 Mbps)' | 'Basic';
+  hasBackupPower: boolean;
+  powerOutlets: 'Plentiful (Every Seat)' | 'Good (Most Tables)' | 'Limited' | 'Upon Request';
+  noiseLevel: 'Silent / Focus' | 'Moderate / Cafe Ambience' | 'Bustling' | 'Call / Zoom Friendly';
+  seatingErgonomics: 'Ergonomic Mesh Chairs' | 'Cushioned Cafe Seating' | 'Lounge / Sofas' | 'Standing Desks';
+  airConditioning: boolean;
+  foodAndCoffee: string;
+  openingHours: string;
+  rating: number;
+  reviewCount: number;
+  priceLevel: '$' | '$$' | '$$$';
+  dayPassUSD?: number;
+  photoUrl: string;
+  photos?: string[];
+  reviews: WorkSpotReview[];
+  tags: string[];
+}
+
 export interface NomadState {
   user: NomadUser;
   currentCity: string;

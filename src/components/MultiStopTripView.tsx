@@ -93,7 +93,32 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
 
   const [isAddStopModalOpen, setIsAddStopModalOpen] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+  const [isCalendarModalOpen, setIsCalendarModalOpen] = useState(false);
+  const [isLuggageModalOpen, setIsLuggageModalOpen] = useState(false);
+  const [isPrivateTrip, setIsPrivateTrip] = useState(true);
+  const [editingStop, setEditingStop] = useState<any | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [tripToast, setTripToast] = useState<string | null>(null);
+
+  // Packing list items
+  const [luggageItems, setLuggageItems] = useState([
+    { id: 'item-1', name: 'Valid Passport (6+ mo validity)', packed: true },
+    { id: 'item-2', name: 'Universal Travel Adapter (EU/UK/US)', packed: true },
+    { id: 'item-3', name: '100W GaN Fast Charger & USB-C cables', packed: true },
+    { id: 'item-4', name: 'Active Noise Canceling Headphones', packed: true },
+    { id: 'item-5', name: 'Foldable Ergonomic Laptop Stand', packed: false },
+    { id: 'item-6', name: 'Global Nomad Health Insurance card', packed: true },
+    { id: 'item-7', name: 'Local / Regional eSIM activated', packed: false },
+  ]);
+
+  const toggleLuggageItem = (id: string) => {
+    setLuggageItems(prev => prev.map(item => item.id === id ? { ...item, packed: !item.packed } : item));
+  };
+
+  const showTripToast = (msg: string) => {
+    setTripToast(msg);
+    setTimeout(() => setTripToast(null), 2500);
+  };
 
   // New Stop form
   const [newCity, setNewCity] = useState('');
@@ -200,32 +225,57 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
       </div>
 
       {/* Action Strip */}
-      <div className="flex items-center gap-2 py-1 border-y border-slate-200/80">
-        <button 
-          title="Trip Calendar"
-          className="p-2 rounded-xl text-slate-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
-        >
-          <Calendar className="w-4 h-4" />
-        </button>
-        <button 
-          title="Privacy & Lock"
-          className="p-2 rounded-xl text-slate-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
-        >
-          <Lock className="w-4 h-4" />
-        </button>
-        <button 
-          title="Collaborators / Partners"
-          onClick={() => setIsShareModalOpen(true)}
-          className="p-2 rounded-xl text-slate-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
-        >
-          <Users className="w-4 h-4" />
-        </button>
-        <button 
-          title="Stops & Luggage"
-          className="p-2 rounded-xl text-slate-500 hover:text-orange-600 hover:bg-orange-50 transition-colors"
-        >
-          <Briefcase className="w-4 h-4" />
-        </button>
+      <div className="flex items-center justify-between py-1.5 border-y border-slate-200/80">
+        <div className="flex items-center gap-1.5">
+          <button 
+            type="button"
+            title="Trip Itinerary Calendar"
+            onClick={() => setIsCalendarModalOpen(true)}
+            className="px-2.5 py-1.5 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-orange-50 transition-colors flex items-center gap-1.5 text-xs font-bold"
+          >
+            <Calendar className="w-4 h-4 text-orange-500" />
+            <span className="hidden sm:inline">Calendar</span>
+          </button>
+          <button 
+            type="button"
+            title={isPrivateTrip ? "Private Trip (Click to Share)" : "Public Trip (Click to Make Private)"}
+            onClick={() => {
+              const next = !isPrivateTrip;
+              setIsPrivateTrip(next);
+              showTripToast(next ? 'Trip visibility: Private 🔒' : 'Trip visibility: Shared with Community 🌐');
+            }}
+            className={`px-2.5 py-1.5 rounded-xl transition-colors flex items-center gap-1.5 text-xs font-bold ${
+              isPrivateTrip ? 'bg-slate-100 text-slate-700 hover:bg-slate-200' : 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100'
+            }`}
+          >
+            <Lock className="w-4 h-4" />
+            <span>{isPrivateTrip ? 'Private' : 'Shared'}</span>
+          </button>
+          <button 
+            type="button"
+            title="Collaborators / Partners"
+            onClick={() => setIsShareModalOpen(true)}
+            className="px-2.5 py-1.5 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-orange-50 transition-colors flex items-center gap-1.5 text-xs font-bold"
+          >
+            <Users className="w-4 h-4 text-sky-500" />
+            <span className="hidden sm:inline">Collaborators</span>
+          </button>
+          <button 
+            type="button"
+            title="Nomad Gear & Luggage Checklist"
+            onClick={() => setIsLuggageModalOpen(true)}
+            className="px-2.5 py-1.5 rounded-xl text-slate-600 hover:text-orange-600 hover:bg-orange-50 transition-colors flex items-center gap-1.5 text-xs font-bold"
+          >
+            <Briefcase className="w-4 h-4 text-amber-500" />
+            <span>Luggage</span>
+          </button>
+        </div>
+
+        {tripToast && (
+          <span className="text-[11px] font-black text-orange-600 animate-in fade-in">
+            {tripToast}
+          </span>
+        )}
       </div>
 
       {/* 4 Stats Cards Grid */}
@@ -287,12 +337,15 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
 
                 <div className="flex items-center gap-1">
                   <button 
+                    type="button"
                     title="Edit stop"
+                    onClick={() => setEditingStop(stop)}
                     className="w-7 h-7 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 flex items-center justify-center transition-colors"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
                   <button 
+                    type="button"
                     onClick={() => handleDeleteStopLocal(stop.id)}
                     title="Delete stop"
                     className="w-7 h-7 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors"
@@ -515,6 +568,204 @@ export const MultiStopTripView: React.FC<MultiStopTripViewProps> = ({
                 />
               </div>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Calendar Itinerary Modal */}
+      {isCalendarModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-5 sm:p-6 w-full max-w-md shadow-2xl border border-slate-200/90 space-y-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                  <Calendar className="w-4 h-4" />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm font-display">Trip Timeline Calendar</h4>
+              </div>
+              <button
+                onClick={() => setIsCalendarModalOpen(false)}
+                className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-500">
+              Complete {trip.daysCount}-day schedule across {trip.stopsCount} nomad stops.
+            </p>
+
+            <div className="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+              {trip.stops.map((s, idx) => (
+                <div key={s.id} className="p-3 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between text-xs">
+                  <div className="flex items-center gap-2.5">
+                    <span className="w-6 h-6 rounded-lg bg-orange-500 text-white font-bold flex items-center justify-center text-[10px]">
+                      {idx + 1}
+                    </span>
+                    <div>
+                      <p className="font-extrabold text-slate-900">{s.city}, {s.country}</p>
+                      <p className="text-[11px] text-slate-500 font-mono">{s.dates}</p>
+                    </div>
+                  </div>
+                  <span className="px-2 py-0.5 rounded-md bg-orange-100 text-orange-800 text-[10px] font-bold">
+                    {s.durationDays} days
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setIsCalendarModalOpen(false)}
+              className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs transition-colors"
+            >
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Luggage & Gear Checklist Modal */}
+      {isLuggageModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-5 sm:p-6 w-full max-w-md shadow-2xl border border-slate-200/90 space-y-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                  <Briefcase className="w-4 h-4" />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm font-display">Nomad Gear & Luggage Checklist</h4>
+              </div>
+              <button
+                onClick={() => setIsLuggageModalOpen(false)}
+                className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-500">
+              Essential gear checklist for long-haul nomad travel:
+            </p>
+
+            <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+              {luggageItems.map((item) => (
+                <div
+                  key={item.id}
+                  onClick={() => toggleLuggageItem(item.id)}
+                  className={`p-3 rounded-2xl border text-xs font-bold cursor-pointer transition-all flex items-center justify-between ${
+                    item.packed
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-900'
+                      : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                  }`}
+                >
+                  <span className={item.packed ? 'line-through opacity-70' : ''}>{item.name}</span>
+                  <div className={`w-5 h-5 rounded-lg flex items-center justify-center text-xs ${
+                    item.packed ? 'bg-emerald-500 text-white' : 'border border-slate-300'
+                  }`}>
+                    {item.packed && <Check className="w-3 h-3 stroke-[3]" />}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setIsLuggageModalOpen(false)}
+              className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs transition-colors"
+            >
+              Close Checklist
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Stop Modal */}
+      {editingStop && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-5 sm:p-6 w-full max-w-md shadow-2xl border border-slate-200/90 space-y-4 animate-in fade-in zoom-in-95">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
+                  <Edit3 className="w-4 h-4" />
+                </div>
+                <h4 className="font-extrabold text-slate-900 text-sm font-display">Edit Stop: {editingStop.city}</h4>
+              </div>
+              <button
+                onClick={() => setEditingStop(null)}
+                className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setTrip(prev => ({
+                  ...prev,
+                  stops: prev.stops.map(s => s.id === editingStop.id ? editingStop : s)
+                }));
+                setEditingStop(null);
+                showTripToast(`Stop "${editingStop.city}" updated successfully!`);
+              }}
+              className="space-y-3 text-xs"
+            >
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">City Name</label>
+                <input
+                  type="text"
+                  value={editingStop.city}
+                  onChange={(e) => setEditingStop({ ...editingStop, city: e.target.value })}
+                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
+                />
+              </div>
+
+              <div>
+                <label className="font-bold text-slate-700 block mb-1">Coworking Space</label>
+                <input
+                  type="text"
+                  value={editingStop.coworking}
+                  onChange={(e) => setEditingStop({ ...editingStop, coworking: e.target.value })}
+                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">Budget (€ EUR)</label>
+                  <input
+                    type="number"
+                    value={editingStop.budgetEUR}
+                    onChange={(e) => setEditingStop({ ...editingStop, budgetEUR: Number(e.target.value) })}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
+                  />
+                </div>
+                <div>
+                  <label className="font-bold text-slate-700 block mb-1">Duration (Days)</label>
+                  <input
+                    type="number"
+                    value={editingStop.durationDays}
+                    onChange={(e) => setEditingStop({ ...editingStop, durationDays: Number(e.target.value) })}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
+                  />
+                </div>
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditingStop(null)}
+                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl"
+                >
+                  Save Stop
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

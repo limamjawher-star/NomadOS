@@ -31,6 +31,7 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
   );
   const [showAddForm, setShowAddForm] = useState(false);
   const [showCountryInfo, setShowCountryInfo] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   // Form State
   const [newCountry, setNewCountry] = useState('Portugal');
@@ -56,9 +57,10 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
 
   const handleSubmitNewStay = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError(null);
     if (!newEntryDate || !newExitDate) return;
     if (newEntryDate > newExitDate) {
-      alert('Entry date cannot be after exit date.');
+      setFormError('Entry date cannot be after exit date.');
       return;
     }
     onAddStay({
@@ -258,6 +260,11 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
             className="mb-6 p-4 rounded-xl bg-stone-950 border border-stone-800 space-y-4"
           >
             <div className="text-sm font-semibold text-stone-200">New Schengen Stay</div>
+            {formError && (
+              <div className="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-semibold">
+                {formError}
+              </div>
+            )}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div>
                 <label className="block text-xs font-medium text-stone-400 mb-1">Country</label>

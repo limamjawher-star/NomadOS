@@ -18,24 +18,29 @@ import {
   Zap,
   Compass,
   Star,
-  X
+  X,
+  Coffee
 } from 'lucide-react';
-import { NomadCity, TripDestination } from '../types';
+import { NomadCity, TripDestination, NomadState } from '../types';
 import { EXPLORE_CITIES } from '../data/defaultData';
 import { CountryFlag } from './CountryFlag';
+import { GoogleNomadMap } from './GoogleNomadMap';
+import { NearbyWorkSpots } from './NearbyWorkSpots';
 
 interface ExploreTabProps {
+  state?: NomadState;
   onAddCityToTrip: (city: NomadCity) => void;
   onOpenPricing: () => void;
   isPro: boolean;
 }
 
 export const ExploreTab: React.FC<ExploreTabProps> = ({
+  state,
   onAddCityToTrip,
   onOpenPricing,
   isPro,
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState<'cities' | 'countries'>('cities');
+  const [activeSubTab, setActiveSubTab] = useState<'workspaces' | 'cities' | 'countries' | 'map'>('workspaces');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRegion, setSelectedRegion] = useState<string>('All');
   const [selectedCityForModal, setSelectedCityForModal] = useState<NomadCity | null>(null);
@@ -60,41 +65,108 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
   };
 
   return (
-    <div id="explore-view" className="space-y-5 pb-28 max-w-2xl mx-auto px-4 pt-4">
+    <div id="explore-view" className="space-y-5 pb-28 max-w-4xl mx-auto px-4 pt-4">
       {/* Subtab Toggle */}
       <div className="flex bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 shadow-inner">
         <button
+          onClick={() => setActiveSubTab('workspaces')}
+          className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${
+            activeSubTab === 'workspaces'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <Coffee className={`w-4 h-4 ${activeSubTab === 'workspaces' ? 'text-orange-500' : 'text-slate-400'}`} />
+          <span className="truncate">Workspaces</span>
+        </button>
+        <button
           onClick={() => setActiveSubTab('cities')}
-          className={`flex-1 py-2 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${
             activeSubTab === 'cities'
               ? 'bg-white text-slate-900 shadow-sm'
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
           <Building2 className={`w-4 h-4 ${activeSubTab === 'cities' ? 'text-orange-500' : 'text-slate-400'}`} />
-          <span>Nomad Hubs & Cities</span>
+          <span className="truncate">Hubs</span>
         </button>
         <button
           onClick={() => setActiveSubTab('countries')}
-          className={`flex-1 py-2 px-4 rounded-xl text-xs font-black flex items-center justify-center gap-2 transition-all ${
+          className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${
             activeSubTab === 'countries'
               ? 'bg-white text-slate-900 shadow-sm'
               : 'text-slate-500 hover:text-slate-900'
           }`}
         >
           <Globe className={`w-4 h-4 ${activeSubTab === 'countries' ? 'text-orange-500' : 'text-slate-400'}`} />
-          <span>Visa & Country Guides</span>
+          <span className="truncate">Visa Guides</span>
+        </button>
+        <button
+          onClick={() => setActiveSubTab('map')}
+          className={`flex-1 py-2 px-2.5 rounded-xl text-xs font-black flex items-center justify-center gap-1.5 transition-all ${
+            activeSubTab === 'map'
+              ? 'bg-white text-slate-900 shadow-sm'
+              : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <MapPin className={`w-4 h-4 ${activeSubTab === 'map' ? 'text-orange-500' : 'text-slate-400'}`} />
+          <span className="truncate">Google Map</span>
         </button>
       </div>
 
-      <div className="space-y-1">
-        <h2 className="text-xl font-black text-slate-900 font-display">
-          {activeSubTab === 'cities' ? 'Top Digital Nomad Cities' : 'Country Nomad Visa Guides'}
-        </h2>
-        <p className="text-xs text-slate-500">
-          Curated global hubs with verified fiber speeds, living expenses, and legal visa rules.
-        </p>
-      </div>
+      {activeSubTab === 'workspaces' && (
+        <NearbyWorkSpots currentCity={state?.currentCity} />
+      )}
+
+      {activeSubTab === 'map' && (
+        <div className="space-y-4">
+          <div className="space-y-1">
+            <h2 className="text-xl font-black text-slate-900 font-display">
+              Google Maps Explorer
+            </h2>
+            <p className="text-xs text-slate-500">
+              Interactive Google Map of nomad coworking hubs, roasteries, and live sunset meetups worldwide.
+            </p>
+          </div>
+          <GoogleNomadMap
+            state={state || ({} as any)}
+            onAddStopFromMap={(cityName, country) => {
+              const matched = EXPLORE_CITIES.find(c => c.name.toLowerCase().includes(cityName.toLowerCase()));
+              if (matched) {
+                handleAddStop(matched);
+              } else {
+                handleAddStop({
+                  id: `city-${Date.now()}`,
+                  name: cityName,
+                  country: country || 'Global',
+                  countryCode: 'UN',
+                  region: 'Global Hub',
+                  costPerMonthUSD: 1800,
+                  internetSpeedMbps: 120,
+                  nomadScore: 88,
+                  weather: '26°C Sunny',
+                  weatherTempC: 26,
+                  safetyScore: 85,
+                  funScore: 90,
+                  coworkingSpacesCount: 15,
+                  highlights: ['Fast fiber', 'Co-living available'],
+                });
+              }
+            }}
+          />
+        </div>
+      )}
+
+      {(activeSubTab === 'cities' || activeSubTab === 'countries') && (
+        <>
+          <div className="space-y-1">
+            <h2 className="text-xl font-black text-slate-900 font-display">
+              {activeSubTab === 'cities' ? 'Top Digital Nomad Cities' : 'Country Nomad Visa Guides'}
+            </h2>
+            <p className="text-xs text-slate-500">
+              Curated global hubs with verified fiber speeds, living expenses, and legal visa rules.
+            </p>
+          </div>
 
       {/* 4 Highlight Cards in 2x2 grid */}
       <div className="grid grid-cols-2 gap-2.5">
@@ -334,6 +406,8 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
           </div>
         ))}
       </div>
+        </>
+      )}
 
       {/* City Details Modal */}
       {selectedCityForModal && (
