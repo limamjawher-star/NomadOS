@@ -40,23 +40,23 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onSelectTab }
               key={tab.id}
               id={`nav-tab-${tab.id}`}
               onClick={() => onSelectTab(tab.id)}
-              className={`relative flex flex-col items-center justify-center flex-1 py-2 px-1.5 rounded-xl sm:rounded-2xl transition-all duration-200 group active:scale-95 ${
+              className={`relative flex flex-col items-center justify-center flex-1 py-2 px-1.5 rounded-xl sm:rounded-2xl transition-all duration-200 group active:scale-95 font-normal ${
                 isActive
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/25 font-black scale-[1.02]'
-                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/70 font-semibold'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/25 scale-[1.02]'
+                  : 'text-slate-500 hover:text-slate-800 hover:bg-slate-100/70'
               }`}
             >
               <div className="relative flex items-center justify-center">
                 <Icon
                   className={`w-5 h-5 transition-transform duration-200 ${
-                    isActive ? 'stroke-[2.5] scale-105' : 'stroke-[2] group-hover:scale-105'
+                    isActive ? 'stroke-[2] scale-105' : 'stroke-[1.75] group-hover:scale-105'
                   }`}
                 />
                 
                 {/* Micro-badge */}
                 {badge && (
                   <span
-                    className={`absolute -top-1.5 -right-2.5 px-1 py-0.2 rounded-full text-[9px] font-black tracking-tighter shadow-xs ${
+                    className={`absolute -top-1.5 -right-2.5 px-1 py-0.2 rounded-full text-[9px] font-semibold tracking-tighter shadow-xs ${
                       isActive
                         ? 'bg-white text-orange-600 ring-1 ring-orange-400'
                         : 'bg-orange-500 text-white'
@@ -68,8 +68,8 @@ export const Navigation: React.FC<NavigationProps> = ({ activeTab, onSelectTab }
               </div>
 
               <span
-                className={`text-[10px] mt-1 tracking-tight leading-none truncate max-w-full ${
-                  isActive ? 'font-black text-white' : 'font-bold text-slate-600 group-hover:text-slate-900'
+                className={`text-[10px] mt-1 tracking-tight leading-none truncate max-w-full font-normal ${
+                  isActive ? 'text-white' : 'text-slate-600 group-hover:text-slate-900'
                 }`}
               >
                 {tab.label}

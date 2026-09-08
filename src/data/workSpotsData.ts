@@ -70,12 +70,34 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
     seatingErgonomics: 'Cushioned Cafe Seating',
     airConditioning: true,
     foodAndCoffee: 'Single-origin Kintamani pour-overs, sourdough tartines, oat matcha lattes',
+    coffeePriceUSD: '$2.50 Flat White / Long Black',
+    specialtyCoffee: 'Single-Origin Kintamani Arabica, V60 Chemex, Nitro Cold Brew on tap, Oatly & Almond milk',
+    barAndDrinks: 'House Cold-Pressed Kombucha, Coconut Cold Brews, Iced Ceremonial Matcha, Organic Herbal Tonics',
+    popularDishes: ['Smoked Salmon Sourdough Tartine', 'Dragonfruit Superfood Acai Bowl', 'Truffle Scrambled Brioche', 'Banana Walnut Protein Bread'],
+    dietaryOptions: ['Vegan Friendly', 'Gluten-Free Bread', 'Oat & Almond Milk'],
+    atmosphere: 'Modern Scandinavian-Balinese roastery with dedicated air-conditioned second-floor laptop mezzanine and lo-fi beats',
     openingHours: '7:00 AM - 9:00 PM Daily',
+    phone: '+62 812 3456 7890',
+    instagram: '@baturroastery',
     rating: 4.8,
     reviewCount: 219,
     priceLevel: '$',
     dayPassUSD: 0,
     photoUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: true,
+      outdoorSeating: true,
+      alcoholServed: false,
+      veganFriendly: true,
+      creditCardsAccepted: true,
+      takeawayAvailable: true,
+      roasteryOnSite: true
+    },
     tags: ['AC Mezzanine', 'Specialty Roastery', 'Plugs At High Tables', 'Free Work'],
     reviews: [
       {
@@ -109,11 +131,30 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
     seatingErgonomics: 'Cushioned Cafe Seating',
     airConditioning: false,
     foodAndCoffee: 'Mediterranean woodfired brunch, fresh cold-pressed tonics & protein bowls',
+    coffeePriceUSD: '$3.00 Flat White',
+    specialtyCoffee: 'Artisanal Bali roasted beans, double shot iced lattes, fresh young coconuts',
+    barAndDrinks: 'Natural organic biodynamic wines, aperol spritzes, local island craft beers, fresh citrus tonics',
+    popularDishes: ['Woodfired Za’atar Flatbread', 'Burrata & Heirloom Tomatoes', 'Slow Cooked Lamb Shakshuka', 'Chargrilled Octopus & Lemon'],
+    dietaryOptions: ['Vegan Friendly', 'Vegetarian', 'Gluten-Free Options'],
+    atmosphere: 'Lush tropical bamboo garden canopy with gentle breeze and spacious communal wooden work tables',
     openingHours: '8:00 AM - 10:30 PM Daily',
+    phone: '+62 813 9876 5432',
+    instagram: '@shelter.bali',
     rating: 4.7,
     reviewCount: 172,
     priceLevel: '$$',
     photoUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: true,
+      outdoorSeating: true,
+      alcoholServed: true,
+      veganFriendly: true,
+      creditCardsAccepted: true
+    },
     tags: ['Garden Terrace', 'Healthy Dining', 'Fast WiFi', 'Lunch & Work'],
     reviews: [
       {
@@ -125,6 +166,62 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
         noiseLevel: 'Moderate / Cafe Ambience',
         comment: 'Great spot to do deep work over a long brunch. The staff is happy for you to stay 3+ hours on your laptop.',
         date: '4 days ago',
+        verifiedNomad: true
+      }
+    ]
+  },
+  {
+    id: 'bali-the-lawn',
+    name: 'The Lawn Beach Lounge & Sunset Bar',
+    category: 'bar',
+    city: 'Canggu, Bali',
+    country: 'Indonesia',
+    lat: -8.6560,
+    lng: 115.1275,
+    address: 'Jl. Pura Dalem, Pantai Batu Bolong, Canggu, Bali',
+    wifiSpeedMbps: 110,
+    wifiSpeedText: '110 Mbps Beachside Fiber',
+    wifiReliability: 'Fast & Stable (80-150 Mbps)',
+    hasBackupPower: true,
+    powerOutlets: 'Upon Request',
+    noiseLevel: 'Bustling',
+    seatingErgonomics: 'Lounge / Sofas',
+    airConditioning: false,
+    foodAndCoffee: 'Artisan cocktails, chilled coconuts, wood-fired pizza & oceanfront tapas',
+    coffeePriceUSD: '$3.50 Espresso Tonic / Cold Brew',
+    specialtyCoffee: 'Cold Brews on Tap, Espresso Martinis, Iced Coconut Americáno',
+    barAndDrinks: 'Signature Beachside Espresso Martinis, Smoked Pineapple Mezcal, Island Craft IPAs, Biodynamic Rosé',
+    popularDishes: ['Truffle Parmesan Hand-Cut Fries', 'Tuna Tartare Crisp Wontons', 'Woodfired Margherita Pizza', 'Crispy Calamari Lime Aioli'],
+    dietaryOptions: ['Vegetarian Friendly', 'Seafood Specialties', 'Gluten-Free Options'],
+    atmosphere: 'Beachfront infinity pool daybeds overlooking world-class surf, transitioning to epic nomad sunset DJ sessions',
+    openingHours: '10:00 AM - 11:00 PM Daily',
+    phone: '+62 361 335 1055',
+    instagram: '@thelawncanggu',
+    rating: 4.8,
+    reviewCount: 340,
+    priceLevel: '$$',
+    photoUrl: 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: true,
+      outdoorSeating: true,
+      alcoholServed: true,
+      creditCardsAccepted: true
+    },
+    tags: ['Sunset Cocktails', 'Ocean View', 'Pool Deck', 'Nomad Social Hours'],
+    reviews: [
+      {
+        id: 'rev-lawn-1',
+        author: 'Julian Cole',
+        avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
+        rating: 5,
+        wifiRating: 4,
+        noiseLevel: 'Lively',
+        comment: 'The go-to spot to wrap up a work afternoon. Close your laptop around 5 PM, order an espresso martini, and network with 50+ nomads watching the sunset.',
+        date: '3 days ago',
         verifiedNomad: true
       }
     ]
@@ -227,12 +324,33 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
     seatingErgonomics: 'Cushioned Cafe Seating',
     airConditioning: true,
     foodAndCoffee: 'Nordic cinnamon rolls, sourdough cardamom buns, flat whites',
+    coffeePriceUSD: '€2.80 Flat White / €2.20 Americano',
+    specialtyCoffee: 'Nordic Light Roast Single-Origin Ethiopian & Brazilian beans, Batch Brew, V60, Oatly Oat Milk',
+    barAndDrinks: 'Freshly squeezed Lisbon orange juice, craft ginger kombucha, organic cold infusions',
+    popularDishes: ['Cardamom & Cinnamon Knots', 'Danish Rye Smørrebrød with Avocado', 'Toasted Croissant with Serpa Cheese', 'Granola Greek Yogurt Bowl'],
+    dietaryOptions: ['Vegetarian', 'Vegan Pastries Available', 'Oat & Soy Milk'],
+    atmosphere: 'Minimalist Scandinavian bakery with brick arches, quiet back laptop work room with power strips',
     openingHours: '7:30 AM - 7:00 PM Daily',
+    phone: '+351 21 396 0014',
+    instagram: '@cphcoffeelab',
     rating: 4.7,
     reviewCount: 260,
     priceLevel: '$',
     dayPassUSD: 0,
     photoUrl: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: true,
+      outdoorSeating: true,
+      alcoholServed: false,
+      veganFriendly: true,
+      creditCardsAccepted: true,
+      takeawayAvailable: true,
+      roasteryOnSite: true
+    },
     tags: ['Nordic Bakery', 'Quiet Mornings', 'Nomad Community', 'Outdoor Patio'],
     reviews: [
       {
@@ -266,11 +384,31 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
     seatingErgonomics: 'Cushioned Cafe Seating',
     airConditioning: true,
     foodAndCoffee: 'Whole-food plant-forward bowls, charcoal lattes, kombucha on tap',
+    coffeePriceUSD: '€2.50 Specialty Latte / €2.00 Espresso',
+    specialtyCoffee: 'Fair-trade organic espresso, activated charcoal lattes, golden turmeric matcha',
+    barAndDrinks: 'Organic Portuguese craft beer, cold-pressed green juices, draft ginger lemon kombucha',
+    popularDishes: ['Warm Ginger Chimichurri Chicken Bowl', 'Wild Mushroom Falafel Market Plate', 'Avocado Hummus Dip with Seed Crackers', 'Plant-Based Salted Caramel Tart'],
+    dietaryOptions: ['100% Real Food', 'Keto & Paleo Options', 'Gluten-Free Certified', 'Vegan Friendly'],
+    atmosphere: 'Spacious industrial greenhouse with abundant natural skylight, plush banquettes with plugs',
     openingHours: '8:30 AM - 11:00 PM Daily',
+    phone: '+351 91 000 7820',
+    instagram: '@honestgreens',
     rating: 4.8,
     reviewCount: 390,
     priceLevel: '$$',
     photoUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: true,
+      outdoorSeating: true,
+      alcoholServed: true,
+      veganFriendly: true,
+      creditCardsAccepted: true,
+      takeawayAvailable: true
+    },
     tags: ['Nutritious Food', 'Spacious Tables', 'No Laptop Restrictions 2-6PM', 'Terrace'],
     reviews: [
       {
@@ -282,6 +420,62 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
         noiseLevel: 'Moderate / Cafe Ambience',
         comment: 'Perfect afternoon workspace. Plugs under the banquet seating and incredible healthy food.',
         date: '1 week ago',
+        verifiedNomad: true
+      }
+    ]
+  },
+  {
+    id: 'lisbon-park-bar',
+    name: 'Park Bar & Sunset Nomad Terrace',
+    category: 'bar',
+    city: 'Lisbon',
+    country: 'Portugal',
+    lat: 38.7118,
+    lng: -9.1451,
+    address: 'Calçada do Combro 58, 1200-115 Lisboa',
+    wifiSpeedMbps: 85,
+    wifiSpeedText: '85 Mbps Rooftop WiFi',
+    wifiReliability: 'Fast & Stable (80-150 Mbps)',
+    hasBackupPower: false,
+    powerOutlets: 'Limited',
+    noiseLevel: 'Bustling',
+    seatingErgonomics: 'Lounge / Sofas',
+    airConditioning: false,
+    foodAndCoffee: 'Porto tonics, craft cocktails, burgers and panoramic Tagus River vistas',
+    coffeePriceUSD: '€2.50 Espresso / €3.00 Iced Coffee',
+    specialtyCoffee: 'Portuguese espresso, iced coffee tonics, fresh mint lemonade',
+    barAndDrinks: 'White Port & Tonics, Lisbon Craft Beers, Sangria Pitchers, Passionfruit Caipirinhas',
+    popularDishes: ['Artisan Beef & Vegan Brioche Burgers', 'Crispy Sweet Potato Wedges', 'Goat Cheese Crostini with Honey', 'Smoked Olives & Almonds'],
+    dietaryOptions: ['Vegetarian Burgers', 'Local Tapas'],
+    atmosphere: 'Legendary converted 6th-floor rooftop car park transformed into a lush botanical terrace with 180° river views',
+    openingHours: '1:00 PM - 2:00 AM Daily',
+    phone: '+351 21 591 4011',
+    instagram: '@parklisboa',
+    rating: 4.7,
+    reviewCount: 420,
+    priceLevel: '$$',
+    photoUrl: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: true,
+      outdoorSeating: true,
+      alcoholServed: true,
+      creditCardsAccepted: true
+    },
+    tags: ['Rooftop Views', 'Tagus Sunset', 'Cocktails & Burgers', 'Evening Nomad Hub'],
+    reviews: [
+      {
+        id: 'rev-park-1',
+        author: 'Duarte Silva',
+        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
+        rating: 5,
+        wifiRating: 4,
+        noiseLevel: 'Lively',
+        comment: 'Early afternoon (1-4 PM) is surprisingly peaceful with great rooftop breezes for light laptop work. Then it turns into the best sunset spot in Lisbon.',
+        date: '4 days ago',
         verifiedNomad: true
       }
     ]
@@ -345,11 +539,31 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
     seatingErgonomics: 'Cushioned Cafe Seating',
     airConditioning: true,
     foodAndCoffee: 'Oslo-style Nordic filter coffee, freshly baked cardamom knots & craft tonics',
-    openingHours: '8:00 AM - 7:00 PM Daily (Cocktail bar evening)',
+    coffeePriceUSD: '¥650 (~$4.30) Single-Origin Drip',
+    specialtyCoffee: 'Nordic Light Roast Kenyas, Ethiopians, AeroPress Championship recipes, Oat Milk Lattes',
+    barAndDrinks: 'Evening Norwegian Aquavit Cocktails, Japanese Microbrews, Highballs, Ginger Brew Tonics',
+    popularDishes: ['Norwegian Brown Cheese Waffles', 'Cardamom Buns', 'Smoked Salmon Open Toast', 'Matcha Chia Pudding'],
+    dietaryOptions: ['Vegetarian Friendly', 'Plant-Based Milk Options'],
+    atmosphere: 'Iconic mid-century vintage Scandinavian design, record player jazz, quiet early mornings',
+    openingHours: '8:00 AM - 7:00 PM (Cocktails until Midnight)',
+    phone: '+81 3-3481-0884',
+    instagram: '@fuglentokyo',
     rating: 4.8,
     reviewCount: 320,
     priceLevel: '$$',
     photoUrl: 'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: false,
+      outdoorSeating: true,
+      alcoholServed: true,
+      creditCardsAccepted: true,
+      takeawayAvailable: true,
+      roasteryOnSite: true
+    },
     tags: ['Vintage Midcentury', 'Quiet Morning Vibe', 'Nordic Coffee', 'Tomigaya'],
     reviews: [
       {
@@ -359,8 +573,64 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
         rating: 5,
         wifiRating: 5,
         noiseLevel: 'Quiet Focus',
-        comment: 'Quiet early mornings between 8 AM and 11 AM are magical for deep creative work.',
+        comment: 'Quiet early mornings between 8 AM and 11 AM are magical for deep creative work. Wi-Fi is super stable and the V60 drip is exceptional.',
         date: '3 days ago',
+        verifiedNomad: true
+      }
+    ]
+  },
+  {
+    id: 'tokyo-bar-trench',
+    name: 'Bar Trench & Nomad Mixology Salon',
+    category: 'bar',
+    city: 'Tokyo',
+    country: 'Japan',
+    lat: 35.6468,
+    lng: 139.7093,
+    address: '1-5-8 Ebisunishi, Shibuya City, Tokyo 150-0021',
+    wifiSpeedMbps: 95,
+    wifiSpeedText: '95 Mbps High Density Guest Line',
+    wifiReliability: 'Fast & Stable (80-150 Mbps)',
+    hasBackupPower: true,
+    powerOutlets: 'Limited',
+    noiseLevel: 'Moderate / Cafe Ambience',
+    seatingErgonomics: 'Lounge / Sofas',
+    airConditioning: true,
+    foodAndCoffee: 'World’s 50 Best Bars honoree, herbal absinthes, espresso martinis & curated small bites',
+    coffeePriceUSD: '¥800 (~$5.20) Barista Espresso Martini',
+    specialtyCoffee: 'Craft Cold Brew Negroni, Japanese Green Tea Infusions, Single Estate Espresso',
+    barAndDrinks: 'World-renowned herbal bitter cocktails, Japanese craft gin & single malt whiskies',
+    popularDishes: ['Truffle Edamame', 'Smoked Duck Breast Pintxos', 'Artisan Dark Chocolate Truffles'],
+    dietaryOptions: ['Gluten-Free Snacks', 'Botanical Non-Alcoholic Mocktails'],
+    atmosphere: 'Intimate European speakeasy aesthetics in Ebisu, perfect for relaxed evening notebook sketching and unwinding',
+    openingHours: '5:00 PM - 2:00 AM Daily',
+    phone: '+81 3-3780-5201',
+    instagram: '@bar_trench',
+    rating: 4.9,
+    reviewCount: 380,
+    priceLevel: '$$$',
+    photoUrl: 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: false,
+      outdoorSeating: false,
+      alcoholServed: true,
+      creditCardsAccepted: true
+    },
+    tags: ['Speakeasy', 'World Top 50', 'Artisan Bitters', 'Ebisu Nightlife'],
+    reviews: [
+      {
+        id: 'rev-trench-1',
+        author: 'Liam Chen',
+        avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80',
+        rating: 5,
+        wifiRating: 4,
+        noiseLevel: 'Moderate / Cafe Ambience',
+        comment: 'Remarkable cocktail craftsmanship. The quiet atmosphere in the early evening is sublime for reflecting on the day’s work.',
+        date: '5 days ago',
         verifiedNomad: true
       }
     ]
@@ -503,11 +773,32 @@ export const WORK_SPOTS_DATA: WorkSpot[] = [
     seatingErgonomics: 'Cushioned Cafe Seating',
     airConditioning: true,
     foodAndCoffee: 'World Latte Art Champion coffee, siphon brews, cold nitrogen espressos',
+    coffeePriceUSD: '฿90 (~$2.50) World Champion Flat White',
+    specialtyCoffee: 'World Latte Art Championship signature beans, Geisha pour-overs, Nitrogen cold brew on draft, Coconut milk latte',
+    barAndDrinks: 'Artisan Espresso Tonics, Chilled Passionfruit Cascara Tea, Fresh Thai Coconuts',
+    popularDishes: ['Matcha Burnt Basque Cheesecake', 'Fluffy Japanese Souffle Pancakes', 'Smoked Salmon Croissant Sandwiches', 'Almond Croissant'],
+    dietaryOptions: ['Vegetarian Friendly', 'Oat & Soy Milk Available'],
+    atmosphere: 'Modern sleek dark laboratory interior with baristas crafting coffee with scientific precision and smooth AC',
     openingHours: '8:00 AM - 5:00 PM Daily',
+    phone: '+66 85 530 5360',
+    instagram: '@roast8ry',
     rating: 4.9,
     reviewCount: 520,
     priceLevel: '$',
     photoUrl: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
+    photos: [
+      'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=800&q=80',
+      'https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80'
+    ],
+    features: {
+      petFriendly: true,
+      outdoorSeating: true,
+      alcoholServed: false,
+      veganFriendly: true,
+      creditCardsAccepted: true,
+      takeawayAvailable: true,
+      roasteryOnSite: true
+    },
     tags: ['World Champion Barista', 'Nimman Hub', 'Fast Fiber', 'Great AC'],
     reviews: [
       {
@@ -532,3 +823,21 @@ export const CITY_COORDINATE_PRESETS: Record<string, { lat: number; lng: number;
   'cdmx': { lat: 19.4194, lng: -99.1601, label: 'Mexico City (Roma)', country: 'Mexico' },
   'chiangmai': { lat: 18.7983, lng: 98.9686, label: 'Chiang Mai (Nimman)', country: 'Thailand' },
 };
+
+export function findWorkSpotById(id: string): WorkSpot | undefined {
+  return WORK_SPOTS_DATA.find((s) => s.id === id);
+}
+
+export function searchWorkSpots(query: string): WorkSpot[] {
+  const q = query.toLowerCase().trim();
+  if (!q) return WORK_SPOTS_DATA;
+  return WORK_SPOTS_DATA.filter((s) =>
+    s.name.toLowerCase().includes(q) ||
+    s.city.toLowerCase().includes(q) ||
+    s.foodAndCoffee.toLowerCase().includes(q) ||
+    s.tags.some((t) => t.toLowerCase().includes(q)) ||
+    (s.specialtyCoffee && s.specialtyCoffee.toLowerCase().includes(q)) ||
+    (s.barAndDrinks && s.barAndDrinks.toLowerCase().includes(q)) ||
+    s.category.toLowerCase().includes(q)
+  );
+}

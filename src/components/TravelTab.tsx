@@ -33,6 +33,13 @@ import {
 import { MultiStopTripView } from './MultiStopTripView';
 import { DayItineraryView } from './DayItineraryView';
 import { CountryFlag } from './CountryFlag';
+import { 
+  NOMAD_CURRENCIES, 
+  CURRENCY_REGIONS, 
+  getCurrency, 
+  convertCurrency, 
+  formatConvertedAmount 
+} from '../data/currencies';
 
 interface TravelTabProps {
   state: NomadState;
@@ -92,17 +99,18 @@ export const TravelTab: React.FC<TravelTabProps> = ({
   const [calcFrom, setCalcFrom] = useState('EUR');
   const [calcTo, setCalcTo] = useState('USD');
 
-  const RATES: Record<string, number> = {
-    USD: 1.0,
-    EUR: 1.08,
-    GBP: 1.28,
-    THB: 0.029,
-    IDR: 0.000062,
-    BGN: 0.55,
-    JPY: 0.0068,
-  };
+  const fromCurrency = getCurrency(calcFrom);
+  const toCurrency = getCurrency(calcTo);
+  const convertedNumeric = convertCurrency(calcAmount, calcFrom, calcTo);
+  const formattedConverted = formatConvertedAmount(convertedNumeric, calcTo);
+  const unitRate = (toCurrency.ratePerUSD / fromCurrency.ratePerUSD);
+  const inverseRate = (fromCurrency.ratePerUSD / toCurrency.ratePerUSD);
 
-  const convertedValue = ((calcAmount * (RATES[calcFrom] || 1)) / (RATES[calcTo] || 1)).toFixed(2);
+  const handleSwapCurrencies = () => {
+    const temp = calcFrom;
+    setCalcFrom(calcTo);
+    setCalcTo(temp);
+  };
 
   // Schengen calculations
   const totalSchengenDays = state.schengenStays.reduce((sum, stay) => {
@@ -137,8 +145,8 @@ export const TravelTab: React.FC<TravelTabProps> = ({
   const handleSaveExpense = (e: React.FormEvent) => {
     e.preventDefault();
     if (!expDesc || expAmount <= 0) return;
-    const rate = RATES[expCurrency] || 1;
-    const amountUSD = Math.round(expAmount * rate);
+    const curr = getCurrency(expCurrency);
+    const amountUSD = Math.round(expAmount * curr.rateInUSD);
     onAddExpense({
       id: `exp-${Date.now()}`,
       date: new Date().toISOString().split('T')[0],
@@ -261,6 +269,7 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                       <img
                         src={trip.coverUrl}
                         alt={trip.city}
+                        referrerPolicy="no-referrer"
                         className="w-16 h-16 rounded-2xl object-cover shrink-0 shadow-xs border border-stone-100"
                       />
                     ) : (
@@ -579,43 +588,96 @@ export const TravelTab: React.FC<TravelTabProps> = ({
 
       {/* ================= 5. FX CONVERTER ================= */}
       {subTab === 'converter' && (
-        <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-5">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
-              <ArrowRightLeft className="w-4 h-4" />
+        <div className="bg-white rounded-3xl p-6 border border-stone-200/80 shadow-sm space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
+                <ArrowRightLeft className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-black text-stone-900 text-base">Nomad Multi-Currency Converter</h3>
+                <p className="text-xs text-stone-500">Live exchange rates across 45+ nomad hubs & 150+ countries</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-black text-stone-900 text-base">Nomad Multi-Currency Converter</h3>
-              <p className="text-xs text-stone-500">Live exchange rates across 150+ countries</p>
-            </div>
+            <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-orange-50 border border-orange-200/80 text-[11px] font-extrabold text-orange-700">
+              <Sparkles className="w-3 h-3 text-orange-500" />
+              {NOMAD_CURRENCIES.length} Currencies
+            </span>
           </div>
 
           <div className="space-y-4">
+            {/* Amount input & Quick Chips */}
             <div>
-              <label className="block text-xs font-bold text-stone-600 mb-1">Amount</label>
-              <input
-                type="number"
-                value={calcAmount}
-                onChange={(e) => setCalcAmount(Number(e.target.value))}
-                className="w-full px-4 py-3 rounded-2xl border border-stone-200 text-lg font-black focus:outline-none focus:border-orange-500"
-              />
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-xs font-bold text-stone-700">Amount</label>
+                <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+                  {[20, 50, 100, 500, 1000, 5000].map((preset) => (
+                    <button
+                      key={preset}
+                      type="button"
+                      onClick={() => setCalcAmount(preset)}
+                      className={`px-2 py-0.5 rounded-lg text-[11px] font-bold transition-colors ${
+                        calcAmount === preset
+                          ? 'bg-orange-600 text-white shadow-xs'
+                          : 'bg-stone-100 text-stone-600 hover:bg-stone-200'
+                      }`}
+                    >
+                      {preset >= 1000 ? `${preset / 1000}k` : preset}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0"
+                  step="any"
+                  value={calcAmount}
+                  onChange={(e) => setCalcAmount(Math.max(0, Number(e.target.value)))}
+                  className="w-full px-4 py-3 rounded-2xl border border-stone-200 text-xl font-black text-stone-900 focus:outline-none focus:border-orange-500 focus:ring-2 focus:ring-orange-500/10"
+                />
+                <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-extrabold text-stone-400">
+                  {fromCurrency.code} ({fromCurrency.symbol})
+                </span>
+              </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
+            {/* From, Swap, and To Controls */}
+            <div className="grid grid-cols-1 sm:grid-cols-[1fr_auto_1fr] items-center gap-3">
               <div>
                 <label className="block text-xs font-bold text-stone-600 mb-1">From</label>
                 <select
                   value={calcFrom}
                   onChange={(e) => setCalcFrom(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white text-stone-800 focus:outline-none focus:border-orange-500"
                 >
-                  <option value="EUR">EUR (€)</option>
-                  <option value="USD">USD ($)</option>
-                  <option value="GBP">GBP (£)</option>
-                  <option value="THB">THB (฿)</option>
-                  <option value="IDR">IDR (Rp)</option>
-                  <option value="JPY">JPY (¥)</option>
+                  {CURRENCY_REGIONS.map((reg) => (
+                    <optgroup key={reg} label={`— ${reg} —`}>
+                      {NOMAD_CURRENCIES.filter((c) => c.region === reg).map((curr) => (
+                        <option key={curr.code} value={curr.code}>
+                          {curr.flag} {curr.code} ({curr.symbol}) — {curr.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
+                {fromCurrency.hub && (
+                  <p className="text-[10px] text-stone-400 mt-1 truncate">
+                    {fromCurrency.flag} {fromCurrency.hub}
+                  </p>
+                )}
+              </div>
+
+              {/* Swap Button */}
+              <div className="flex justify-center pt-2 sm:pt-4">
+                <button
+                  type="button"
+                  onClick={handleSwapCurrencies}
+                  title="Swap currencies"
+                  className="w-10 h-10 rounded-2xl bg-orange-50 hover:bg-orange-100 border border-orange-200/80 text-orange-600 flex items-center justify-center transition-all hover:scale-105 active:scale-95 shadow-xs"
+                >
+                  <ArrowRightLeft className="w-4 h-4" />
+                </button>
               </div>
 
               <div>
@@ -623,23 +685,87 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                 <select
                   value={calcTo}
                   onChange={(e) => setCalcTo(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-bold bg-white text-stone-800 focus:outline-none focus:border-orange-500"
                 >
-                  <option value="USD">USD ($)</option>
-                  <option value="EUR">EUR (€)</option>
-                  <option value="GBP">GBP (£)</option>
-                  <option value="THB">THB (฿)</option>
-                  <option value="IDR">IDR (Rp)</option>
-                  <option value="JPY">JPY (¥)</option>
+                  {CURRENCY_REGIONS.map((reg) => (
+                    <optgroup key={reg} label={`— ${reg} —`}>
+                      {NOMAD_CURRENCIES.filter((c) => c.region === reg).map((curr) => (
+                        <option key={curr.code} value={curr.code}>
+                          {curr.flag} {curr.code} ({curr.symbol}) — {curr.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
+                {toCurrency.hub && (
+                  <p className="text-[10px] text-stone-400 mt-1 truncate">
+                    {toCurrency.flag} {toCurrency.hub}
+                  </p>
+                )}
               </div>
             </div>
 
-            <div className="p-4 bg-orange-50 rounded-2xl border border-orange-200 text-center">
-              <span className="text-xs text-orange-700 font-bold block">Converted Value</span>
-              <span className="text-2xl font-black text-orange-900 mt-1 block">
-                {convertedValue} {calcTo}
+            {/* Popular Nomad Pairs */}
+            <div>
+              <span className="text-[11px] font-bold text-stone-500 block mb-1.5">
+                Popular Nomad Pairs:
               </span>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { from: 'USD', to: 'THB', label: 'USD ⇄ THB (Thailand)' },
+                  { from: 'USD', to: 'IDR', label: 'USD ⇄ IDR (Bali)' },
+                  { from: 'EUR', to: 'USD', label: 'EUR ⇄ USD' },
+                  { from: 'USD', to: 'MXN', label: 'USD ⇄ MXN (Mexico)' },
+                  { from: 'USD', to: 'VND', label: 'USD ⇄ VND (Vietnam)' },
+                  { from: 'EUR', to: 'BGN', label: 'EUR ⇄ BGN (Bansko)' },
+                  { from: 'USD', to: 'JPY', label: 'USD ⇄ JPY (Japan)' },
+                  { from: 'USD', to: 'COP', label: 'USD ⇄ COP (Colombia)' },
+                  { from: 'EUR', to: 'GBP', label: 'EUR ⇄ GBP' },
+                  { from: 'USD', to: 'AED', label: 'USD ⇄ AED (Dubai)' },
+                ].map((pair) => (
+                  <button
+                    key={`${pair.from}-${pair.to}`}
+                    type="button"
+                    onClick={() => {
+                      setCalcFrom(pair.from);
+                      setCalcTo(pair.to);
+                    }}
+                    className={`px-2.5 py-1 rounded-xl text-[11px] font-bold border transition-colors ${
+                      calcFrom === pair.from && calcTo === pair.to
+                        ? 'bg-orange-500 border-orange-500 text-white'
+                        : 'bg-stone-50 border-stone-200/80 text-stone-700 hover:bg-stone-100'
+                    }`}
+                  >
+                    {pair.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Converted Value Card */}
+            <div className="p-5 bg-gradient-to-br from-orange-50 to-amber-50 rounded-2xl border border-orange-200 text-center space-y-2">
+              <span className="text-xs text-orange-800 font-bold uppercase tracking-wider block">
+                Converted Value
+              </span>
+              <div className="flex items-center justify-center gap-2">
+                <span className="text-3xl font-black text-stone-900 tracking-tight">
+                  {formattedConverted}
+                </span>
+                <span className="text-sm font-bold text-orange-700 self-end mb-1">
+                  {calcTo}
+                </span>
+              </div>
+
+              {/* Rate equation */}
+              <div className="pt-2 border-t border-orange-200/70 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-stone-600 font-medium">
+                <span>
+                  1 {calcFrom} = <strong className="text-stone-900">{unitRate < 0.001 ? unitRate.toFixed(6) : unitRate < 1 ? unitRate.toFixed(4) : unitRate.toLocaleString('en-US', { maximumFractionDigits: 2 })}</strong> {calcTo}
+                </span>
+                <span className="text-stone-300">|</span>
+                <span>
+                  1 {calcTo} = <strong className="text-stone-900">{inverseRate < 0.001 ? inverseRate.toFixed(6) : inverseRate < 1 ? inverseRate.toFixed(4) : inverseRate.toLocaleString('en-US', { maximumFractionDigits: 2 })}</strong> {calcFrom}
+                </span>
+              </div>
             </div>
           </div>
         </div>
@@ -696,6 +822,53 @@ export const TravelTab: React.FC<TravelTabProps> = ({
               >
                 <X className="w-4 h-4" />
               </button>
+            </div>
+
+            {/* 1-Tap Fast Nomad Hub Presets (No manual typing required) */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="block text-xs font-bold text-stone-700">1-Tap Popular Nomad Hubs</label>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (state.currentCity) {
+                      const parts = state.currentCity.split(',').map(s => s.trim());
+                      setNewCity(parts[0] || 'Bali');
+                      setNewCountry(parts[1] || 'Indonesia');
+                      setNewArrival(new Date().toISOString().split('T')[0]);
+                    }
+                  }}
+                  className="text-[11px] text-orange-600 hover:text-orange-700 font-semibold flex items-center gap-1"
+                >
+                  <MapPin className="w-3 h-3" />
+                  <span>Use Current Location</span>
+                </button>
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { city: 'Chiang Mai', country: 'Thailand', flag: '🇹🇭', cost: 450, visa: 'DTV 60d' },
+                  { city: 'Lisbon', country: 'Portugal', flag: '🇵🇹', cost: 1200, visa: 'Schengen 90d' },
+                  { city: 'Bali (Canggu)', country: 'Indonesia', flag: '🇮🇩', cost: 750, visa: 'VoA B213' },
+                  { city: 'Mexico City', country: 'Mexico', flag: '🇲🇽', cost: 950, visa: 'FMM 180d' },
+                  { city: 'Bansko', country: 'Bulgaria', flag: '🇧🇬', cost: 420, visa: 'Schengen 90d' },
+                  { city: 'Barcelona', country: 'Spain', flag: '🇪🇸', cost: 1300, visa: 'Schengen 90d' },
+                ].map((preset) => (
+                  <button
+                    key={preset.city}
+                    type="button"
+                    onClick={() => {
+                      setNewCity(preset.city);
+                      setNewCountry(preset.country);
+                      setNewHousingCost(preset.cost);
+                      setNewVisaType(preset.visa);
+                    }}
+                    className="px-2.5 py-1 rounded-xl bg-stone-100 hover:bg-orange-50 hover:text-orange-700 text-stone-700 text-[11px] font-medium border border-stone-200 transition-colors flex items-center gap-1"
+                  >
+                    <span>{preset.flag}</span>
+                    <span>{preset.city}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
@@ -808,11 +981,15 @@ export const TravelTab: React.FC<TravelTabProps> = ({
                   onChange={(e) => setExpCurrency(e.target.value)}
                   className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-bold bg-white focus:outline-none focus:border-orange-500"
                 >
-                  <option value="EUR">EUR (€)</option>
-                  <option value="USD">USD ($)</option>
-                  <option value="THB">THB (฿)</option>
-                  <option value="IDR">IDR (Rp)</option>
-                  <option value="GBP">GBP (£)</option>
+                  {CURRENCY_REGIONS.map((reg) => (
+                    <optgroup key={reg} label={`— ${reg} —`}>
+                      {NOMAD_CURRENCIES.filter((c) => c.region === reg).map((curr) => (
+                        <option key={curr.code} value={curr.code}>
+                          {curr.flag} {curr.code} ({curr.symbol}) — {curr.name}
+                        </option>
+                      ))}
+                    </optgroup>
+                  ))}
                 </select>
               </div>
             </div>

@@ -318,6 +318,9 @@ export function App() {
               state={state}
               onNavigateTab={(tab) => setActiveTab(tab)}
               onOpenPricing={() => setIsPricingOpen(true)}
+              deviceMode={deviceMode}
+              onSetDeviceMode={setDeviceMode}
+              onViewLanding={() => setViewMode('landing')}
             />
 
             <main className="flex-1 w-full">
@@ -376,6 +379,7 @@ export function App() {
                   onToggleEventRSVP={handleToggleEventRSVP}
                   onAddEvent={handleAddEvent}
                   onSetCity={handleSetCity}
+                  onNavigateTab={setActiveTab}
                 />
               )}
 
@@ -386,6 +390,9 @@ export function App() {
                   onOpenPricing={() => setIsPricingOpen(true)}
                   onOpenAuth={() => setIsAuthOpen(true)}
                   onAddCountryVisited={handleAddCountryVisited}
+                  onViewLanding={() => setViewMode('landing')}
+                  deviceMode={deviceMode}
+                  onSetDeviceMode={setDeviceMode}
                 />
               )}
             </main>

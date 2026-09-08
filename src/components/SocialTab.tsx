@@ -21,16 +21,19 @@ import {
   Activity,
   Building2,
   CheckCircle2,
-  X
+  X,
+  Radio
 } from 'lucide-react';
 import { NomadState, NearbyNomad, NomadEvent } from '../types';
 import { GoogleNomadMap } from './GoogleNomadMap';
+import { NomadLiveRadar } from './NomadLiveRadar';
 
 interface SocialTabProps {
   state: NomadState;
   onToggleEventRSVP: (eventId: string) => void;
   onAddEvent: (title: string, date: string, city: string) => void;
   onSetCity: (city: string) => void;
+  onNavigateTab?: (tab: 'home' | 'travel' | 'finance' | 'explore' | 'social' | 'me') => void;
 }
 
 export const SocialTab: React.FC<SocialTabProps> = ({
@@ -38,8 +41,9 @@ export const SocialTab: React.FC<SocialTabProps> = ({
   onToggleEventRSVP,
   onAddEvent,
   onSetCity,
+  onNavigateTab,
 }) => {
-  const [socialSubTab, setSocialSubTab] = useState<'people' | 'meet' | 'messages'>('meet');
+  const [socialSubTab, setSocialSubTab] = useState<'radar' | 'people' | 'meet' | 'messages'>('radar');
   const [selectedTag, setSelectedTag] = useState<string>('All');
   const [eventFilter, setEventFilter] = useState<'all' | 'my' | 'nearby'>('nearby');
   const [isEventsSheetOpen, setIsEventsSheetOpen] = useState(true);
@@ -96,11 +100,23 @@ export const SocialTab: React.FC<SocialTabProps> = ({
 
   return (
     <div id="social-view" className="space-y-4 pb-28 max-w-2xl mx-auto px-4 pt-3">
-      {/* Top 3 Subtabs */}
+      {/* Top 4 Subtabs */}
       <div className="flex bg-slate-100/90 p-1.5 rounded-2xl border border-slate-200/80 shadow-inner">
         <button
+          onClick={() => setSocialSubTab('radar')}
+          className={`flex-1 py-2 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all ${
+            socialSubTab === 'radar'
+              ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20'
+              : 'text-slate-500 hover:text-slate-900'
+          }`}
+        >
+          <Radio className="w-3.5 h-3.5" />
+          <span>Live Radar</span>
+        </button>
+
+        <button
           onClick={() => setSocialSubTab('people')}
-          className={`flex-1 py-2 rounded-xl text-xs font-black transition-all ${
+          className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
             socialSubTab === 'people'
               ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20'
               : 'text-slate-500 hover:text-slate-900'
@@ -111,7 +127,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
 
         <button
           onClick={() => setSocialSubTab('meet')}
-          className={`flex-1 py-2 rounded-xl text-xs font-black transition-all ${
+          className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
             socialSubTab === 'meet'
               ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20'
               : 'text-slate-500 hover:text-slate-900'
@@ -122,7 +138,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
 
         <button
           onClick={() => setSocialSubTab('messages')}
-          className={`flex-1 py-2 rounded-xl text-xs font-black transition-all ${
+          className={`flex-1 py-2 rounded-xl text-xs font-medium transition-all ${
             socialSubTab === 'messages'
               ? 'bg-orange-500 text-white shadow-md shadow-orange-500/20'
               : 'text-slate-500 hover:text-slate-900'
@@ -131,6 +147,15 @@ export const SocialTab: React.FC<SocialTabProps> = ({
           Messages (5)
         </button>
       </div>
+
+      {/* ================= RADAR VIEW ================= */}
+      {socialSubTab === 'radar' && (
+        <NomadLiveRadar
+          state={state}
+          onNavigateTab={onNavigateTab}
+          onDirectMessage={(nomad) => setActiveNomadMessage(nomad)}
+        />
+      )}
 
       {/* ================= MEET / GOOGLE MAP VIEW ================= */}
       {socialSubTab === 'meet' && (
@@ -252,6 +277,7 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                     <img
                       src={nomad.avatarUrl}
                       alt={nomad.name}
+                      referrerPolicy="no-referrer"
                       className="w-12 h-12 rounded-full object-cover border-2 border-orange-500/30"
                     />
                     {nomad.isOnline && (
@@ -294,7 +320,12 @@ export const SocialTab: React.FC<SocialTabProps> = ({
                 className="p-3 bg-slate-50 hover:bg-orange-50/60 rounded-2xl border border-slate-200/80 flex items-center justify-between cursor-pointer transition-colors"
               >
                 <div className="flex items-center gap-3">
-                  <img src={nomad.avatarUrl} alt={nomad.name} className="w-10 h-10 rounded-full object-cover" />
+                  <img 
+                    src={nomad.avatarUrl} 
+                    alt={nomad.name} 
+                    referrerPolicy="no-referrer"
+                    className="w-10 h-10 rounded-full object-cover" 
+                  />
                   <div>
                     <h5 className="font-extrabold text-slate-900 text-xs font-display">{nomad.name}</h5>
                     <p className="text-[11px] text-slate-500 line-clamp-1">

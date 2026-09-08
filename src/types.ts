@@ -235,7 +235,7 @@ export interface WorkSpotReview {
 export interface WorkSpot {
   id: string;
   name: string;
-  category: 'coworking' | 'cafe' | 'restaurant';
+  category: 'coworking' | 'cafe' | 'restaurant' | 'bar';
   city: string;
   country: string;
   lat: number;
@@ -247,7 +247,7 @@ export interface WorkSpot {
   wifiReliability: 'Ultra Fast (150+ Mbps)' | 'Fast & Stable (80-150 Mbps)' | 'Good (40-80 Mbps)' | 'Basic';
   hasBackupPower: boolean;
   powerOutlets: 'Plentiful (Every Seat)' | 'Good (Most Tables)' | 'Limited' | 'Upon Request';
-  noiseLevel: 'Silent / Focus' | 'Moderate / Cafe Ambience' | 'Bustling' | 'Call / Zoom Friendly';
+  noiseLevel: 'Silent / Focus' | 'Moderate / Cafe Ambience' | 'Bustling' | 'Call / Zoom Friendly' | 'Quiet Focus';
   seatingErgonomics: 'Ergonomic Mesh Chairs' | 'Cushioned Cafe Seating' | 'Lounge / Sofas' | 'Standing Desks';
   airConditioning: boolean;
   foodAndCoffee: string;
@@ -260,6 +260,29 @@ export interface WorkSpot {
   photos?: string[];
   reviews: WorkSpotReview[];
   tags: string[];
+
+  // Detailed Coffee, Bar & Dining metadata
+  coffeePriceUSD?: string;
+  specialtyCoffee?: string;
+  barAndDrinks?: string;
+  popularDishes?: string[];
+  dietaryOptions?: string[];
+  atmosphere?: string;
+  phone?: string;
+  instagram?: string;
+  website?: string;
+  googleMapsUrl?: string;
+  features?: {
+    petFriendly?: boolean;
+    outdoorSeating?: boolean;
+    alcoholServed?: boolean;
+    veganFriendly?: boolean;
+    phoneBooths?: boolean;
+    parking?: boolean;
+    creditCardsAccepted?: boolean;
+    takeawayAvailable?: boolean;
+    roasteryOnSite?: boolean;
+  };
 }
 
 export interface NomadState {

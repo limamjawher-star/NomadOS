@@ -16,7 +16,10 @@ import {
   LogOut,
   Sparkles,
   Camera,
-  CheckCircle2
+  CheckCircle2,
+  Download,
+  Monitor,
+  Smartphone
 } from 'lucide-react';
 import { NomadUser, NomadState } from '../types';
 import { CountryFlag } from './CountryFlag';
@@ -27,6 +30,9 @@ interface ProfileTabProps {
   onOpenPricing: () => void;
   onOpenAuth: () => void;
   onAddCountryVisited: (countryCode: string) => void;
+  onViewLanding?: () => void;
+  deviceMode?: 'web' | 'ios' | 'android';
+  onSetDeviceMode?: (mode: 'web' | 'ios' | 'android') => void;
 }
 
 const ALL_COUNTRIES = [
@@ -53,6 +59,9 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
   onOpenPricing,
   onOpenAuth,
   onAddCountryVisited,
+  onViewLanding,
+  deviceMode = 'web',
+  onSetDeviceMode,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(state.user.name);
@@ -61,6 +70,23 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
   const [editBio, setEditBio] = useState(state.user.bio);
   const [isAddCountryOpen, setIsAddCountryOpen] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
+  const [exportNotice, setExportNotice] = useState(false);
+
+  const handleExportData = () => {
+    try {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `nomados-backup-${new Date().toISOString().split('T')[0]}.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+      setExportNotice(true);
+      setTimeout(() => setExportNotice(false), 2500);
+    } catch (e) {
+      console.error('Export error', e);
+    }
+  };
 
   const handleSaveProfile = (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,6 +156,7 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
           <img
             src={state.user.avatarUrl}
             alt={state.user.name}
+            referrerPolicy="no-referrer"
             className="w-24 h-24 rounded-full object-cover border-4 border-orange-500/20 shadow-md ring-4 ring-orange-500/10"
           />
           {state.user.isPro && (
@@ -227,6 +254,51 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
         </div>
       </div>
 
+      {/* NomadOS Membership Status Card */}
+      <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2.5">
+            <div className={`w-9 h-9 rounded-2xl flex items-center justify-center font-bold text-white shadow-sm ${
+              state.user.isPro
+                ? 'bg-gradient-to-tr from-amber-500 to-orange-500 shadow-orange-500/20'
+                : 'bg-slate-800'
+            }`}>
+              <Crown className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                  {state.user.isPro ? 'NomadOS Pro Active' : 'Free Plan'}
+                </h4>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                  state.user.isPro
+                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                    : 'bg-slate-100 text-slate-700 border border-slate-200'
+                }`}>
+                  {state.user.isPro ? 'PRO ACTIVE' : 'LIMITED FEATURES'}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-500">
+                {state.user.isPro
+                  ? 'All Schengen legal tracking, FEIE tax engine, and 360° radar active'
+                  : 'Includes 3 trips, 1km radar range, and basic expense tracking'}
+              </p>
+            </div>
+          </div>
+
+          {!state.user.isPro ? (
+            <button
+              onClick={onOpenPricing}
+              className="px-3.5 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-bold rounded-xl shadow-sm transition-all"
+            >
+              Upgrade Pro
+            </button>
+          ) : (
+            <span className="text-xs font-medium text-slate-500">Plan: {state.user.subscriptionPlan}</span>
+          )}
+        </div>
+      </div>
+
       {/* Countries Visited / Passport Stamps */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
@@ -261,6 +333,120 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
             <Plus className="w-5 h-5 text-orange-500" />
             <span className="text-xs font-bold">+ Add country</span>
           </button>
+        </div>
+      </div>
+
+      {/* Export Feedback Notice */}
+      {exportNotice && (
+        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-bold flex items-center justify-between animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>NomadOS data exported successfully! Download started.</span>
+          </div>
+        </div>
+      )}
+
+      {/* System, Preferences & Simulation Settings */}
+      <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-4">
+        <h4 className="text-sm font-black text-slate-900 font-display">App Preferences & Workspace</h4>
+
+        <div className="space-y-2.5">
+          {/* Landing Page Preview */}
+          {onViewLanding && (
+            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between hover:bg-orange-50/50 hover:border-orange-200 transition-colors">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
+                  <Globe className="w-4 h-4" />
+                </div>
+                <div>
+                  <h5 className="text-xs font-black text-slate-900">NomadOS Landing Page</h5>
+                  <p className="text-[11px] text-slate-500">Preview marketing website & public showcases</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onViewLanding}
+                className="px-3 py-1.5 bg-white border border-slate-200 hover:border-orange-400 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
+              >
+                View
+              </button>
+            </div>
+          )}
+
+          {/* Device Simulator Toggle */}
+          {onSetDeviceMode && (
+            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center font-bold">
+                  <Monitor className="w-4 h-4" />
+                </div>
+                <div>
+                  <h5 className="text-xs font-black text-slate-900">Device Viewport</h5>
+                  <p className="text-[11px] text-slate-500">Switch desktop frame or mobile shell</p>
+                </div>
+              </div>
+              <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200 gap-1">
+                <button
+                  type="button"
+                  onClick={() => onSetDeviceMode('web')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                    deviceMode === 'web' ? 'bg-orange-500 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  Web
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onSetDeviceMode('ios')}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                    deviceMode === 'ios' ? 'bg-orange-500 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+                  }`}
+                >
+                  Phone
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Export Data Backup */}
+          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between hover:bg-slate-100/60 transition-colors">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                <Download className="w-4 h-4" />
+              </div>
+              <div>
+                <h5 className="text-xs font-black text-slate-900">Export Nomad Data (JSON)</h5>
+                <p className="text-[11px] text-slate-500">Full backup of expenses, visas & planned trips</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={handleExportData}
+              className="px-3 py-1.5 bg-white border border-slate-200 hover:border-emerald-400 text-slate-700 hover:text-emerald-700 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
+            >
+              Export
+            </button>
+          </div>
+
+          {/* Switch Account / Auth Modal */}
+          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center font-bold">
+                <LogOut className="w-4 h-4" />
+              </div>
+              <div>
+                <h5 className="text-xs font-black text-slate-900">Account Session</h5>
+                <p className="text-[11px] text-slate-500">Sign in with another nomad passport</p>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={onOpenAuth}
+              className="px-3 py-1.5 bg-white border border-slate-200 hover:border-slate-400 text-slate-700 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
+            >
+              Sign In
+            </button>
+          </div>
         </div>
       </div>
 

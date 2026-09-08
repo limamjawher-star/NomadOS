@@ -39,6 +39,9 @@ import {
   NomadCostEstimate 
 } from '../types';
 import { CountryFlag } from './CountryFlag';
+import { NOMAD_CURRENCIES, CURRENCY_REGIONS, getCurrency } from '../data/currencies';
+import { TaxOptimizationHub } from './TaxOptimizationHub';
+import { SmartExpenseQuickLogger } from './SmartExpenseQuickLogger';
 
 interface FinanceTabProps {
   state: NomadState;
@@ -141,7 +144,7 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
   onUpdateMonthlyBudget,
   onOpenPricing,
 }) => {
-  const [subView, setSubView] = useState<'overview' | 'income' | 'expenses' | 'planner'>('overview');
+  const [subView, setSubView] = useState<'overview' | 'income' | 'expenses' | 'planner' | 'tax'>('overview');
   const [expenseFilter, setExpenseFilter] = useState<string>('All');
   
   // Modals
@@ -197,11 +200,8 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
     if (!expDescription || !expAmount) return;
 
     const parsedAmount = parseFloat(expAmount);
-    let amountUSD = parsedAmount;
-    if (expCurrency === 'EUR') amountUSD = Math.round(parsedAmount * 1.08);
-    if (expCurrency === 'GBP') amountUSD = Math.round(parsedAmount * 1.28);
-    if (expCurrency === 'IDR') amountUSD = Math.round(parsedAmount / 16000);
-    if (expCurrency === 'THB') amountUSD = Math.round(parsedAmount / 36);
+    const curr = getCurrency(expCurrency);
+    const amountUSD = Math.round(parsedAmount * curr.rateInUSD);
 
     const newExpense: NomadExpense = {
       id: `exp-${Date.now()}`,
@@ -320,47 +320,58 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
           </button>
         </div>
 
-        {/* 4 Segmented Subtabs */}
-        <div className="grid grid-cols-4 gap-1.5 p-1 bg-slate-100/90 rounded-2xl text-xs font-extrabold">
+        {/* 5 Segmented Subtabs - Clean Non-Bold Styling */}
+        <div className="grid grid-cols-5 gap-1 p-1 bg-slate-100/90 rounded-2xl text-xs font-medium">
           <button
             onClick={() => setSubView('overview')}
             className={`py-2 rounded-xl transition-all ${
               subView === 'overview'
-                ? 'bg-white text-orange-600 shadow-sm'
+                ? 'bg-white text-orange-600 shadow-sm font-semibold'
                 : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             Overview
           </button>
           <button
-            onClick={() => setSubView('income')}
-            className={`py-2 rounded-xl transition-all ${
-              subView === 'income'
-                ? 'bg-white text-orange-600 shadow-sm'
-                : 'text-slate-500 hover:text-slate-800'
-            }`}
-          >
-            Income ({state.incomes.length})
-          </button>
-          <button
             onClick={() => setSubView('expenses')}
             className={`py-2 rounded-xl transition-all ${
               subView === 'expenses'
-                ? 'bg-white text-orange-600 shadow-sm'
+                ? 'bg-white text-orange-600 shadow-sm font-semibold'
                 : 'text-slate-500 hover:text-slate-800'
             }`}
           >
             Expenses ({state.expenses.length})
           </button>
           <button
-            onClick={() => setSubView('planner')}
-            className={`py-2 rounded-xl transition-all flex items-center justify-center gap-1.5 ${
-              subView === 'planner'
-                ? 'bg-white text-orange-600 shadow-sm'
+            onClick={() => setSubView('income')}
+            className={`py-2 rounded-xl transition-all ${
+              subView === 'income'
+                ? 'bg-white text-orange-600 shadow-sm font-semibold'
                 : 'text-slate-500 hover:text-slate-800'
             }`}
           >
-            <span>Planner</span>
+            Income ({state.incomes.length})
+          </button>
+          <button
+            onClick={() => setSubView('tax')}
+            className={`py-2 rounded-xl transition-all flex items-center justify-center gap-1 ${
+              subView === 'tax'
+                ? 'bg-white text-orange-600 shadow-sm font-semibold'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            <span>Tax & FEIE</span>
+          </button>
+          <button
+            onClick={() => setSubView('planner')}
+            className={`py-2 rounded-xl transition-all flex items-center justify-center gap-1 ${
+              subView === 'planner'
+                ? 'bg-white text-orange-600 shadow-sm font-semibold'
+                : 'text-slate-500 hover:text-slate-800'
+            }`}
+          >
+            <span>Runway</span>
             <Sparkles className="w-3 h-3 text-orange-500" />
           </button>
         </div>
@@ -597,6 +608,76 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
               </div>
             </div>
           </div>
+
+          {/* Multi-Currency Nomad Wallet & Bank FX Markup Savings */}
+          <div className="bg-white rounded-3xl p-4 sm:p-5 border border-slate-200/90 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center font-bold">
+                  <Wallet className="w-4 h-4" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                    Multi-Currency Nomad Wallet & FX Savings
+                  </h4>
+                  <p className="text-[11px] text-slate-500">
+                    Real-time balances across current active nomad currencies
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-50 text-emerald-700 text-xs font-semibold border border-emerald-200">
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>Saved $384 vs Bank FX Fees</span>
+              </div>
+            </div>
+
+            {/* Currency Wallets Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+              {[
+                { code: 'USD', name: 'US Dollar', symbol: '$', balance: '18,450', flag: '🇺🇸', inUSD: 18450 },
+                { code: 'EUR', name: 'Euro', symbol: '€', balance: '4,280', flag: '🇪🇺', inUSD: 4622 },
+                { code: 'THB', name: 'Thai Baht', symbol: '฿', balance: '65,000', flag: '🇹🇭', inUSD: 1780 },
+                { code: 'IDR', name: 'Indonesian Rupiah', symbol: 'Rp', balance: '16.5M', flag: '🇮🇩', inUSD: 1045 },
+                { code: 'GBP', name: 'British Pound', symbol: '£', balance: '1,950', flag: '🇬🇧', inUSD: 2496 },
+              ].map((wallet) => (
+                <div
+                  key={wallet.code}
+                  className="p-2.5 rounded-2xl bg-slate-50 border border-slate-200/80 hover:bg-orange-50/50 hover:border-orange-200 transition-colors"
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="text-base">{wallet.flag}</span>
+                    <span className="font-bold text-slate-700 text-[11px]">{wallet.code}</span>
+                  </div>
+                  <div className="mt-1.5">
+                    <span className="text-xs font-bold text-slate-900 block font-display">
+                      {wallet.symbol}{wallet.balance}
+                    </span>
+                    <span className="text-[10px] text-slate-600 block">
+                      ≈ ${wallet.inUSD.toLocaleString()} USD
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Bank FX Fee Shield Callout */}
+            <div className="p-3 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl border border-emerald-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs">
+              <div className="space-y-0.5">
+                <span className="font-bold text-emerald-950 flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
+                  <span>Hidden Bank Foreign Transaction Fee Protection</span>
+                </span>
+                <p className="text-[11px] text-emerald-800">
+                  Traditional credit cards charge a 3.5% foreign transaction fee + 2% ATM spread. By tracking and transacting in native currencies, you avoid unnecessary fees.
+                </p>
+              </div>
+              <div className="shrink-0 text-right">
+                <span className="text-[10px] text-emerald-700 uppercase font-semibold block">Estimated Annual Savings</span>
+                <span className="text-base font-bold text-emerald-700 font-display">+$580 / year</span>
+              </div>
+            </div>
+          </div>
         </div>
       )}
 
@@ -756,6 +837,20 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
             </div>
           </div>
 
+          {/* 1-Tap Quick Logger & Auto-Parser for Remote Workers */}
+          <SmartExpenseQuickLogger
+            currentCity={state.currentCity}
+            onAddExpense={onAddExpense}
+            onPrefillModal={(preset) => {
+              setExpDescription(preset.description);
+              setExpAmount(preset.amount);
+              setExpCurrency(preset.currency);
+              setExpCategory(preset.category);
+              setExpDeductible(preset.isDeductible);
+              setIsAddExpenseOpen(true);
+            }}
+          />
+
           {/* Filter Categories Chips */}
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs font-bold">
             {[
@@ -841,6 +936,13 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
             ))}
           </div>
         </div>
+      )}
+
+      {/* =========================================================================
+          VIEW: TAX OPTIMIZATION & FEIE PRESENCE HUB
+         ========================================================================= */}
+      {subView === 'tax' && (
+        <TaxOptimizationHub state={state} onOpenPricing={onOpenPricing} />
       )}
 
       {/* =========================================================================
@@ -1092,6 +1194,36 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
               </button>
             </div>
 
+            {/* 1-Tap Quick Fill Presets */}
+            <div>
+              <label className="block text-[11px] font-bold text-slate-500 mb-1.5">1-Tap Fast Fill (No Typing)</label>
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: '☕ Cafe Work', amount: '4.5', cat: 'Coworking & Cafes', ded: true },
+                  { label: '💻 Cowork Day Pass', amount: '20', cat: 'Coworking & Cafes', ded: true },
+                  { label: '📱 eSIM Data', amount: '14', cat: 'Tech & Subscriptions', ded: true },
+                  { label: '🍜 Nomad Meal', amount: '6.5', cat: 'Food & Groceries', ded: false },
+                  { label: '🚕 Grab Scooter', amount: '5', cat: 'Flights & Transit', ded: false },
+                  { label: '🏠 Coliving Stay', amount: '650', cat: 'Accommodation', ded: false },
+                  { label: '🛂 Visa Extension', amount: '45', cat: 'Health & Visas', ded: false },
+                ].map((p) => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    onClick={() => {
+                      setExpDescription(p.label);
+                      setExpAmount(p.amount);
+                      setExpCategory(p.cat as any);
+                      setExpDeductible(p.ded);
+                    }}
+                    className="px-2 py-1 rounded-lg bg-slate-100 hover:bg-orange-50 hover:text-orange-700 text-slate-600 text-[11px] font-medium border border-slate-200 transition-colors"
+                  >
+                    {p.label} (${p.amount})
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1">Description</label>
@@ -1126,11 +1258,15 @@ export const FinanceTab: React.FC<FinanceTabProps> = ({
                     onChange={(e) => setExpCurrency(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs font-medium bg-white focus:outline-none focus:border-orange-500"
                   >
-                    <option value="USD">USD ($)</option>
-                    <option value="EUR">EUR (€)</option>
-                    <option value="GBP">GBP (£)</option>
-                    <option value="IDR">IDR (Rp)</option>
-                    <option value="THB">THB (฿)</option>
+                    {CURRENCY_REGIONS.map((reg) => (
+                      <optgroup key={reg} label={`— ${reg} —`}>
+                        {NOMAD_CURRENCIES.filter((c) => c.region === reg).map((curr) => (
+                          <option key={curr.code} value={curr.code}>
+                            {curr.flag} {curr.code} ({curr.symbol}) — {curr.name}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
                   </select>
                 </div>
               </div>

@@ -6,6 +6,7 @@ import {
   Coffee,
   Building2,
   Utensils,
+  Wine,
   Navigation,
   Star,
   Clock,
@@ -27,17 +28,20 @@ import {
 import { WorkSpot, WorkSpotReview } from '../types';
 import { WORK_SPOTS_DATA, CITY_COORDINATE_PRESETS } from '../data/workSpotsData';
 import { calculateHaversineDistanceKm, formatDistance } from '../utils/geoUtils';
+import { WorkSpotDetailModal } from './WorkSpotDetailModal';
 
 interface NearbyWorkSpotsProps {
   currentCity?: string;
   onAddStopToTrip?: (spot: WorkSpot) => void;
   onAddToDayItinerary?: (spot: WorkSpot) => void;
+  onSelectSpot?: (spot: WorkSpot) => void;
 }
 
 export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
   currentCity = 'Canggu, Bali',
   onAddStopToTrip,
-  onAddToDayItinerary
+  onAddToDayItinerary,
+  onSelectSpot
 }) => {
   // User Coordinates State (Defaults to Canggu, Bali or Lisbon depending on profile)
   const defaultCoords = useMemo(() => {
@@ -47,7 +51,7 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
   const [userCoords, setUserCoords] = useState<{ lat: number; lng: number; label: string }>(defaultCoords);
   const [isLocating, setIsLocating] = useState(false);
   const [locationError, setLocationError] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<'all' | 'coworking' | 'cafe' | 'restaurant'>('all');
+  const [activeCategory, setActiveCategory] = useState<'all' | 'coworking' | 'cafe' | 'restaurant' | 'bar'>('all');
   const [sortBy, setSortBy] = useState<'distance' | 'wifi' | 'rating' | 'price'>('distance');
   const [filterHighSpeedOnly, setFilterHighSpeedOnly] = useState(false);
   const [filterPlugsOnly, setFilterPlugsOnly] = useState(false);
@@ -60,15 +64,7 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
 
   // Selected spot modal
   const [selectedSpotForDetails, setSelectedSpotForDetails] = useState<WorkSpot | null>(null);
-  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  // New review form
-  const [newReviewAuthor, setNewReviewAuthor] = useState('');
-  const [newReviewRating, setNewReviewRating] = useState(5);
-  const [newReviewWifiMbps, setNewReviewWifiMbps] = useState(120);
-  const [newReviewNoise, setNewReviewNoise] = useState<'Quiet Focus' | 'Moderate / Cafe Ambience' | 'Lively' | 'Zoom Friendly'>('Quiet Focus');
-  const [newReviewComment, setNewReviewComment] = useState('');
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -143,9 +139,12 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
       const aliases: Record<string, string[]> = {
-        'coffe': ['coffee', 'cafe', 'roast', 'brew', 'espresso', 'cappuccino', 'matcha'],
-        'coffee': ['coffe', 'cafe', 'roast', 'brew', 'espresso', 'cappuccino', 'barista'],
-        'cafe': ['coffee', 'coffe', 'bakery', 'roastery', 'espresso'],
+        'coffe': ['coffee', 'cafe', 'roast', 'brew', 'espresso', 'cappuccino', 'matcha', 'latte'],
+        'coffee': ['coffe', 'cafe', 'roast', 'brew', 'espresso', 'cappuccino', 'barista', 'latte', 'v60'],
+        'cafe': ['coffee', 'coffe', 'bakery', 'roastery', 'espresso', 'pour-over'],
+        'bar': ['cocktail', 'wine', 'beer', 'taproom', 'drinks', 'sunset', 'night', 'spirits', 'lounge'],
+        'cocktail': ['bar', 'drinks', 'mixology', 'sunset', 'wine'],
+        'restaurant': ['dining', 'food', 'bistro', 'brunch', 'dinner', 'lunch', 'kitchen', 'dishes'],
         'cowork': ['coworking', 'workspace', 'desk', 'office'],
         'coworking': ['cowork', 'workspace', 'desk', 'office'],
         'wifi': ['internet', 'fiber', 'speed', 'mbps', 'fast'],
@@ -219,26 +218,17 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
     sortBy
   ]);
 
-  // Handle Add New Review
-  const handleSubmitReview = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedSpotForDetails) return;
+  const handleOpenSpotDetails = (spot: WorkSpot) => {
+    if (onSelectSpot) {
+      onSelectSpot(spot);
+    }
+    setSelectedSpotForDetails(spot);
+  };
 
-    const newReview: WorkSpotReview = {
-      id: `rev-user-${Date.now()}`,
-      author: newReviewAuthor.trim() || 'Nomad Explorer',
-      avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80',
-      rating: newReviewRating,
-      wifiRating: newReviewWifiMbps >= 100 ? 5 : 4,
-      noiseLevel: newReviewNoise,
-      comment: newReviewComment.trim() || 'Tested the connection on laptop, smooth and reliable work session.',
-      date: 'Just now',
-      verifiedNomad: true
-    };
-
+  const handleSaveReviewFromModal = (spotId: string, review: WorkSpotReview) => {
     const updatedSpots = spots.map((sp) => {
-      if (sp.id === selectedSpotForDetails.id) {
-        const updatedReviews = [newReview, ...sp.reviews];
+      if (sp.id === spotId) {
+        const updatedReviews = [review, ...sp.reviews];
         const avgRating = Number(
           (updatedReviews.reduce((sum, r) => sum + r.rating, 0) / updatedReviews.length).toFixed(1)
         );
@@ -246,7 +236,7 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
           ...sp,
           rating: avgRating,
           reviewCount: sp.reviewCount + 1,
-          wifiSpeedMbps: Math.max(sp.wifiSpeedMbps, newReviewWifiMbps),
+          wifiSpeedMbps: Math.max(sp.wifiSpeedMbps, review.wifiRating >= 5 ? 120 : 80),
           reviews: updatedReviews
         };
       }
@@ -254,13 +244,10 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
     });
 
     setSpots(updatedSpots);
-    const updatedSelected = updatedSpots.find((s) => s.id === selectedSpotForDetails.id);
+    const updatedSelected = updatedSpots.find((s) => s.id === spotId);
     if (updatedSelected) {
       setSelectedSpotForDetails(updatedSelected);
     }
-
-    setIsReviewModalOpen(false);
-    setNewReviewComment('');
     showToast('✨ Thank you! Your Wi-Fi speed & review have been posted.');
   };
 
@@ -373,9 +360,10 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
             {[
               { id: 'all', label: 'All', count: spots.length },
-              { id: 'coworking', label: 'Coworking', icon: Building2 },
-              { id: 'cafe', label: 'Cafes', icon: Coffee },
-              { id: 'restaurant', label: 'Restaurants', icon: Utensils }
+              { id: 'cafe', label: 'Cafes & Roasteries', icon: Coffee },
+              { id: 'bar', label: 'Bars & Sunset Lounges', icon: Wine },
+              { id: 'restaurant', label: 'Restaurants & Bistros', icon: Utensils },
+              { id: 'coworking', label: 'Coworking Hubs', icon: Building2 }
             ].map((cat) => {
               const Icon = cat.icon;
               const isActive = activeCategory === cat.id;
@@ -488,7 +476,10 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
           >
             <div>
               {/* Photo & Distance Header */}
-              <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+              <div
+                onClick={() => handleOpenSpotDetails(spot)}
+                className="relative h-44 w-full bg-slate-100 overflow-hidden cursor-pointer group-hover:opacity-95 transition-opacity"
+              >
                 <img
                   src={spot.photoUrl}
                   alt={spot.name}
@@ -511,6 +502,8 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
                         ? 'bg-orange-500/90 text-white'
                         : spot.category === 'cafe'
                         ? 'bg-amber-500/90 text-white'
+                        : spot.category === 'bar'
+                        ? 'bg-purple-600/90 text-white'
                         : 'bg-rose-500/90 text-white'
                     }`}
                   >
@@ -644,13 +637,13 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
                   <span>Directions</span>
                 </a>
 
-                {/* View Reviews & Test Wifi */}
+                {/* View Details & Specs */}
                 <button
                   type="button"
-                  onClick={() => setSelectedSpotForDetails(spot)}
-                  className="px-3.5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-colors"
+                  onClick={() => handleOpenSpotDetails(spot)}
+                  className="px-3.5 py-2 bg-slate-900 hover:bg-orange-500 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm transition-colors"
                 >
-                  <span>Reviews ({spot.reviews.length})</span>
+                  <span>All Details & Specs</span>
                   <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
@@ -683,321 +676,15 @@ export const NearbyWorkSpots: React.FC<NearbyWorkSpotsProps> = ({
         </div>
       )}
 
-      {/* Place Details & Community Reviews Modal */}
+      {/* Comprehensive Venue, Coffee, Bar & Dining Details Modal */}
       {selectedSpotForDetails && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl w-full max-w-2xl max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 animate-in fade-in zoom-in-95">
-            {/* Header Image */}
-            <div className="relative h-48 w-full bg-slate-100">
-              <img
-                src={selectedSpotForDetails.photoUrl}
-                alt={selectedSpotForDetails.name}
-                className="w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-              <button
-                onClick={() => setSelectedSpotForDetails(null)}
-                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center hover:bg-black/70 transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
-
-              <div className="absolute bottom-4 left-4 right-4 text-white">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="px-2 py-0.5 rounded-lg bg-orange-500 text-white text-[10px] font-black uppercase">
-                    {selectedSpotForDetails.category}
-                  </span>
-                  <span className="text-xs font-bold text-white/90">
-                    📍 {formatDistance(selectedSpotForDetails.distanceKm || 0)} from you
-                  </span>
-                </div>
-                <h3 className="text-xl font-black font-display drop-shadow">
-                  {selectedSpotForDetails.name}
-                </h3>
-                <p className="text-xs text-white/80 font-medium">
-                  {selectedSpotForDetails.address}
-                </p>
-              </div>
-            </div>
-
-            {/* Modal Body */}
-            <div className="p-5 sm:p-6 space-y-6">
-              {/* Live Wi-Fi & Productivity Specs */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="p-3.5 rounded-2xl bg-orange-50 border border-orange-100">
-                  <div className="flex items-center gap-1.5 text-orange-600 mb-1">
-                    <Wifi className="w-4 h-4" />
-                    <span className="text-[11px] font-extrabold uppercase">Internet</span>
-                  </div>
-                  <p className="text-lg font-black text-slate-900">
-                    {selectedSpotForDetails.wifiSpeedMbps} Mbps
-                  </p>
-                  <p className="text-[11px] text-slate-500 font-medium">
-                    {selectedSpotForDetails.wifiSpeedText}
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-amber-50 border border-amber-100">
-                  <div className="flex items-center gap-1.5 text-amber-600 mb-1">
-                    <Zap className="w-4 h-4" />
-                    <span className="text-[11px] font-extrabold uppercase">Power Plugs</span>
-                  </div>
-                  <p className="text-sm font-black text-slate-900 truncate">
-                    {selectedSpotForDetails.powerOutlets}
-                  </p>
-                  <p className="text-[11px] text-slate-500 font-medium">
-                    {selectedSpotForDetails.hasBackupPower ? 'Backup generator ready' : 'Standard mains'}
-                  </p>
-                </div>
-
-                <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-100">
-                  <div className="flex items-center gap-1.5 text-emerald-600 mb-1">
-                    <Volume2 className="w-4 h-4" />
-                    <span className="text-[11px] font-extrabold uppercase">Noise / Calls</span>
-                  </div>
-                  <p className="text-sm font-black text-slate-900 truncate">
-                    {selectedSpotForDetails.noiseLevel}
-                  </p>
-                  <p className="text-[11px] text-slate-500 font-medium">
-                    {selectedSpotForDetails.seatingErgonomics}
-                  </p>
-                </div>
-              </div>
-
-              {/* Hours & Amenities */}
-              <div className="space-y-2 text-xs">
-                <div className="flex items-center gap-2 text-slate-700 font-bold">
-                  <Clock className="w-4 h-4 text-slate-400" />
-                  <span>Hours: {selectedSpotForDetails.openingHours}</span>
-                </div>
-                <div className="flex items-center gap-2 text-slate-700 font-bold">
-                  <Coffee className="w-4 h-4 text-amber-500" />
-                  <span>Menu: {selectedSpotForDetails.foodAndCoffee}</span>
-                </div>
-              </div>
-
-              {/* Action Strip: Free Google Maps directions + Add to Itinerary */}
-              <div className="flex items-center gap-2 pt-2 border-t border-slate-100">
-                <a
-                  href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
-                    `${selectedSpotForDetails.name}, ${selectedSpotForDetails.address}`
-                  )}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-1 py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-2xl text-xs flex items-center justify-center gap-2 shadow-md transition-all"
-                >
-                  <Navigation className="w-4 h-4 text-orange-400" />
-                  <span>Open Directions (Free Maps)</span>
-                  <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
-                </a>
-
-                {onAddToDayItinerary && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onAddToDayItinerary(selectedSpotForDetails);
-                      showToast(`Added ${selectedSpotForDetails.name} to Day Itinerary!`);
-                    }}
-                    className="py-3 px-4 bg-orange-50 hover:bg-orange-100 text-orange-700 font-bold rounded-2xl text-xs flex items-center gap-1.5 transition-colors"
-                  >
-                    <Plus className="w-4 h-4 text-orange-600" />
-                    <span>Add to Itinerary</span>
-                  </button>
-                )}
-              </div>
-
-              {/* Verified Nomad Reviews Header */}
-              <div className="space-y-4 pt-2 border-t border-slate-100">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h4 className="font-black text-slate-900 text-base font-display">
-                      Nomad Reviews & Speed Reports ({selectedSpotForDetails.reviews.length})
-                    </h4>
-                    <p className="text-xs text-slate-500">
-                      Real feedback on Wi-Fi speeds, plug access, and noise levels.
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setIsReviewModalOpen(true)}
-                    className="px-3.5 py-2 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors shadow-sm"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    <span>Report Wi-Fi / Review</span>
-                  </button>
-                </div>
-
-                {/* Review Items */}
-                <div className="space-y-3">
-                  {selectedSpotForDetails.reviews.map((rev) => (
-                    <div
-                      key={rev.id}
-                      className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2 text-xs"
-                    >
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-2.5">
-                          <img
-                            src={rev.avatarUrl}
-                            alt={rev.author}
-                            className="w-7 h-7 rounded-full object-cover border border-slate-300"
-                          />
-                          <div>
-                            <p className="font-extrabold text-slate-900 flex items-center gap-1.5">
-                              <span>{rev.author}</span>
-                              {rev.verifiedNomad && (
-                                <span className="text-[10px] text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded font-bold">
-                                  Verified Nomad
-                                </span>
-                              )}
-                            </p>
-                            <p className="text-[10px] text-slate-400">{rev.date}</p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-1 text-amber-500">
-                          {Array.from({ length: rev.rating }).map((_, i) => (
-                            <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
-                          ))}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center gap-2 text-[11px] text-slate-600 font-semibold">
-                        <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 flex items-center gap-1">
-                          <Wifi className="w-3 h-3 text-orange-500" />
-                          {rev.wifiRating}/5 Wi-Fi
-                        </span>
-                        <span className="px-2 py-0.5 rounded-md bg-white border border-slate-200 flex items-center gap-1">
-                          <Volume2 className="w-3 h-3 text-sky-500" />
-                          {rev.noiseLevel}
-                        </span>
-                      </div>
-
-                      <p className="text-slate-700 leading-relaxed font-normal">
-                        "{rev.comment}"
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Review Submission Modal */}
-      {isReviewModalOpen && selectedSpotForDetails && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 w-full max-w-md shadow-2xl border border-slate-200 space-y-4 animate-in fade-in zoom-in-95">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
-                  <Wifi className="w-4 h-4" />
-                </div>
-                <h4 className="font-extrabold text-slate-900 text-sm font-display">
-                  Report Wi-Fi Speed & Review
-                </h4>
-              </div>
-              <button
-                onClick={() => setIsReviewModalOpen(false)}
-                className="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <p className="text-xs text-slate-500">
-              Help your fellow digital nomads by sharing your measured download speed and workplace comfort at{' '}
-              <strong className="text-slate-800">{selectedSpotForDetails.name}</strong>.
-            </p>
-
-            <form onSubmit={handleSubmitReview} className="space-y-3.5 text-xs">
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Your Name / Tag</label>
-                <input
-                  type="text"
-                  value={newReviewAuthor}
-                  onChange={(e) => setNewReviewAuthor(e.target.value)}
-                  placeholder="e.g. Alex (Backend Dev)"
-                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
-                  required
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1">Overall Rating (1-5)</label>
-                  <select
-                    value={newReviewRating}
-                    onChange={(e) => setNewReviewRating(Number(e.target.value))}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
-                  >
-                    <option value={5}>⭐⭐⭐⭐⭐ (5 - Exceptional)</option>
-                    <option value={4}>⭐⭐⭐⭐ (4 - Great Workspot)</option>
-                    <option value={3}>⭐⭐⭐ (3 - Average)</option>
-                    <option value={2}>⭐⭐ (2 - Below Average)</option>
-                    <option value={1}>⭐ (1 - Not Recommended)</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="font-bold text-slate-700 block mb-1">Tested Speed (Mbps)</label>
-                  <input
-                    type="number"
-                    value={newReviewWifiMbps}
-                    onChange={(e) => setNewReviewWifiMbps(Number(e.target.value))}
-                    min={5}
-                    max={1000}
-                    className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Noise / Zoom Environment</label>
-                <select
-                  value={newReviewNoise}
-                  onChange={(e) => setNewReviewNoise(e.target.value as any)}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-bold text-slate-900"
-                >
-                  <option value="Quiet Focus">Quiet Focus (Whisper / Headphones)</option>
-                  <option value="Moderate / Cafe Ambience">Moderate / Cafe Ambience</option>
-                  <option value="Zoom Friendly">Zoom Friendly (Calls Allowed)</option>
-                  <option value="Lively">Lively (Busy & Social)</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-700 block mb-1">Review Comments</label>
-                <textarea
-                  value={newReviewComment}
-                  onChange={(e) => setNewReviewComment(e.target.value)}
-                  placeholder="Share details on outlet availability, coffee quality, chair comfort, air conditioning..."
-                  rows={3}
-                  className="w-full p-2.5 rounded-xl border border-slate-200 bg-slate-50 font-medium text-slate-900"
-                  required
-                />
-              </div>
-
-              <div className="flex gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setIsReviewModalOpen(false)}
-                  className="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl"
-                >
-                  Submit Review
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        <WorkSpotDetailModal
+          spot={selectedSpotForDetails}
+          onClose={() => setSelectedSpotForDetails(null)}
+          onAddStopToTrip={onAddStopToTrip}
+          onAddToDayItinerary={onAddToDayItinerary}
+          onSaveReview={handleSaveReviewFromModal}
+        />
       )}
     </div>
   );

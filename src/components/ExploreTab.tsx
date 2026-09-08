@@ -304,6 +304,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
               <img
                 src={city.imageUrl || "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80"}
                 alt={city.name}
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-black/20" />
@@ -418,6 +419,7 @@ export const ExploreTab: React.FC<ExploreTabProps> = ({
               <img
                 src={selectedCityForModal.imageUrl || "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=800&q=80"}
                 alt={selectedCityForModal.name}
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent" />

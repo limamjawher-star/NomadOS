@@ -11,6 +11,12 @@ import {
 } from 'lucide-react';
 import { NomadExpense } from '../types';
 import { formatUSD, formatCurrency } from '../utils/formatters';
+import { 
+  NOMAD_CURRENCIES, 
+  CURRENCY_REGIONS, 
+  getCurrency, 
+  convertCurrency 
+} from '../data/currencies';
 
 interface ExpenseBurnRateProps {
   expenses: NomadExpense[];
@@ -39,26 +45,8 @@ export const ExpenseBurnRate: React.FC<ExpenseBurnRateProps> = ({
   const [convFrom, setConvFrom] = useState<string>('USD');
   const [convTo, setConvTo] = useState<string>('EUR');
 
-  // Baseline FX rates relative to 1 USD (approx 2026 realistic)
-  const FX_RATES: Record<string, number> = {
-    USD: 1.0,
-    EUR: 0.92,
-    GBP: 0.78,
-    THB: 35.5,
-    IDR: 15800,
-    JPY: 152.0,
-    MXN: 18.5,
-    BRL: 5.4,
-    CAD: 1.36,
-    AUD: 1.52,
-    BGN: 1.80,
-  };
-
   const convertCurrencies = (amount: number, from: string, to: string) => {
-    const fromRate = FX_RATES[from] || 1;
-    const toRate = FX_RATES[to] || 1;
-    const inUSD = amount / fromRate;
-    return inUSD * toRate;
+    return convertCurrency(amount, from, to);
   };
 
   const totalSpentUSD = expenses.reduce((sum, e) => sum + e.amountUSD, 0);
@@ -77,8 +65,8 @@ export const ExpenseBurnRate: React.FC<ExpenseBurnRateProps> = ({
     if (!newDesc.trim()) return;
 
     // Convert to USD
-    const rate = FX_RATES[newCurrency] || 1;
-    const amountInUSD = Math.round(newAmount / rate);
+    const curr = getCurrency(newCurrency);
+    const amountInUSD = Math.round(newAmount * curr.rateInUSD);
 
     onAddExpense({
       date: newDate,
@@ -247,9 +235,9 @@ export const ExpenseBurnRate: React.FC<ExpenseBurnRateProps> = ({
                     onChange={(e) => setNewCurrency(e.target.value)}
                     className="w-1/3 bg-stone-900 border border-stone-700 rounded-r-lg px-1 py-2 text-xs font-mono text-stone-200 focus:outline-none focus:border-amber-500"
                   >
-                    {Object.keys(FX_RATES).map((cur) => (
-                      <option key={cur} value={cur}>
-                        {cur}
+                    {NOMAD_CURRENCIES.map((cur) => (
+                      <option key={cur.code} value={cur.code}>
+                        {cur.flag} {cur.code}
                       </option>
                     ))}
                   </select>
@@ -308,10 +296,14 @@ export const ExpenseBurnRate: React.FC<ExpenseBurnRateProps> = ({
                     onChange={(e) => setConvFrom(e.target.value)}
                     className="w-full bg-stone-950 border border-stone-700 rounded-lg px-2.5 py-2 text-xs font-mono text-stone-200"
                   >
-                    {Object.keys(FX_RATES).map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
+                    {CURRENCY_REGIONS.map((reg) => (
+                      <optgroup key={reg} label={`— ${reg} —`} className="bg-stone-900 text-stone-300">
+                        {NOMAD_CURRENCIES.filter((c) => c.region === reg).map((c) => (
+                          <option key={c.code} value={c.code} className="bg-stone-950 text-stone-100">
+                            {c.flag} {c.code} ({c.symbol})
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                 </div>
@@ -323,10 +315,14 @@ export const ExpenseBurnRate: React.FC<ExpenseBurnRateProps> = ({
                     onChange={(e) => setConvTo(e.target.value)}
                     className="w-full bg-stone-950 border border-stone-700 rounded-lg px-2.5 py-2 text-xs font-mono text-stone-200"
                   >
-                    {Object.keys(FX_RATES).map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
+                    {CURRENCY_REGIONS.map((reg) => (
+                      <optgroup key={reg} label={`— ${reg} —`} className="bg-stone-900 text-stone-300">
+                        {NOMAD_CURRENCIES.filter((c) => c.region === reg).map((c) => (
+                          <option key={c.code} value={c.code} className="bg-stone-950 text-stone-100">
+                            {c.flag} {c.code} ({c.symbol})
+                          </option>
+                        ))}
+                      </optgroup>
                     ))}
                   </select>
                 </div>
@@ -338,14 +334,19 @@ export const ExpenseBurnRate: React.FC<ExpenseBurnRateProps> = ({
                   {formatCurrency(convertCurrencies(convAmount, convFrom, convTo), convTo)}
                 </div>
                 <div className="text-[11px] text-stone-500 font-mono mt-1">
-                  1 {convFrom} ≈ {(FX_RATES[convTo] / FX_RATES[convFrom]).toFixed(4)} {convTo}
+                  {(() => {
+                    const fromCurr = getCurrency(convFrom);
+                    const toCurr = getCurrency(convTo);
+                    const rate = toCurr.ratePerUSD / fromCurr.ratePerUSD;
+                    return `1 ${convFrom} ≈ ${rate < 0.001 ? rate.toFixed(6) : rate < 1 ? rate.toFixed(4) : rate.toLocaleString('en-US', { maximumFractionDigits: 2 })} ${convTo}`;
+                  })()}
                 </div>
               </div>
             </div>
           </div>
 
           <div className="text-[11px] text-stone-500 mt-4 pt-3 border-t border-stone-800">
-            Rates updated for international remote hubs (THB, EUR, IDR, GBP, USD).
+            Rates updated for 45+ international remote hubs & currencies across Europe, Asia, Americas, and beyond.
           </div>
         </div>
 
