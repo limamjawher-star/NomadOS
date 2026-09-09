@@ -24,6 +24,7 @@ import { COUNTRIES } from '../data/countries';
 interface OnboardingModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onComplete?: () => void;
   state: NomadState;
   onUpdateUser: (updated: Partial<NomadUser>) => void;
   onSetCity: (city: string) => void;
@@ -33,6 +34,7 @@ interface OnboardingModalProps {
 export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   isOpen,
   onClose,
+  onComplete,
   state,
   onUpdateUser,
   onSetCity,
@@ -84,7 +86,11 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   };
 
   const handleFinish = () => {
-    onClose();
+    if (onComplete) {
+      onComplete();
+    } else {
+      onClose();
+    }
   };
 
   return (

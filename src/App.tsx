@@ -118,12 +118,12 @@ export function App() {
 
   // Auto-onboarding for new users exploring the app
   useEffect(() => {
-    if (viewMode === 'app' && !state.user.name && !isOnboardingOpen) {
+    if (viewMode === 'app' && !state.hasCompletedOnboarding && !isOnboardingOpen) {
       // Small delay to allow transition from landing to finish
       const timer = setTimeout(() => setIsOnboardingOpen(true), 500);
       return () => clearTimeout(timer);
     }
-  }, [viewMode, state.user.name, isOnboardingOpen]);
+  }, [viewMode, state.hasCompletedOnboarding, isOnboardingOpen]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -477,6 +477,10 @@ export function App() {
       <OnboardingModal
         isOpen={isOnboardingOpen}
         onClose={() => setIsOnboardingOpen(false)}
+        onComplete={() => {
+          setIsOnboardingOpen(false);
+          setState((prev) => ({ ...prev, hasCompletedOnboarding: true }));
+        }}
         state={state}
         onUpdateUser={handleUpdateUser}
         onSetCity={handleSetCity}
