@@ -34,12 +34,12 @@ export const getSupabaseClient = (): SupabaseClient | null => {
 };
 
 /**
- * Sign in using Supabase OAuth (Google or Apple)
+ * Sign in using Supabase OAuth (Google)
  */
-export const signInWithOAuth = async (provider: 'google' | 'apple') => {
+export const signInWithOAuth = async (provider: 'google') => {
   const supabase = getSupabaseClient();
   if (!supabase) {
-    throw new Error('Supabase is not configured yet. Add your Supabase URL & Anon Key in Settings.');
+    throw new Error('Authentication is currently unavailable.');
   }
 
   const { data, error } = await supabase.auth.signInWithOAuth({
@@ -62,7 +62,7 @@ export const signInWithOAuth = async (provider: 'google' | 'apple') => {
 export const signInWithEmail = async (email: string, password: string) => {
   const supabase = getSupabaseClient();
   if (!supabase) {
-    throw new Error('Supabase is not configured yet.');
+    throw new Error('Authentication is currently unavailable.');
   }
 
   const { data, error } = await supabase.auth.signInWithPassword({
@@ -87,7 +87,7 @@ export const signUpWithEmail = async (
 ) => {
   const supabase = getSupabaseClient();
   if (!supabase) {
-    throw new Error('Supabase is not configured yet.');
+    throw new Error('Authentication is currently unavailable.');
   }
 
   const { data, error } = await supabase.auth.signUp({

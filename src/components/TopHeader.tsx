@@ -1,20 +1,14 @@
 import React from 'react';
-import { Crown, Monitor, Smartphone, Globe, Database } from 'lucide-react';
+import { Crown } from 'lucide-react';
 import { NomadState } from '../types';
 import { Logo } from './Logo';
 import { TopSearchBar } from './TopSearchBar';
-import { isSupabaseConfigured } from '../lib/supabase';
 
 interface TopHeaderProps {
   state: NomadState;
   onNavigateTab: (tab: 'home' | 'travel' | 'finance' | 'explore' | 'social' | 'me') => void;
   onOpenPricing: () => void;
   onOpenAddExpense?: () => void;
-  deviceMode?: 'web' | 'ios' | 'android';
-  onSetDeviceMode?: (mode: 'web' | 'ios' | 'android') => void;
-  onViewLanding?: () => void;
-  onOpenWelcomeMobile?: () => void;
-  onOpenSupabase?: () => void;
 }
 
 export const TopHeader: React.FC<TopHeaderProps> = ({
@@ -22,11 +16,6 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
   onNavigateTab,
   onOpenPricing,
   onOpenAddExpense,
-  deviceMode = 'web',
-  onSetDeviceMode,
-  onViewLanding,
-  onOpenWelcomeMobile,
-  onOpenSupabase,
 }) => {
   return (
     <header
@@ -56,81 +45,6 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
 
         {/* Right: Actions, Device Toggle, Upgrade & Avatar */}
         <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-          {/* Supabase Cloud Button */}
-          {onOpenSupabase && (
-            <button
-              id="top-header-supabase-btn"
-              onClick={onOpenSupabase}
-              className={`flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full border text-xs font-semibold transition-all shadow-xs cursor-pointer ${
-                isSupabaseConfigured()
-                  ? 'border-emerald-200/90 bg-emerald-50/70 hover:bg-emerald-100/80 text-emerald-700'
-                  : 'border-stone-200/80 bg-stone-50 hover:bg-stone-100 text-stone-600'
-              }`}
-              title="Supabase Cloud Database & OAuth"
-            >
-              <Database className={`w-3.5 h-3.5 ${isSupabaseConfigured() ? 'text-emerald-600' : 'text-stone-500'}`} strokeWidth={1.75} />
-              <span className="hidden sm:inline">Supabase</span>
-              {isSupabaseConfigured() && (
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              )}
-            </button>
-          )}
-
-          {/* Web & Mobile App Button */}
-          {onOpenWelcomeMobile && (
-            <button
-              id="top-header-mobile-btn"
-              onClick={onOpenWelcomeMobile}
-              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full border border-orange-200/90 bg-orange-50/70 hover:bg-orange-100/80 text-orange-700 text-xs font-semibold transition-all shadow-xs cursor-pointer"
-              title="Web App & Mobile App (PWA)"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-orange-600" strokeWidth={1.75} />
-              <span className="hidden sm:inline">Web & Mobile App</span>
-              <span className="sm:hidden">App</span>
-            </button>
-          )}
-
-          {/* Landing Page Preview Button */}
-          {onViewLanding && (
-            <button
-              id="top-header-landing-btn"
-              onClick={onViewLanding}
-              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-stone-200/80 hover:border-orange-300 hover:bg-orange-50 text-stone-600 hover:text-orange-600 text-xs font-medium transition-all shadow-xs cursor-pointer"
-              title="Preview Landing Page"
-            >
-              <Globe className="w-3.5 h-3.5 text-orange-500" strokeWidth={1.75} />
-              <span>Landing Page</span>
-            </button>
-          )}
-
-          {/* Device Simulator Toggle */}
-          {onSetDeviceMode && (
-            <div className="hidden lg:flex items-center bg-stone-100 p-0.5 rounded-full border border-stone-200/80 text-xs">
-              <button
-                onClick={() => onSetDeviceMode('web')}
-                className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                  deviceMode === 'web' 
-                    ? 'bg-white text-orange-600 shadow-xs font-semibold' 
-                    : 'text-stone-500 hover:text-stone-900'
-                }`}
-                title="Full Web View"
-              >
-                <Monitor className="w-3.5 h-3.5" strokeWidth={1.75} />
-              </button>
-              <button
-                onClick={() => onSetDeviceMode('ios')}
-                className={`p-1.5 rounded-full transition-colors cursor-pointer ${
-                  deviceMode === 'ios' 
-                    ? 'bg-white text-orange-600 shadow-xs font-semibold' 
-                    : 'text-stone-500 hover:text-stone-900'
-                }`}
-                title="iPhone Simulator View"
-              >
-                <Smartphone className="w-3.5 h-3.5" strokeWidth={1.75} />
-              </button>
-            </div>
-          )}
-
           {/* Upgrade to Pro Button */}
           {!state.user.isPro ? (
             <button

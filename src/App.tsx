@@ -21,10 +21,7 @@ import { OnboardingModal } from './components/OnboardingModal';
 import { PricingModal } from './components/PricingModal';
 import { AuthModal } from './components/AuthModal';
 import { LandingPage } from './components/LandingPage';
-import { DeviceSimulator } from './components/DeviceSimulator';
-import { WelcomeMobileModal } from './components/WelcomeMobileModal';
 import { OfflineIndicator } from './components/OfflineIndicator';
-import { SupabaseModal } from './components/SupabaseModal';
 import { 
   isSupabaseConfigured, 
   onAuthStateChange, 
@@ -56,13 +53,10 @@ export function App() {
   });
 
   const [viewMode, setViewMode] = useState<'landing' | 'app'>('app');
-  const [deviceMode, setDeviceMode] = useState<'web' | 'ios' | 'android'>('web');
   const [activeTab, setActiveTab] = useState<'home' | 'travel' | 'finance' | 'explore' | 'social' | 'me'>('home');
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
-  const [isWelcomeMobileOpen, setIsWelcomeMobileOpen] = useState(false);
-  const [isSupabaseOpen, setIsSupabaseOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Sync to localStorage
@@ -366,120 +360,96 @@ export function App() {
             onOpenPricing={() => setIsPricingOpen(true)}
             onOpenAuth={() => setIsAuthOpen(true)}
             onOpenOnboarding={() => setIsOnboardingOpen(true)}
-            onOpenWelcomeMobile={() => setIsWelcomeMobileOpen(true)}
           />
         </main>
       ) : (
-        /* App Workspace rendered inside DeviceSimulator (Web / iOS / Android) */
-        <DeviceSimulator deviceMode={deviceMode}>
-          <div className="flex flex-col min-h-full">
-            {/* Centered Top Search Bar & Header */}
-            <TopHeader
-              state={state}
-              onNavigateTab={(tab) => setActiveTab(tab)}
-              onOpenPricing={() => setIsPricingOpen(true)}
-              deviceMode={deviceMode}
-              onSetDeviceMode={setDeviceMode}
-              onViewLanding={() => setViewMode('landing')}
-              onOpenWelcomeMobile={() => setIsWelcomeMobileOpen(true)}
-              onOpenSupabase={() => setIsSupabaseOpen(true)}
-            />
+        /* App Workspace - Responsive layout for web and mobile screens */
+        <div className="w-full min-h-screen bg-stone-50 flex flex-col">
+          {/* Centered Top Search Bar & Header */}
+          <TopHeader
+            state={state}
+            onNavigateTab={(tab) => setActiveTab(tab)}
+            onOpenPricing={() => setIsPricingOpen(true)}
+          />
 
-            <main className="flex-1 w-full">
-              {activeTab === 'home' && (
-                <HomeDashboard
-                  state={state}
-                  onNavigateTab={(tab) => setActiveTab(tab)}
-                  onOpenPricing={() => setIsPricingOpen(true)}
-                  onOpenOnboarding={() => setIsOnboardingOpen(true)}
-                  onToggleEventRSVP={handleToggleEventRSVP}
-                  onOpenCreateMeetup={() => setActiveTab('social')}
-                />
-              )}
+          <main className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4 sm:py-6 pb-24 sm:pb-28">
+            {activeTab === 'home' && (
+              <HomeDashboard
+                state={state}
+                onNavigateTab={(tab) => setActiveTab(tab)}
+                onOpenPricing={() => setIsPricingOpen(true)}
+                onOpenOnboarding={() => setIsOnboardingOpen(true)}
+                onToggleEventRSVP={handleToggleEventRSVP}
+                onOpenCreateMeetup={() => setActiveTab('social')}
+              />
+            )}
 
-              {activeTab === 'travel' && (
-                <TravelTab
-                  state={state}
-                  onAddTrip={handleAddTrip}
-                  onDeleteTrip={handleDeleteTrip}
-                  onAddSchengenStay={handleAddSchengenStay}
-                  onDeleteSchengenStay={handleDeleteSchengenStay}
-                  onAddExpense={handleAddExpense}
-                  onDeleteExpense={handleDeleteExpense}
-                  onUpdateTaxPresence={handleUpdateTaxPresence}
-                  onOpenPricing={() => setIsPricingOpen(true)}
-                />
-              )}
+            {activeTab === 'travel' && (
+              <TravelTab
+                state={state}
+                onAddTrip={handleAddTrip}
+                onDeleteTrip={handleDeleteTrip}
+                onAddSchengenStay={handleAddSchengenStay}
+                onDeleteSchengenStay={handleDeleteSchengenStay}
+                onAddExpense={handleAddExpense}
+                onDeleteExpense={handleDeleteExpense}
+                onUpdateTaxPresence={handleUpdateTaxPresence}
+                onOpenPricing={() => setIsPricingOpen(true)}
+              />
+            )}
 
-              {activeTab === 'finance' && (
-                <FinanceTab
-                  state={state}
-                  onAddExpense={handleAddExpense}
-                  onDeleteExpense={handleDeleteExpense}
-                  onAddIncome={handleAddIncome}
-                  onDeleteIncome={handleDeleteIncome}
-                  onUpdateGoal={handleUpdateGoal}
-                  onAddGoal={handleAddGoal}
-                  onUpdateTaxBuffer={handleUpdateTaxBuffer}
-                  onUpdateMonthlyBudget={handleUpdateMonthlyBudget}
-                  onOpenPricing={() => setIsPricingOpen(true)}
-                />
-              )}
+            {activeTab === 'finance' && (
+              <FinanceTab
+                state={state}
+                onAddExpense={handleAddExpense}
+                onDeleteExpense={handleDeleteExpense}
+                onAddIncome={handleAddIncome}
+                onDeleteIncome={handleDeleteIncome}
+                onUpdateGoal={handleUpdateGoal}
+                onAddGoal={handleAddGoal}
+                onUpdateTaxBuffer={handleUpdateTaxBuffer}
+                onUpdateMonthlyBudget={handleUpdateMonthlyBudget}
+                onOpenPricing={() => setIsPricingOpen(true)}
+              />
+            )}
 
-              {activeTab === 'explore' && (
-                <ExploreTab
-                  state={state}
-                  onAddCityToTrip={handleAddCityToTrip}
-                  onOpenPricing={() => setIsPricingOpen(true)}
-                  isPro={state.user.isPro}
-                />
-              )}
+            {activeTab === 'explore' && (
+              <ExploreTab
+                state={state}
+                onAddCityToTrip={handleAddCityToTrip}
+                onOpenPricing={() => setIsPricingOpen(true)}
+                isPro={state.user.isPro}
+              />
+            )}
 
-              {activeTab === 'social' && (
-                <SocialTab
-                  state={state}
-                  onToggleEventRSVP={handleToggleEventRSVP}
-                  onAddEvent={handleAddEvent}
-                  onSetCity={handleSetCity}
-                  onNavigateTab={setActiveTab}
-                />
-              )}
+            {activeTab === 'social' && (
+              <SocialTab
+                state={state}
+                onToggleEventRSVP={handleToggleEventRSVP}
+                onAddEvent={handleAddEvent}
+                onSetCity={handleSetCity}
+                onNavigateTab={setActiveTab}
+              />
+            )}
 
-              {activeTab === 'me' && (
-                <ProfileTab
-                  state={state}
-                  onUpdateUser={handleUpdateUser}
-                  onOpenPricing={() => setIsPricingOpen(true)}
-                  onOpenAuth={() => setIsAuthOpen(true)}
-                  onAddCountryVisited={handleAddCountryVisited}
-                  onViewLanding={() => setViewMode('landing')}
-                  deviceMode={deviceMode}
-                  onSetDeviceMode={setDeviceMode}
-                  onOpenWelcomeMobile={() => setIsWelcomeMobileOpen(true)}
-                  onOpenSupabaseGuide={() => setIsSupabaseOpen(true)}
-                />
-              )}
-            </main>
+            {activeTab === 'me' && (
+              <ProfileTab
+                state={state}
+                onUpdateUser={handleUpdateUser}
+                onOpenPricing={() => setIsPricingOpen(true)}
+                onOpenAuth={() => setIsAuthOpen(true)}
+                onAddCountryVisited={handleAddCountryVisited}
+                onViewLanding={() => setViewMode('landing')}
+              />
+            )}
+          </main>
 
-            {/* Bottom Tab Bar Navigation */}
-            <Navigation activeTab={activeTab} onSelectTab={(tab) => setActiveTab(tab)} />
-          </div>
-        </DeviceSimulator>
+          {/* Bottom Tab Bar Navigation */}
+          <Navigation activeTab={activeTab} onSelectTab={(tab) => setActiveTab(tab)} />
+        </div>
       )}
 
       {/* Modals */}
-      <WelcomeMobileModal
-        isOpen={isWelcomeMobileOpen}
-        onClose={() => setIsWelcomeMobileOpen(false)}
-        onOpenApp={() => setViewMode('app')}
-      />
-
-      <SupabaseModal
-        isOpen={isSupabaseOpen}
-        onClose={() => setIsSupabaseOpen(false)}
-        onOpenAuth={() => setIsAuthOpen(true)}
-      />
-
       <OnboardingModal
         isOpen={isOnboardingOpen}
         onClose={() => setIsOnboardingOpen(false)}
@@ -501,7 +471,6 @@ export function App() {
         onClose={() => setIsAuthOpen(false)}
         currentUser={state.user}
         onSignIn={handleSignIn}
-        onOpenSupabaseGuide={() => setIsSupabaseOpen(true)}
       />
 
       {/* Connectivity Status for PWA / Offline usage */}

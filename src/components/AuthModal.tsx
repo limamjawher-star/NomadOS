@@ -26,7 +26,6 @@ interface AuthModalProps {
   onClose: () => void;
   currentUser: NomadUser;
   onSignIn: (user: Partial<NomadUser>) => void;
-  onOpenSupabaseGuide?: () => void;
 }
 
 export const AuthModal: React.FC<AuthModalProps> = ({
@@ -34,7 +33,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   onClose,
   currentUser,
   onSignIn,
-  onOpenSupabaseGuide,
 }) => {
   const [isSignUp, setIsSignUp] = useState(true);
   const [name, setName] = useState(currentUser.name || 'Jawher');
@@ -48,16 +46,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   if (!isOpen) return null;
 
-  const handleOAuthSignIn = async (provider: 'google' | 'apple') => {
+  const handleOAuthSignIn = async (provider: 'google') => {
     if (!supabaseReady) {
-      if (onOpenSupabaseGuide) {
-        onOpenSupabaseGuide();
-      } else {
-        setStatusMsg({
-          type: 'info',
-          text: 'Supabase credentials are required in .env or Settings to connect Google/Apple sign-in.',
-        });
-      }
+      setStatusMsg({
+        type: 'info',
+        text: 'OAuth connection is currently unavailable. Please sign in with email.',
+      });
       return;
     }
 
@@ -89,7 +83,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             });
             setStatusMsg({
               type: 'success',
-              text: 'Account created with Supabase! Check your email for confirmation.',
+              text: 'Account created! Please check your email for confirmation.',
             });
           }
         } else {
@@ -101,7 +95,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             });
             setStatusMsg({
               type: 'success',
-              text: 'Signed in with Supabase! Welcome back.',
+              text: 'Signed in! Welcome back.',
             });
           }
         }
@@ -170,26 +164,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </p>
           </div>
 
-          {/* Supabase Status Banner */}
-          <div className="p-2.5 rounded-xl border flex items-center justify-between text-xs bg-stone-50 border-stone-200/80">
-            <div className="flex items-center gap-2">
-              <Database className={`w-3.5 h-3.5 ${supabaseReady ? 'text-emerald-600' : 'text-stone-400'}`} strokeWidth={1.75} />
-              <span className="text-[11px] font-medium text-stone-700">
-                {supabaseReady ? 'Connected to Supabase' : 'Supabase: Ready to link project'}
-              </span>
-            </div>
-            {onOpenSupabaseGuide && (
-              <button
-                type="button"
-                onClick={onOpenSupabaseGuide}
-                className="text-[11px] font-semibold text-emerald-700 hover:text-emerald-800 underline cursor-pointer"
-              >
-                Setup Guide / SQL
-              </button>
-            )}
-          </div>
-
-          {/* Social OAuth Providers (Google & Apple) */}
+          {/* Social OAuth Providers (Google) */}
           <div className="space-y-2 pt-1">
             {/* Google Sign In Button */}
             <button
@@ -218,20 +193,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 />
               </svg>
               <span>Continue with Google</span>
-            </button>
-
-            {/* Apple Sign In Button */}
-            <button
-              type="button"
-              id="apple-signin-btn"
-              onClick={() => handleOAuthSignIn('apple')}
-              disabled={isLoading}
-              className="w-full py-2.5 px-4 bg-stone-900 hover:bg-stone-800 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-3 transition-colors shadow-xs cursor-pointer disabled:opacity-50"
-            >
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 170 170">
-                <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.69-3.08-7.77-7.94-12.24-14.58-6.19-9.16-11.1-19.64-14.75-31.45-3.65-11.8-5.48-23.01-5.48-33.62 0-14.07 3.51-26.04 10.53-35.91 7.02-9.87 16.03-14.92 27.03-15.16 4.35 0 9.28 1.16 14.78 3.48 5.51 2.32 9.4 3.54 11.68 3.65 2.07 0 6.13-1.32 12.19-3.96 6.06-2.64 11.13-3.79 15.22-3.46 11.29.53 20.47 4.7 27.54 12.51-9.92 6-14.75 14.19-14.5 24.58.26 8.35 3.44 15.28 9.54 20.79 6.1 5.51 13.33 8.78 21.68 9.81-2.43 7.54-5.45 15.34-9.08 23.4zM119.22 31.85c0-6.73 2.45-13.08 7.35-19.05 4.9-5.97 10.99-9.78 18.27-11.43.34 2.87.27 5.74-.21 8.61-.48 2.87-1.57 5.75-3.26 8.64-2.14 3.65-4.98 6.78-8.52 9.38-3.54 2.6-7.14 4.25-10.8 4.95-.55-2.92-.83-6.62-.83-11.1z"/>
-              </svg>
-              <span>Continue with Apple</span>
             </button>
           </div>
 

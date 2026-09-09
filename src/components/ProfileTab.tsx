@@ -13,14 +13,10 @@ import {
   Plane, 
   LogOut,
   CheckCircle2,
-  Download,
-  Monitor,
-  Smartphone,
-  Database
+  Download
 } from 'lucide-react';
 import { NomadUser, NomadState } from '../types';
 import { CountryFlag } from './CountryFlag';
-import { isSupabaseConfigured } from '../lib/supabase';
 
 interface ProfileTabProps {
   state: NomadState;
@@ -29,10 +25,6 @@ interface ProfileTabProps {
   onOpenAuth: () => void;
   onAddCountryVisited: (countryCode: string) => void;
   onViewLanding?: () => void;
-  deviceMode?: 'web' | 'ios' | 'android';
-  onSetDeviceMode?: (mode: 'web' | 'ios' | 'android') => void;
-  onOpenWelcomeMobile?: () => void;
-  onOpenSupabaseGuide?: () => void;
 }
 
 const ALL_COUNTRIES = [
@@ -60,10 +52,6 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
   onOpenAuth,
   onAddCountryVisited,
   onViewLanding,
-  deviceMode = 'web',
-  onSetDeviceMode,
-  onOpenWelcomeMobile,
-  onOpenSupabaseGuide,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(state.user.name);
@@ -392,41 +380,6 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
             </div>
           )}
 
-          {/* Device Simulator Toggle */}
-          {onSetDeviceMode && (
-            <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-stone-200 text-stone-700 flex items-center justify-center font-semibold shrink-0">
-                  <Monitor className="w-4 h-4" strokeWidth={1.75} />
-                </div>
-                <div>
-                  <h5 className="text-xs font-semibold text-stone-900">Device Viewport</h5>
-                  <p className="text-[11px] text-stone-500 font-normal">Switch desktop frame or mobile shell</p>
-                </div>
-              </div>
-              <div className="flex items-center bg-white p-1 rounded-xl border border-stone-200/80 gap-1">
-                <button
-                  type="button"
-                  onClick={() => onSetDeviceMode('web')}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                    deviceMode === 'web' ? 'bg-orange-500 text-white shadow-xs' : 'text-stone-500 hover:text-stone-800'
-                  }`}
-                >
-                  Web
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onSetDeviceMode('ios')}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
-                    deviceMode === 'ios' ? 'bg-orange-500 text-white shadow-xs' : 'text-stone-500 hover:text-stone-800'
-                  }`}
-                >
-                  Phone
-                </button>
-              </div>
-            </div>
-          )}
-
           {/* Export Data Backup */}
           <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between hover:bg-stone-100/60 transition-colors">
             <div className="flex items-center gap-3">
@@ -445,59 +398,6 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
             >
               Export
             </button>
-          </div>
-
-          {/* Mobile & Web App PWA Card */}
-          {onOpenWelcomeMobile && (
-            <div className="p-3 rounded-xl bg-orange-50/70 border border-orange-200/80 flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-orange-500 text-white flex items-center justify-center font-semibold shrink-0 shadow-xs">
-                  <Smartphone className="w-4 h-4" strokeWidth={1.75} />
-                </div>
-                <div>
-                  <h5 className="text-xs font-semibold text-stone-900">Mobile App & PWA Install</h5>
-                  <p className="text-[11px] text-stone-600 font-normal">Install on your phone or desktop home screen</p>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={onOpenWelcomeMobile}
-                className="px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
-              >
-                Install / QR
-              </button>
-            </div>
-          )}
-
-          {/* Supabase Cloud Database & OAuth Sync */}
-          <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-semibold shrink-0 shadow-xs">
-                <Database className="w-4 h-4" strokeWidth={1.75} />
-              </div>
-              <div>
-                <div className="flex items-center gap-1.5">
-                  <h5 className="text-xs font-semibold text-stone-900">Supabase Cloud Sync</h5>
-                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-medium ${
-                    isSupabaseConfigured() 
-                      ? 'bg-emerald-100 text-emerald-800' 
-                      : 'bg-stone-200/70 text-stone-600'
-                  }`}>
-                    {isSupabaseConfigured() ? 'Connected' : 'Free Tier / Setup'}
-                  </span>
-                </div>
-                <p className="text-[11px] text-stone-600 font-normal">PostgreSQL database, Google & Apple OAuth</p>
-              </div>
-            </div>
-            {onOpenSupabaseGuide && (
-              <button
-                type="button"
-                onClick={onOpenSupabaseGuide}
-                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
-              >
-                Configure / SQL
-              </button>
-            )}
           </div>
 
           {/* Switch Account / Auth Modal */}

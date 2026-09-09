@@ -43,7 +43,6 @@ interface LandingPageProps {
   onOpenPricing: () => void;
   onOpenAuth: () => void;
   onOpenOnboarding: () => void;
-  onOpenWelcomeMobile?: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
@@ -52,7 +51,6 @@ export const LandingPage: React.FC<LandingPageProps> = ({
   onOpenPricing,
   onOpenAuth,
   onOpenOnboarding,
-  onOpenWelcomeMobile,
 }) => {
   const [activeFeatureTab, setActiveFeatureTab] = useState<'command' | 'visas' | 'trips' | 'daily' | 'expenses' | 'community'>('command');
 
@@ -97,19 +95,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 
         {/* Header Action Buttons */}
         <div className="flex items-center gap-2 sm:gap-3">
-          {onOpenWelcomeMobile && (
-            <button
-              onClick={onOpenWelcomeMobile}
-              className="flex items-center gap-1.5 px-3 py-2 text-xs font-semibold text-orange-700 bg-orange-50 hover:bg-orange-100/80 border border-orange-200/80 rounded-full transition-colors cursor-pointer"
-            >
-              <Smartphone className="w-3.5 h-3.5 text-orange-600" strokeWidth={1.75} />
-              <span className="hidden sm:inline">Web & Mobile App</span>
-              <span className="sm:hidden">App</span>
-            </button>
-          )}
           <button
             onClick={onOpenAuth}
-            className="px-3 sm:px-4 py-2 text-xs font-medium text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-colors cursor-pointer"
+            className="px-3.5 sm:px-4 py-2 text-xs font-medium text-stone-700 hover:text-stone-900 hover:bg-stone-100 rounded-full transition-colors cursor-pointer"
           >
             Sign in
           </button>
@@ -146,19 +134,9 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             id="hero-get-app-btn"
             className="px-6 py-3.5 bg-orange-600 hover:bg-orange-700 text-white font-semibold text-sm rounded-full shadow-xs flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95 cursor-pointer"
           >
-            <span>Launch Web App</span>
+            <span>Launch NomadOS</span>
             <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
           </button>
-          {onOpenWelcomeMobile && (
-            <button
-              onClick={onOpenWelcomeMobile}
-              id="hero-mobile-pwa-btn"
-              className="px-6 py-3.5 bg-orange-50 hover:bg-orange-100/90 border border-orange-200/90 text-orange-700 font-semibold text-sm rounded-full shadow-xs flex items-center gap-2 transition-all transform hover:-translate-y-0.5 active:scale-95 cursor-pointer"
-            >
-              <Smartphone className="w-4 h-4 text-orange-600" strokeWidth={1.75} />
-              <span>Get Mobile App (iOS / Android)</span>
-            </button>
-          )}
           <button
             onClick={() => onLaunchApp('travel')}
             className="px-6 py-3.5 bg-white hover:bg-stone-50 border border-stone-200 text-stone-800 font-semibold text-sm rounded-full shadow-xs flex items-center gap-2 transition-all cursor-pointer"
