@@ -26,7 +26,8 @@ import {
   isSupabaseConfigured, 
   onAuthStateChange, 
   syncNomadStateToSupabase, 
-  fetchNomadStateFromSupabase 
+  fetchNomadStateFromSupabase,
+  signOutSupabase
 } from './lib/supabase';
 import { NomadIncomeStream, NomadFinancialGoal } from './types';
 
@@ -150,6 +151,19 @@ export function App() {
       },
     }));
     showToast(`Welcome, ${userData.name || 'Nomad'}!`);
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await signOutSupabase();
+      localStorage.removeItem(STORAGE_KEY);
+      setState(INITIAL_NOMAD_DATA);
+      setViewMode('landing');
+      showToast('Signed out successfully');
+    } catch (err) {
+      console.error(err);
+      showToast('Failed to sign out');
+    }
   };
 
   const handleAddCountryVisited = (code: string) => {
@@ -438,6 +452,7 @@ export function App() {
                 onUpdateUser={handleUpdateUser}
                 onOpenPricing={() => setIsPricingOpen(true)}
                 onOpenAuth={() => setIsAuthOpen(true)}
+                onSignOut={handleSignOut}
                 onAddCountryVisited={handleAddCountryVisited}
                 onViewLanding={() => setViewMode('landing')}
               />

@@ -23,6 +23,7 @@ interface ProfileTabProps {
   onUpdateUser: (updated: Partial<NomadUser>) => void;
   onOpenPricing: () => void;
   onOpenAuth: () => void;
+  onSignOut: () => void;
   onAddCountryVisited: (countryCode: string) => void;
   onViewLanding?: () => void;
 }
@@ -50,6 +51,7 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
   onUpdateUser,
   onOpenPricing,
   onOpenAuth,
+  onSignOut,
   onAddCountryVisited,
   onViewLanding,
 }) => {
@@ -408,16 +410,25 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
               </div>
               <div>
                 <h5 className="text-xs font-semibold text-stone-900">Account Session</h5>
-                <p className="text-[11px] text-stone-500 font-normal">Sign in with another nomad passport</p>
+                <p className="text-[11px] text-stone-500 font-normal">Manage your active connection</p>
               </div>
             </div>
-            <button
-              type="button"
-              onClick={onOpenAuth}
-              className="px-3 py-1.5 bg-white border border-stone-200/80 hover:border-stone-400 text-stone-700 rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
-            >
-              Sign In
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={onSignOut}
+                className="px-3 py-1.5 bg-white border border-red-200/80 hover:border-red-400 text-red-600 rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+              >
+                Sign Out
+              </button>
+              <button
+                type="button"
+                onClick={onOpenAuth}
+                className="px-3 py-1.5 bg-white border border-stone-200/80 hover:border-stone-400 text-stone-700 rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+              >
+                Sign In
+              </button>
+            </div>
           </div>
         </div>
       </div>
