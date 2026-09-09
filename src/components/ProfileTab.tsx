@@ -13,7 +13,8 @@ import {
   Plane, 
   LogOut,
   CheckCircle2,
-  Download
+  Download,
+  Camera
 } from 'lucide-react';
 import { NomadUser, NomadState } from '../types';
 import { CountryFlag } from './CountryFlag';
@@ -60,9 +61,21 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
   const [editTag, setEditTag] = useState(state.user.tag);
   const [editProfession, setEditProfession] = useState(state.user.profession);
   const [editBio, setEditBio] = useState(state.user.bio);
+  const [editAvatarUrl, setEditAvatarUrl] = useState(state.user.avatarUrl);
   const [isAddCountryOpen, setIsAddCountryOpen] = useState(false);
   const [shareSuccess, setShareSuccess] = useState(false);
   const [exportNotice, setExportNotice] = useState(false);
+
+  // Sync state when modal opens
+  React.useEffect(() => {
+    if (isEditing) {
+      setEditName(state.user.name);
+      setEditTag(state.user.tag);
+      setEditProfession(state.user.profession);
+      setEditBio(state.user.bio);
+      setEditAvatarUrl(state.user.avatarUrl);
+    }
+  }, [isEditing, state.user]);
 
   const handleExportData = () => {
     try {
@@ -87,6 +100,7 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
       tag: editTag.startsWith('@') ? editTag : `@${editTag}`,
       profession: editProfession,
       bio: editBio,
+      avatarUrl: editAvatarUrl,
     });
     setIsEditing(false);
   };
@@ -528,6 +542,50 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
             </div>
 
             <form onSubmit={handleSaveProfile} className="space-y-3">
+              <div className="flex justify-center mb-4">
+                <div className="relative group">
+                  <input 
+                    type="file" 
+                    id="profile-avatar-upload" 
+                    accept="image/*" 
+                    className="hidden" 
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          if (event.target?.result) {
+                            setEditAvatarUrl(event.target.result as string);
+                          }
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }} 
+                  />
+                  <label htmlFor="profile-avatar-upload" className="cursor-pointer block relative">
+                    {editAvatarUrl && editAvatarUrl.trim() !== '' ? (
+                      <img
+                        src={editAvatarUrl}
+                        alt="Edit Avatar"
+                        className="w-20 h-20 rounded-full object-cover border-2 border-orange-500/20 shadow-sm"
+                        onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      />
+                    ) : (
+                      <div className="w-20 h-20 rounded-full border-2 border-orange-500/20 shadow-sm bg-stone-100 flex items-center justify-center text-stone-400">
+                        {editName ? (
+                          <span className="text-2xl font-bold text-stone-600">{editName.charAt(0).toUpperCase()}</span>
+                        ) : (
+                          <User className="w-8 h-8" strokeWidth={2} />
+                        )}
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Camera className="w-5 h-5 text-white" />
+                    </div>
+                  </label>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-xs font-medium text-stone-700 uppercase tracking-wider mb-1">
                   Full Name

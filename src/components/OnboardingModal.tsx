@@ -19,6 +19,7 @@ import {
   Compass
 } from 'lucide-react';
 import { NomadState, NomadUser } from '../types';
+import { COUNTRIES } from '../data/countries';
 
 interface OnboardingModalProps {
   isOpen: boolean;
@@ -45,8 +46,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   const [avatarUrl, setAvatarUrl] = useState(state.user.avatarUrl);
   const [firstAction, setFirstAction] = useState<string>('trip');
   const [currentLocation, setCurrentLocation] = useState(state.currentCity || 'Lisbon');
-  const [meetupName, setMeetupName] = useState(`Nomads meetup in ${state.currentCity || 'Lisbon'}`);
-  const [meetupDate, setMeetupDate] = useState('2026-09-10');
 
   if (!isOpen) return null;
 
@@ -82,13 +81,6 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       onSetCity(currentLocation);
     }
     setStep(6);
-  };
-
-  const handleCreateMeetup = () => {
-    if (meetupName.trim()) {
-      onAddEvent(meetupName, meetupDate, currentLocation || 'Lisbon');
-    }
-    setStep(7);
   };
 
   const handleFinish = () => {
@@ -161,17 +153,10 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     onChange={(e) => setNationality(e.target.value)}
                     className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all text-sm"
                   >
-                    <option value="Argentina">Argentina</option>
-                    <option value="United States">United States</option>
-                    <option value="Portugal">Portugal</option>
-                    <option value="United Kingdom">United Kingdom</option>
-                    <option value="Germany">Germany</option>
-                    <option value="France">France</option>
-                    <option value="Spain">Spain</option>
-                    <option value="Canada">Canada</option>
-                    <option value="Australia">Australia</option>
-                    <option value="Brazil">Brazil</option>
-                    <option value="Italy">Italy</option>
+                    <option value="" disabled>Select nationality</option>
+                    {COUNTRIES.map((country) => (
+                      <option key={country} value={country}>{country}</option>
+                    ))}
                   </select>
                 </div>
 
@@ -226,14 +211,34 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
 
               <div className="flex flex-col items-center justify-center py-4 space-y-3">
                 <div className="relative group">
-                  <img
-                    src={avatarUrl}
-                    alt="Nomad Avatar"
-                    className="w-28 h-28 rounded-full object-cover border-4 border-orange-500/20 shadow-md ring-4 ring-orange-500/10"
+                  <input 
+                    type="file" 
+                    id="avatar-upload" 
+                    accept="image/*" 
+                    className="hidden" 
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                          if (event.target?.result) {
+                            setAvatarUrl(event.target.result as string);
+                          }
+                        };
+                        reader.readAsDataURL(file);
+                      }
+                    }} 
                   />
-                  <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                    <Camera className="w-6 h-6 text-white" />
-                  </div>
+                  <label htmlFor="avatar-upload" className="cursor-pointer block relative">
+                    <img
+                      src={avatarUrl}
+                      alt="Nomad Avatar"
+                      className="w-28 h-28 rounded-full object-cover border-4 border-orange-500/20 shadow-md ring-4 ring-orange-500/10"
+                    />
+                    <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                      <Camera className="w-6 h-6 text-white" />
+                    </div>
+                  </label>
                 </div>
                 <button
                   type="button"
@@ -478,66 +483,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             </div>
           )}
 
-          {/* STEP 6: Create a meetup */}
+          {/* STEP 6: Added! Setup more */}
           {step === 6 && (
             <div id="onboarding-step-6" className="space-y-6">
-              <div className="flex flex-col items-center text-center space-y-2">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-bold mb-1">
-                  <Check className="w-3.5 h-3.5" /> You're on the map as {currentLocation}!
-                </div>
-                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">Create a meetup</h2>
-                <p className="text-sm text-stone-500 max-w-sm leading-relaxed">
-                  Invite nomads in your city to meet up IRL for coffee, coworking, or sunset drinks.
-                </p>
-              </div>
-
-              <div className="space-y-3.5 pt-1">
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                    Event name
-                  </label>
-                  <input
-                    type="text"
-                    value={meetupName}
-                    onChange={(e) => setMeetupName(e.target.value)}
-                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-sm"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider mb-1.5">
-                    Date
-                  </label>
-                  <input
-                    type="date"
-                    value={meetupDate}
-                    onChange={(e) => setMeetupDate(e.target.value)}
-                    className="w-full px-4 py-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white text-sm"
-                  />
-                </div>
-              </div>
-
-              <div className="pt-2 flex flex-col space-y-2">
-                <button
-                  id="onboarding-create-meetup-btn"
-                  onClick={handleCreateMeetup}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all text-sm"
-                >
-                  Create meetup
-                </button>
-                <button
-                  onClick={() => setStep(7)}
-                  className="text-xs font-medium text-stone-400 hover:text-stone-600 py-1.5"
-                >
-                  Skip for now
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* STEP 7: Added! Setup more */}
-          {step === 7 && (
-            <div id="onboarding-step-7" className="space-y-6">
               <div className="text-center space-y-2">
                 <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25">
                   <Check className="w-8 h-8 stroke-[2.5]" />
