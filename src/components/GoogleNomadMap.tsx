@@ -420,7 +420,7 @@ export const GoogleNomadMap: React.FC<GoogleNomadMapProps> = ({
                         {place.category === 'city' && <MapPin className="w-4 h-4 text-indigo-400" />}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-xs font-black truncate leading-tight font-display">{place.name}</p>
+                        <p className="text-xs font-semibold truncate leading-tight">{place.name}</p>
                         <p className={`text-[10px] truncate mt-0.5 ${isSelected ? 'text-white/80' : 'text-slate-400'}`}>
                           {place.badge || place.address.split(',')[0]}
                         </p>
@@ -445,23 +445,23 @@ export const GoogleNomadMap: React.FC<GoogleNomadMapProps> = ({
                 />
                 <div>
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="px-2 py-0.5 rounded-md bg-orange-50 text-orange-700 text-[10px] font-black uppercase tracking-wider border border-orange-100">
+                    <span className="px-2 py-0.5 rounded-md bg-orange-50 text-orange-700 text-[10px] font-semibold uppercase tracking-wider border border-orange-100">
                       {selectedPlace.category}
                     </span>
                     {selectedPlace.badge && (
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-bold border border-emerald-100">
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 text-[10px] font-medium border border-emerald-100">
                         {selectedPlace.badge}
                       </span>
                     )}
                     {selectedPlace.rating && (
-                      <span className="flex items-center gap-1 text-[11px] font-black text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded-md border border-amber-100">
+                      <span className="flex items-center gap-1 text-[11px] font-semibold text-amber-600 bg-amber-50 px-1.5 py-0.2 rounded-md border border-amber-100">
                         <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
                         <span>{selectedPlace.rating}</span>
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-sm sm:text-base font-black text-slate-900 font-display mt-1">
+                  <h3 className="text-sm sm:text-base font-semibold text-stone-900 mt-1">
                     {selectedPlace.name}
                   </h3>
 

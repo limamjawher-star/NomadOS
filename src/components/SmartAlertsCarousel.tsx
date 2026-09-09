@@ -166,7 +166,7 @@ export const SmartAlertsCarousel: React.FC<SmartAlertsCarouselProps> = ({
               <div className="p-1 rounded-lg bg-slate-900 border border-slate-800 shrink-0">
                 {renderAlertIcon(activeAlert.badgeType, 'w-4 h-4')}
               </div>
-              <h4 className="text-base font-extrabold text-white tracking-tight">
+              <h4 className="text-sm sm:text-base font-semibold text-white tracking-tight">
                 {activeAlert.title}
               </h4>
             </div>

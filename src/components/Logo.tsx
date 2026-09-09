@@ -68,16 +68,16 @@ export const Logo: React.FC<LogoProps> = ({
       {/* Brand Text */}
       <div className="flex flex-col leading-tight">
         <div className="flex items-center gap-1.5">
-          <span className={`${textSize} font-black tracking-tight text-slate-900 font-display`}>
+          <span className={`${textSize} font-semibold tracking-tight text-stone-900`}>
             Nomad<span className="text-orange-600">OS</span>
           </span>
           {showBadge && (
-            <span className="px-1.5 py-0.5 rounded-md bg-orange-50 border border-orange-200/80 text-orange-700 text-[10px] font-extrabold uppercase tracking-wider">
+            <span className="px-1.5 py-0.5 rounded-md bg-orange-50 border border-orange-200/80 text-orange-700 text-[10px] font-semibold uppercase tracking-wider">
               2026
             </span>
           )}
         </div>
-        <span className="text-[10px] font-semibold text-slate-400 tracking-wide -mt-0.5">
+        <span className="text-[10px] font-normal text-stone-400 tracking-wide -mt-0.5">
           Global Life OS
         </span>
       </div>

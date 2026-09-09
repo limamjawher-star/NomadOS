@@ -45,7 +45,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   const [avatarUrl, setAvatarUrl] = useState(state.user.avatarUrl);
   const [firstAction, setFirstAction] = useState<string>('trip');
   const [currentLocation, setCurrentLocation] = useState(state.currentCity || 'Lisbon');
-  const [meetupName, setMeetupName] = useState(`☕ Nomads meetup in ${state.currentCity || 'Lisbon'}`);
+  const [meetupName, setMeetupName] = useState(`Nomads meetup in ${state.currentCity || 'Lisbon'}`);
   const [meetupDate, setMeetupDate] = useState('2026-09-10');
 
   if (!isOpen) return null;
@@ -99,22 +99,22 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
     <div id="onboarding-overlay" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
       <div 
         id="onboarding-card"
-        className="w-full max-w-lg bg-white rounded-3xl shadow-2xl border border-stone-200 overflow-hidden flex flex-col max-h-[92vh]"
+        className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-stone-200/80 overflow-hidden flex flex-col max-h-[92vh]"
       >
         {/* Header bar */}
         <div className="flex items-center justify-between px-6 pt-5 pb-2">
           <div className="flex items-center gap-2">
-            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-orange-500 text-white font-black text-xs shadow-md shadow-orange-500/20">
+            <span className="flex h-7 w-7 items-center justify-center rounded-xl bg-orange-500 text-white font-bold text-xs shadow-xs">
               N
             </span>
-            <span className="text-sm font-bold text-stone-900 tracking-tight">NomadOS Setup</span>
+            <span className="text-sm font-semibold text-stone-900 tracking-tight">NomadOS Setup</span>
           </div>
           <button
             id="onboarding-close-btn"
             onClick={onClose}
-            className="text-stone-400 hover:text-stone-700 p-1.5 rounded-full hover:bg-stone-100 transition-colors"
+            className="text-stone-400 hover:text-stone-700 p-1.5 rounded-full hover:bg-stone-100 transition-colors cursor-pointer"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" strokeWidth={1.75} />
           </button>
         </div>
 
@@ -125,9 +125,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             <div id="onboarding-step-1" className="space-y-6">
               <div className="flex flex-col items-center text-center space-y-2">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/25">
-                  <span className="text-2xl font-black">@</span>
+                  <span className="text-2xl font-semibold">@</span>
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Set up your identity</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">Set up your identity</h2>
                 <p className="text-sm text-stone-500 max-w-xs leading-relaxed">
                   Choose a unique @tag and your nationality — used across the global nomad community.
                 </p>
@@ -218,7 +218,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/25">
                   <Camera className="w-7 h-7" />
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Add a profile photo</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">Add a profile photo</h2>
                 <p className="text-sm text-stone-500 max-w-xs leading-relaxed">
                   Choose a picture so other nomads recognize you in coworking spaces and meetups.
                 </p>
@@ -247,15 +247,15 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     const next = randomAvatars[(randomAvatars.indexOf(avatarUrl) + 1) % randomAvatars.length];
                     setAvatarUrl(next);
                   }}
-                  className="text-xs font-bold text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5"
+                  className="text-xs font-medium text-orange-600 hover:text-orange-700 bg-orange-50 px-3 py-1.5 rounded-full transition-colors flex items-center gap-1.5 cursor-pointer"
                 >
                   <RefreshCw className="w-3 h-3 text-orange-600" />
                   <span>Shuffle photo avatar</span>
                 </button>
-                <span className="text-[11px] text-stone-400">JPG, PNG or WebP · Max 5MB</span>
+                <span className="text-[11px] text-stone-400 font-normal">JPG, PNG or WebP · Max 5MB</span>
               </div>
 
-              <div className="bg-orange-50/60 border border-orange-200/60 rounded-2xl p-4 text-xs text-orange-900 leading-relaxed flex items-start gap-2.5">
+              <div className="bg-orange-50/60 border border-orange-200/60 rounded-2xl p-4 text-xs text-orange-900 leading-relaxed flex items-start gap-2.5 font-normal">
                 <Lightbulb className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
                 <span><span className="font-semibold">Pro tip:</span> Nomads with photos get 3x more replies to local coffee chats and coworking invitations.</span>
               </div>
@@ -270,7 +270,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <button
                   id="onboarding-step-2-btn"
                   onClick={handleNextStep2}
-                  className="flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all text-sm"
+                  className="flex items-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl shadow-xs transition-all text-sm cursor-pointer"
                 >
                   Continue <ChevronRight className="w-4 h-4" />
                 </button>
@@ -285,7 +285,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/25">
                   <Sparkles className="w-7 h-7" />
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Configure your nomad life</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">Configure your nomad life</h2>
                 <p className="text-sm text-stone-500 max-w-sm leading-relaxed">
                   Two quick steps and NomadOS will already be working for you — visa alerts, expense tracking, and your next trip ready to go.
                 </p>
@@ -296,21 +296,21 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
                     <Clock className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-bold text-stone-800">Visa countdown</span>
+                  <span className="text-xs font-semibold text-stone-800">Visa countdown</span>
                 </div>
 
                 <div className="bg-stone-50 border border-stone-200/80 rounded-2xl p-3.5 text-center flex flex-col items-center justify-center space-y-1.5">
                   <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
                     <Bell className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-bold text-stone-800">Smart alerts</span>
+                  <span className="text-xs font-semibold text-stone-800">Smart alerts</span>
                 </div>
 
                 <div className="bg-stone-50 border border-stone-200/80 rounded-2xl p-3.5 text-center flex flex-col items-center justify-center space-y-1.5">
                   <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center">
                     <DollarSign className="w-5 h-5" />
                   </div>
-                  <span className="text-xs font-bold text-stone-800">Your currency</span>
+                  <span className="text-xs font-semibold text-stone-800">Your currency</span>
                 </div>
               </div>
 
@@ -318,13 +318,13 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <button
                   id="onboarding-step-3-btn"
                   onClick={handleNextStep3}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl shadow-lg shadow-orange-500/30 transition-all text-sm"
+                  className="w-full flex items-center justify-center gap-2 py-3.5 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl shadow-xs transition-all text-sm cursor-pointer"
                 >
                   Let's go <ChevronRight className="w-4 h-4" />
                 </button>
                 <button
                   onClick={onClose}
-                  className="text-xs font-semibold text-stone-400 hover:text-stone-600 transition-colors"
+                  className="text-xs font-medium text-stone-400 hover:text-stone-600 transition-colors cursor-pointer"
                 >
                   I'll explore on my own
                 </button>
@@ -336,8 +336,8 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
           {step === 4 && (
             <div id="onboarding-step-4" className="space-y-6">
               <div className="text-center space-y-1.5">
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">What do you want to do first?</h2>
-                <p className="text-xs text-stone-500">You can always do the rest later.</p>
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">What do you want to do first?</h2>
+                <p className="text-xs text-stone-500 font-normal">You can always do the rest later.</p>
               </div>
 
               <div className="grid grid-cols-2 gap-3 pt-2">
@@ -437,7 +437,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-500 flex items-center justify-center text-white shadow-lg shadow-orange-500/25">
                   <MapPin className="w-7 h-7" />
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Join the nomad map</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">Join the nomad map</h2>
                 <p className="text-sm text-stone-500 max-w-sm leading-relaxed">
                   Tell us where you are to connect with nomads nearby.
                 </p>
@@ -485,7 +485,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full text-xs font-bold mb-1">
                   <Check className="w-3.5 h-3.5" /> You're on the map as {currentLocation}!
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Create a meetup</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">Create a meetup</h2>
                 <p className="text-sm text-stone-500 max-w-sm leading-relaxed">
                   Invite nomads in your city to meet up IRL for coffee, coworking, or sunset drinks.
                 </p>
@@ -540,9 +540,9 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
             <div id="onboarding-step-7" className="space-y-6">
               <div className="text-center space-y-2">
                 <div className="w-14 h-14 mx-auto rounded-2xl bg-emerald-500 flex items-center justify-center text-white shadow-lg shadow-emerald-500/25">
-                  <Check className="w-8 h-8 stroke-[3]" />
+                  <Check className="w-8 h-8 stroke-[2.5]" />
                 </div>
-                <h2 className="text-2xl font-black text-stone-900 tracking-tight">Added! Want to set up more?</h2>
+                <h2 className="text-xl sm:text-2xl font-semibold text-stone-900 tracking-tight">Added! Want to set up more?</h2>
                 <p className="text-xs text-stone-500">Your profile is initialized and ready on NomadOS.</p>
               </div>
 

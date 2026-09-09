@@ -22,6 +22,15 @@ import { PricingModal } from './components/PricingModal';
 import { AuthModal } from './components/AuthModal';
 import { LandingPage } from './components/LandingPage';
 import { DeviceSimulator } from './components/DeviceSimulator';
+import { WelcomeMobileModal } from './components/WelcomeMobileModal';
+import { OfflineIndicator } from './components/OfflineIndicator';
+import { SupabaseModal } from './components/SupabaseModal';
+import { 
+  isSupabaseConfigured, 
+  onAuthStateChange, 
+  syncNomadStateToSupabase, 
+  fetchNomadStateFromSupabase 
+} from './lib/supabase';
 import { NomadIncomeStream, NomadFinancialGoal } from './types';
 
 const STORAGE_KEY = 'nomados_state_v3';
@@ -52,6 +61,8 @@ export function App() {
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isPricingOpen, setIsPricingOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isWelcomeMobileOpen, setIsWelcomeMobileOpen] = useState(false);
+  const [isSupabaseOpen, setIsSupabaseOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   // Sync to localStorage
@@ -60,6 +71,53 @@ export function App() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
     } catch (err) {
       console.warn('Failed to save state:', err);
+    }
+  }, [state]);
+
+  // Supabase Auth State Change Listener & Remote Hydration
+  useEffect(() => {
+    const unsubscribe = onAuthStateChange(async (user) => {
+      if (user) {
+        const metaName = user.user_metadata?.full_name || user.user_metadata?.name;
+        const metaAvatar = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+        const emailTag = user.email ? `@${user.email.split('@')[0]}` : undefined;
+
+        setState((prev) => ({
+          ...prev,
+          user: {
+            ...prev.user,
+            name: metaName || prev.user.name,
+            avatarUrl: metaAvatar || prev.user.avatarUrl,
+            tag: user.user_metadata?.tag || emailTag || prev.user.tag,
+          },
+        }));
+
+        // Fetch remote state from Supabase if present
+        const remote = await fetchNomadStateFromSupabase();
+        if (remote) {
+          setState((prev) => ({
+            ...prev,
+            ...remote,
+            user: { ...prev.user, ...(remote.user || {}) },
+          }));
+          setToastMessage('Synced with Supabase Cloud');
+          setTimeout(() => setToastMessage(null), 3000);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  // Debounced auto-sync to Supabase Cloud on changes
+  useEffect(() => {
+    if (isSupabaseConfigured()) {
+      const timer = setTimeout(() => {
+        syncNomadStateToSupabase(state);
+      }, 1500);
+      return () => clearTimeout(timer);
     }
   }, [state]);
 
@@ -86,7 +144,7 @@ export function App() {
         subscriptionPlan: plan,
       },
     }));
-    showToast(`Upgraded to NomadOS Pro (${plan})! 👑`);
+    showToast(`Upgraded to NomadOS Pro (${plan})`);
   };
 
   const handleSignIn = (userData: Partial<NomadUser>) => {
@@ -109,7 +167,7 @@ export function App() {
           countriesVisited: [...prev.user.countriesVisited, code],
         },
       }));
-      showToast(`Added ${code} to visited countries! 🌐`);
+      showToast(`Added ${code} to visited countries`);
     }
   };
 
@@ -119,7 +177,7 @@ export function App() {
       ...prev,
       currentCity: city,
     }));
-    showToast(`Current location set to ${city} 📍`);
+    showToast(`Current location set to ${city}`);
   };
 
   const handleToggleEventRSVP = (eventId: string) => {
@@ -138,7 +196,7 @@ export function App() {
       }),
     }));
     const event = state.events.find((e) => e.id === eventId);
-    showToast(event?.isAttending ? 'RSVP cancelled' : 'RSVP confirmed! See you there 🎉');
+    showToast(event?.isAttending ? 'RSVP cancelled' : 'RSVP confirmed');
   };
 
   const handleAddEvent = (title: string, date: string, city: string) => {
@@ -160,7 +218,7 @@ export function App() {
       ...prev,
       events: [newEvent, ...prev.events],
     }));
-    showToast('Meetup published! Other nomads can now RSVP. 🚀');
+    showToast('Meetup published. Other nomads can now RSVP.');
   };
 
   // Trips Management
@@ -169,7 +227,7 @@ export function App() {
       ...prev,
       trips: [...prev.trips, newTrip],
     }));
-    showToast(`Added ${newTrip.city} to your itinerary! ✈️`);
+    showToast(`Added ${newTrip.city} to your itinerary`);
   };
 
   const handleDeleteTrip = (tripId: string) => {
@@ -205,7 +263,7 @@ export function App() {
       ...prev,
       schengenStays: [...prev.schengenStays, stay],
     }));
-    showToast(`Recorded stay in ${stay.country} 🇪🇺`);
+    showToast(`Recorded stay in ${stay.country}`);
   };
 
   const handleDeleteSchengenStay = (id: string) => {
@@ -222,7 +280,7 @@ export function App() {
       ...prev,
       expenses: [expense, ...prev.expenses],
     }));
-    showToast(`Expense logged: $${expense.amountUSD} 💳`);
+    showToast(`Expense logged: $${expense.amountUSD}`);
   };
 
   const handleDeleteExpense = (id: string) => {
@@ -290,11 +348,12 @@ export function App() {
       ...prev,
       monthlyBudgetUSD: budgetUSD,
     }));
-    showToast(`Monthly budget set to ${budgetUSD}`);
+    showToast(`Monthly budget set to $${budgetUSD}`);
   };
 
   return (
-    <div className="min-h-screen bg-[#fafafa] text-slate-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
+    <div className="min-h-screen bg-stone-50 text-stone-900 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
+
       {/* Main View: Landing Page OR App Workspace */}
       {viewMode === 'landing' ? (
         <main className="flex-1 w-full">
@@ -307,6 +366,7 @@ export function App() {
             onOpenPricing={() => setIsPricingOpen(true)}
             onOpenAuth={() => setIsAuthOpen(true)}
             onOpenOnboarding={() => setIsOnboardingOpen(true)}
+            onOpenWelcomeMobile={() => setIsWelcomeMobileOpen(true)}
           />
         </main>
       ) : (
@@ -321,6 +381,8 @@ export function App() {
               deviceMode={deviceMode}
               onSetDeviceMode={setDeviceMode}
               onViewLanding={() => setViewMode('landing')}
+              onOpenWelcomeMobile={() => setIsWelcomeMobileOpen(true)}
+              onOpenSupabase={() => setIsSupabaseOpen(true)}
             />
 
             <main className="flex-1 w-full">
@@ -393,6 +455,8 @@ export function App() {
                   onViewLanding={() => setViewMode('landing')}
                   deviceMode={deviceMode}
                   onSetDeviceMode={setDeviceMode}
+                  onOpenWelcomeMobile={() => setIsWelcomeMobileOpen(true)}
+                  onOpenSupabaseGuide={() => setIsSupabaseOpen(true)}
                 />
               )}
             </main>
@@ -404,6 +468,18 @@ export function App() {
       )}
 
       {/* Modals */}
+      <WelcomeMobileModal
+        isOpen={isWelcomeMobileOpen}
+        onClose={() => setIsWelcomeMobileOpen(false)}
+        onOpenApp={() => setViewMode('app')}
+      />
+
+      <SupabaseModal
+        isOpen={isSupabaseOpen}
+        onClose={() => setIsSupabaseOpen(false)}
+        onOpenAuth={() => setIsAuthOpen(true)}
+      />
+
       <OnboardingModal
         isOpen={isOnboardingOpen}
         onClose={() => setIsOnboardingOpen(false)}
@@ -425,13 +501,17 @@ export function App() {
         onClose={() => setIsAuthOpen(false)}
         currentUser={state.user}
         onSignIn={handleSignIn}
+        onOpenSupabaseGuide={() => setIsSupabaseOpen(true)}
       />
+
+      {/* Connectivity Status for PWA / Offline usage */}
+      <OfflineIndicator />
 
       {/* Global Toast Notification */}
       {toastMessage && (
         <div
           id="global-toast-notification"
-          className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-stone-900/95 text-white text-xs font-bold px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 backdrop-blur-md border border-stone-700/50"
+          className="fixed top-16 left-1/2 -translate-x-1/2 z-50 bg-stone-900/95 text-white text-xs font-medium px-4 py-2.5 rounded-full shadow-2xl flex items-center gap-2 animate-in fade-in slide-in-from-top-2 backdrop-blur-md border border-stone-700/50"
         >
           <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
           <span>{toastMessage}</span>

@@ -10,19 +10,17 @@ import {
   Check, 
   X, 
   Users, 
-  Heart, 
   Plane, 
-  Compass, 
   LogOut,
-  Sparkles,
-  Camera,
   CheckCircle2,
   Download,
   Monitor,
-  Smartphone
+  Smartphone,
+  Database
 } from 'lucide-react';
 import { NomadUser, NomadState } from '../types';
 import { CountryFlag } from './CountryFlag';
+import { isSupabaseConfigured } from '../lib/supabase';
 
 interface ProfileTabProps {
   state: NomadState;
@@ -33,24 +31,26 @@ interface ProfileTabProps {
   onViewLanding?: () => void;
   deviceMode?: 'web' | 'ios' | 'android';
   onSetDeviceMode?: (mode: 'web' | 'ios' | 'android') => void;
+  onOpenWelcomeMobile?: () => void;
+  onOpenSupabaseGuide?: () => void;
 }
 
 const ALL_COUNTRIES = [
-  { code: 'AR', name: 'Argentina', flag: '🇦🇷' },
-  { code: 'PT', name: 'Portugal', flag: '🇵🇹' },
-  { code: 'ES', name: 'Spain', flag: '🇪🇸' },
-  { code: 'FR', name: 'France', flag: '🇫🇷' },
-  { code: 'TH', name: 'Thailand', flag: '🇹🇭' },
-  { code: 'ID', name: 'Indonesia', flag: '🇮🇩' },
-  { code: 'US', name: 'United States', flag: '🇺🇸' },
-  { code: 'GB', name: 'United Kingdom', flag: '🇬🇧' },
-  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
-  { code: 'IT', name: 'Italy', flag: '🇮🇹' },
-  { code: 'JP', name: 'Japan', flag: '🇯🇵' },
-  { code: 'BG', name: 'Bulgaria', flag: '🇧🇬' },
-  { code: 'VN', name: 'Vietnam', flag: '🇻🇳' },
-  { code: 'CO', name: 'Colombia', flag: '🇨🇴' },
-  { code: 'MX', name: 'Mexico', flag: '🇲🇽' },
+  { code: 'AR', name: 'Argentina' },
+  { code: 'PT', name: 'Portugal' },
+  { code: 'ES', name: 'Spain' },
+  { code: 'FR', name: 'France' },
+  { code: 'TH', name: 'Thailand' },
+  { code: 'ID', name: 'Indonesia' },
+  { code: 'US', name: 'United States' },
+  { code: 'GB', name: 'United Kingdom' },
+  { code: 'DE', name: 'Germany' },
+  { code: 'IT', name: 'Italy' },
+  { code: 'JP', name: 'Japan' },
+  { code: 'BG', name: 'Bulgaria' },
+  { code: 'VN', name: 'Vietnam' },
+  { code: 'CO', name: 'Colombia' },
+  { code: 'MX', name: 'Mexico' },
 ];
 
 export const ProfileTab: React.FC<ProfileTabProps> = ({
@@ -62,6 +62,8 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
   onViewLanding,
   deviceMode = 'web',
   onSetDeviceMode,
+  onOpenWelcomeMobile,
+  onOpenSupabaseGuide,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(state.user.name);
@@ -107,178 +109,195 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
 
   return (
     <div id="profile-view" className="space-y-6 pb-28 max-w-2xl mx-auto px-4 pt-4">
-      {/* Top Bar matching screenshot */}
+      {/* Top Bar */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-black text-slate-900 tracking-tight font-display">PROFILE</h2>
+        <div>
+          <h2 className="text-xl font-semibold text-stone-900 tracking-tight font-display">User Passport</h2>
+          <p className="text-xs text-stone-500 font-normal">Digital nomad profile & credentials</p>
+        </div>
         <div className="flex items-center gap-2">
-          {!state.user.isPro ? (
-            <button
-              onClick={onOpenPricing}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 text-white text-xs font-black rounded-full shadow-md shadow-orange-500/20 flex items-center gap-1.5 transition-all hover:from-orange-600 hover:to-amber-600"
-            >
-              <Crown className="w-3.5 h-3.5 text-amber-200" /> <span>Upgrade Pro</span>
-            </button>
-          ) : (
-            <span className="px-3 py-1 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-black rounded-full flex items-center gap-1">
-              <Crown className="w-3.5 h-3.5 text-amber-600" />
+          {state.user.isPro ? (
+            <span className="px-2.5 py-1 bg-orange-50 text-orange-700 text-xs font-semibold rounded-full border border-orange-200 flex items-center gap-1">
+              <Crown className="w-3 h-3 text-orange-600" strokeWidth={1.75} />
               <span>PRO</span>
             </span>
+          ) : (
+            <button
+              onClick={onOpenPricing}
+              className="px-3.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold rounded-full shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Crown className="w-3 h-3" strokeWidth={1.75} />
+              <span>Upgrade</span>
+            </button>
           )}
 
           <button
             onClick={handleShare}
-            className="p-2 bg-white border border-slate-200 text-slate-600 hover:text-slate-900 rounded-full shadow-sm transition-colors"
+            className="p-2 bg-white border border-stone-200/80 text-stone-600 hover:text-stone-900 rounded-full shadow-xs transition-colors cursor-pointer"
             title="Share Profile"
           >
-            <Share2 className="w-4 h-4" />
+            <Share2 className="w-4 h-4" strokeWidth={1.75} />
           </button>
 
           <button
             onClick={onOpenAuth}
-            className="p-2 bg-white border border-slate-200 text-slate-600 hover:text-slate-900 rounded-full shadow-sm transition-colors"
+            className="p-2 bg-white border border-stone-200/80 text-stone-600 hover:text-stone-900 rounded-full shadow-xs transition-colors cursor-pointer"
             title="Account Settings"
           >
-            <Settings className="w-4 h-4" />
+            <Settings className="w-4 h-4" strokeWidth={1.75} />
           </button>
         </div>
       </div>
 
       {shareSuccess && (
-        <div className="p-2.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-2xl text-xs font-bold text-center flex items-center justify-center gap-1.5">
-          <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+        <div className="p-3 bg-emerald-50 text-emerald-700 border border-emerald-200/80 rounded-xl text-xs font-semibold text-center flex items-center justify-center gap-1.5">
+          <CheckCircle2 className="w-4 h-4 text-emerald-600" strokeWidth={1.75} />
           <span>Link copied to clipboard!</span>
         </div>
       )}
 
-      {/* Profile Card */}
-      <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-sm flex flex-col items-center text-center space-y-4">
+      {/* Profile Hero Card */}
+      <div className="bg-white rounded-xl p-6 border border-stone-200/80 shadow-xs flex flex-col items-center text-center space-y-4">
         <div className="relative">
           <img
             src={state.user.avatarUrl}
             alt={state.user.name}
             referrerPolicy="no-referrer"
-            className="w-24 h-24 rounded-full object-cover border-4 border-orange-500/20 shadow-md ring-4 ring-orange-500/10"
+            className="w-24 h-24 rounded-full object-cover border-4 border-orange-500/20 shadow-sm ring-4 ring-orange-500/10"
           />
           {state.user.isPro && (
-            <div className="absolute -bottom-1 -right-1 bg-gradient-to-tr from-amber-500 to-orange-600 text-white p-1 rounded-full shadow-md text-xs flex items-center justify-center">
-              <Crown className="w-3 h-3" />
+            <div className="absolute -bottom-1 -right-1 bg-gradient-to-tr from-amber-500 to-orange-600 text-white p-1.5 rounded-full shadow-xs text-xs flex items-center justify-center">
+              <Crown className="w-3.5 h-3.5" strokeWidth={1.75} />
             </div>
           )}
         </div>
 
         <div>
-          <h3 className="text-xl font-black text-slate-900 font-display">{state.user.name}</h3>
-          <p className="text-xs font-bold text-orange-600 mt-0.5">{state.user.tag}</p>
-          <p className="text-xs text-slate-500 font-medium mt-1">{state.user.profession}</p>
+          <h3 className="text-xl font-semibold text-stone-900 font-display tracking-tight">{state.user.name}</h3>
+          <p className="text-xs font-semibold text-orange-600 mt-0.5">{state.user.tag}</p>
+          <p className="text-xs text-stone-600 font-normal mt-1">{state.user.profession}</p>
         </div>
 
         {/* Location and Nationality pills */}
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="flex items-center gap-1 text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200/80">
-            <MapPin className="w-3.5 h-3.5 text-orange-500" /> {state.currentCity}
+          <span className="flex items-center gap-1.5 text-xs font-medium bg-stone-100 text-stone-700 px-3 py-1 rounded-full border border-stone-200/80">
+            <MapPin className="w-3.5 h-3.5 text-orange-500" strokeWidth={1.75} />
+            <span>{state.currentCity}, {state.currentCountry}</span>
           </span>
-          <span className="flex items-center gap-1.5 text-xs font-bold bg-slate-100 text-slate-700 px-3 py-1 rounded-full border border-slate-200/80">
+          <span className="flex items-center gap-1.5 text-xs font-medium bg-stone-100 text-stone-700 px-3 py-1 rounded-full border border-stone-200/80">
             <CountryFlag code="AR" name="Argentina" size="xs" />
             <span>{state.user.nationality}</span>
           </span>
         </div>
 
-        <p className="text-xs text-slate-500 max-w-md leading-relaxed">
+        <p className="text-xs text-stone-500 max-w-md leading-relaxed font-normal">
           {state.user.bio}
         </p>
 
         <button
           onClick={() => setIsEditing(true)}
-          className="px-5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded-xl text-xs flex items-center gap-1.5 transition-colors border border-slate-200/80"
+          className="px-4 py-2 bg-stone-100 hover:bg-stone-200/80 text-stone-800 font-semibold rounded-xl text-xs flex items-center gap-1.5 transition-colors border border-stone-200/80 cursor-pointer"
         >
-          <Edit3 className="w-3.5 h-3.5 text-slate-600" /> Edit Profile
+          <Edit3 className="w-3.5 h-3.5 text-stone-600" strokeWidth={1.75} /> Edit Profile
         </button>
       </div>
 
-      {/* 4 Stat Cards in 2x2 Grid */}
+      {/* 4 Stat Cards in 2x2 / 4-Col Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm text-center">
-          <Globe className="w-4 h-4 text-orange-600 mx-auto mb-1" />
-          <p className="text-lg font-black text-slate-900 font-display">{state.user.countriesVisited.length}</p>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Countries</span>
+        <div className="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs text-center flex flex-col justify-between min-h-[6.5rem]">
+          <span className="text-[10px] font-medium text-stone-400 uppercase tracking-wider">Countries</span>
+          <p className="text-xl font-semibold text-stone-900 font-display mt-1">
+            {state.user.countriesVisited.length}
+          </p>
+          <span className="text-[10px] text-orange-600 font-medium flex items-center justify-center gap-1">
+            <Globe className="w-3 h-3" strokeWidth={1.75} />
+            <span>Stamped</span>
+          </span>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm text-center">
-          <Plane className="w-4 h-4 text-orange-600 mx-auto mb-1" />
-          <p className="text-lg font-black text-slate-900 font-display">{state.trips.length}</p>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Trips</span>
+        <div className="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs text-center flex flex-col justify-between min-h-[6.5rem]">
+          <span className="text-[10px] font-medium text-stone-400 uppercase tracking-wider">Total Trips</span>
+          <p className="text-xl font-semibold text-stone-900 font-display mt-1">
+            {state.trips.length}
+          </p>
+          <span className="text-[10px] text-stone-500 font-medium flex items-center justify-center gap-1">
+            <Plane className="w-3 h-3" strokeWidth={1.75} />
+            <span>Completed</span>
+          </span>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm text-center">
-          <Users className="w-4 h-4 text-orange-600 mx-auto mb-1" />
-          <p className="text-lg font-black text-slate-900 font-display">{state.user.followersCount}</p>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Followers</span>
+        <div className="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs text-center flex flex-col justify-between min-h-[6.5rem]">
+          <span className="text-[10px] font-medium text-stone-400 uppercase tracking-wider">Nomad Days</span>
+          <p className="text-xl font-semibold text-stone-900 font-display mt-1">
+            428d
+          </p>
+          <span className="text-[10px] text-emerald-600 font-medium flex items-center justify-center gap-1">
+            <CheckCircle2 className="w-3 h-3" strokeWidth={1.75} />
+            <span>Track record</span>
+          </span>
         </div>
 
-        <div className="bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm text-center">
-          <Heart className="w-4 h-4 text-orange-600 mx-auto mb-1" />
-          <p className="text-lg font-black text-slate-900 font-display">{state.user.followingCount}</p>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Following</span>
+        <div className="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs text-center flex flex-col justify-between min-h-[6.5rem]">
+          <span className="text-[10px] font-medium text-stone-400 uppercase tracking-wider">Community</span>
+          <p className="text-xl font-semibold text-stone-900 font-display mt-1">
+            {state.user.followersCount}
+          </p>
+          <span className="text-[10px] text-stone-500 font-medium flex items-center justify-center gap-1">
+            <Users className="w-3 h-3" strokeWidth={1.75} />
+            <span>Connections</span>
+          </span>
         </div>
       </div>
 
       {/* Profile Completion Card */}
-      <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-3">
+      <div className="bg-white rounded-xl p-5 border border-stone-200/80 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <h4 className="text-xs font-black text-slate-900 uppercase tracking-wider font-display">
+          <h4 className="text-xs font-semibold text-stone-900 uppercase tracking-wider font-display">
             Profile {state.user.profileCompletion}% complete
           </h4>
-          <span className="text-xs font-bold text-orange-600">3 tasks</span>
+          <span className="text-xs font-semibold text-orange-600">3 tasks remaining</span>
         </div>
 
-        <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden">
+        <div className="w-full h-2 bg-stone-100 rounded-full overflow-hidden">
           <div 
-            className="h-full bg-gradient-to-r from-orange-500 to-amber-500 rounded-full transition-all duration-500" 
+            className="h-full bg-orange-500 rounded-full transition-all duration-500" 
             style={{ width: `${state.user.profileCompletion}%` }}
           />
         </div>
 
-        <div className="space-y-1.5 pt-1 text-xs text-slate-600 font-medium">
+        <div className="space-y-1.5 pt-1 text-xs text-stone-600 font-normal">
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
             <span>Write a short bio</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
             <span>Set your profession ({state.user.profession || 'Not set'})</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-orange-500 shrink-0" />
             <span>Log your first upcoming trip</span>
           </div>
         </div>
       </div>
 
-      {/* NomadOS Membership Status Card */}
-      <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-3">
+      {/* NomadOS Pro Membership Promo Card */}
+      <div className="bg-orange-50/50 rounded-xl p-5 border border-orange-200/80 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className={`w-9 h-9 rounded-2xl flex items-center justify-center font-bold text-white shadow-sm ${
-              state.user.isPro
-                ? 'bg-gradient-to-tr from-amber-500 to-orange-500 shadow-orange-500/20'
-                : 'bg-slate-800'
-            }`}>
-              <Crown className="w-5 h-5" />
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-xl bg-orange-500 text-white flex items-center justify-center font-semibold shadow-xs shrink-0">
+              <Crown className="w-5 h-5" strokeWidth={1.75} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h4 className="text-sm font-bold text-slate-900 leading-tight">
+                <h4 className="text-sm font-semibold text-stone-900 leading-tight">
                   {state.user.isPro ? 'NomadOS Pro Active' : 'Free Plan'}
                 </h4>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                  state.user.isPro
-                    ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                    : 'bg-slate-100 text-slate-700 border border-slate-200'
-                }`}>
-                  {state.user.isPro ? 'PRO ACTIVE' : 'LIMITED FEATURES'}
+                <span className="px-2 py-0.5 rounded-full bg-orange-500 text-white text-[10px] font-semibold">
+                  {state.user.isPro ? 'PRO ACTIVE' : 'UPGRADE AVAILABLE'}
                 </span>
               </div>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-stone-600 font-normal mt-0.5">
                 {state.user.isPro
                   ? 'All Schengen legal tracking, FEIE tax engine, and 360° radar active'
                   : 'Includes 3 trips, 1km radar range, and basic expense tracking'}
@@ -289,12 +308,12 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
           {!state.user.isPro ? (
             <button
               onClick={onOpenPricing}
-              className="px-3.5 py-1.5 bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white text-xs font-bold rounded-xl shadow-sm transition-all"
+              className="px-3.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold rounded-xl shadow-xs transition-colors cursor-pointer shrink-0"
             >
-              Upgrade Pro
+              Upgrade
             </button>
           ) : (
-            <span className="text-xs font-medium text-slate-500">Plan: {state.user.subscriptionPlan}</span>
+            <span className="text-xs font-normal text-stone-500">Plan: {state.user.subscriptionPlan}</span>
           )}
         </div>
       </div>
@@ -302,10 +321,10 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
       {/* Countries Visited / Passport Stamps */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h4 className="text-sm font-black text-slate-900 font-display">Countries Visited</h4>
+          <h4 className="text-sm font-semibold text-stone-900 font-display">Countries Visited</h4>
           <button
             onClick={() => setIsAddCountryOpen(true)}
-            className="text-xs font-bold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+            className="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1 cursor-pointer"
           >
             + Add country
           </button>
@@ -317,56 +336,56 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
             return (
               <div
                 key={code}
-                className="bg-white rounded-2xl p-3 border border-slate-200/90 shadow-sm flex flex-col items-center text-center space-y-1.5"
+                className="bg-white rounded-xl p-3 border border-stone-200/80 shadow-xs flex flex-col items-center text-center space-y-1.5"
               >
                 <CountryFlag code={code} name={countryInfo.name} size="md" />
-                <span className="text-xs font-bold text-slate-800 truncate w-full">{countryInfo.name}</span>
-                <span className="text-[10px] text-slate-400 font-bold uppercase font-display">{countryInfo.code}</span>
+                <span className="text-xs font-medium text-stone-800 truncate w-full">{countryInfo.name}</span>
+                <span className="text-[10px] text-stone-400 font-semibold uppercase font-display">{countryInfo.code}</span>
               </div>
             );
           })}
 
           <button
             onClick={() => setIsAddCountryOpen(true)}
-            className="rounded-2xl p-3 border-2 border-dashed border-slate-200 hover:border-orange-400 hover:bg-orange-50/20 text-slate-400 hover:text-orange-600 transition-all flex flex-col items-center justify-center space-y-1 min-h-[86px]"
+            className="rounded-xl p-3 border-2 border-dashed border-stone-200 hover:border-orange-400 hover:bg-orange-50/20 text-stone-400 hover:text-orange-600 transition-colors flex flex-col items-center justify-center space-y-1 min-h-[86px] cursor-pointer"
           >
-            <Plus className="w-5 h-5 text-orange-500" />
-            <span className="text-xs font-bold">+ Add country</span>
+            <Plus className="w-5 h-5 text-orange-500" strokeWidth={1.75} />
+            <span className="text-xs font-semibold">+ Add country</span>
           </button>
         </div>
       </div>
 
       {/* Export Feedback Notice */}
       {exportNotice && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-2xl text-xs font-bold flex items-center justify-between animate-in fade-in">
+        <div className="p-3 bg-emerald-50 border border-emerald-200/80 text-emerald-800 rounded-xl text-xs font-semibold flex items-center justify-between animate-in fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" strokeWidth={1.75} />
             <span>NomadOS data exported successfully! Download started.</span>
           </div>
         </div>
       )}
 
       {/* System, Preferences & Simulation Settings */}
-      <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-sm space-y-4">
-        <h4 className="text-sm font-black text-slate-900 font-display">App Preferences & Workspace</h4>
+      <div className="bg-white rounded-xl p-5 border border-stone-200/80 shadow-xs space-y-4">
+        <h4 className="text-sm font-semibold text-stone-900 font-display">App Preferences & Workspace</h4>
 
         <div className="space-y-2.5">
           {/* Landing Page Preview */}
           {onViewLanding && (
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between hover:bg-orange-50/50 hover:border-orange-200 transition-colors">
+            <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between hover:bg-orange-50/50 hover:border-orange-200 transition-colors">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
-                  <Globe className="w-4 h-4" />
+                <div className="w-9 h-9 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-semibold shrink-0">
+                  <Globe className="w-4 h-4" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h5 className="text-xs font-black text-slate-900">NomadOS Landing Page</h5>
-                  <p className="text-[11px] text-slate-500">Preview marketing website & public showcases</p>
+                  <h5 className="text-xs font-semibold text-stone-900">NomadOS Landing Page</h5>
+                  <p className="text-[11px] text-stone-500 font-normal">Preview marketing website & public showcases</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={onViewLanding}
-                className="px-3 py-1.5 bg-white border border-slate-200 hover:border-orange-400 text-slate-700 hover:text-orange-600 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
+                className="px-3 py-1.5 bg-white border border-stone-200/80 hover:border-orange-400 text-stone-700 hover:text-orange-600 rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
               >
                 View
               </button>
@@ -375,22 +394,22 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
 
           {/* Device Simulator Toggle */}
           {onSetDeviceMode && (
-            <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+            <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center font-bold">
-                  <Monitor className="w-4 h-4" />
+                <div className="w-9 h-9 rounded-xl bg-stone-200 text-stone-700 flex items-center justify-center font-semibold shrink-0">
+                  <Monitor className="w-4 h-4" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h5 className="text-xs font-black text-slate-900">Device Viewport</h5>
-                  <p className="text-[11px] text-slate-500">Switch desktop frame or mobile shell</p>
+                  <h5 className="text-xs font-semibold text-stone-900">Device Viewport</h5>
+                  <p className="text-[11px] text-stone-500 font-normal">Switch desktop frame or mobile shell</p>
                 </div>
               </div>
-              <div className="flex items-center bg-white p-1 rounded-xl border border-slate-200 gap-1">
+              <div className="flex items-center bg-white p-1 rounded-xl border border-stone-200/80 gap-1">
                 <button
                   type="button"
                   onClick={() => onSetDeviceMode('web')}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                    deviceMode === 'web' ? 'bg-orange-500 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                    deviceMode === 'web' ? 'bg-orange-500 text-white shadow-xs' : 'text-stone-500 hover:text-stone-800'
                   }`}
                 >
                   Web
@@ -398,8 +417,8 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
                 <button
                   type="button"
                   onClick={() => onSetDeviceMode('ios')}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
-                    deviceMode === 'ios' ? 'bg-orange-500 text-white shadow-2xs' : 'text-slate-500 hover:text-slate-800'
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-colors cursor-pointer ${
+                    deviceMode === 'ios' ? 'bg-orange-500 text-white shadow-xs' : 'text-stone-500 hover:text-stone-800'
                   }`}
                 >
                   Phone
@@ -409,40 +428,93 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
           )}
 
           {/* Export Data Backup */}
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between hover:bg-slate-100/60 transition-colors">
+          <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between hover:bg-stone-100/60 transition-colors">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
-                <Download className="w-4 h-4" />
+              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-semibold shrink-0">
+                <Download className="w-4 h-4" strokeWidth={1.75} />
               </div>
               <div>
-                <h5 className="text-xs font-black text-slate-900">Export Nomad Data (JSON)</h5>
-                <p className="text-[11px] text-slate-500">Full backup of expenses, visas & planned trips</p>
+                <h5 className="text-xs font-semibold text-stone-900">Export Nomad Data (JSON)</h5>
+                <p className="text-[11px] text-stone-500 font-normal">Full backup of expenses, visas & planned trips</p>
               </div>
             </div>
             <button
               type="button"
               onClick={handleExportData}
-              className="px-3 py-1.5 bg-white border border-slate-200 hover:border-emerald-400 text-slate-700 hover:text-emerald-700 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
+              className="px-3 py-1.5 bg-white border border-stone-200/80 hover:border-emerald-400 text-stone-700 hover:text-emerald-700 rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
             >
               Export
             </button>
           </div>
 
-          {/* Switch Account / Auth Modal */}
-          <div className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 flex items-center justify-between">
+          {/* Mobile & Web App PWA Card */}
+          {onOpenWelcomeMobile && (
+            <div className="p-3 rounded-xl bg-orange-50/70 border border-orange-200/80 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-orange-500 text-white flex items-center justify-center font-semibold shrink-0 shadow-xs">
+                  <Smartphone className="w-4 h-4" strokeWidth={1.75} />
+                </div>
+                <div>
+                  <h5 className="text-xs font-semibold text-stone-900">Mobile App & PWA Install</h5>
+                  <p className="text-[11px] text-stone-600 font-normal">Install on your phone or desktop home screen</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={onOpenWelcomeMobile}
+                className="px-3 py-1.5 bg-orange-600 hover:bg-orange-700 text-white rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+              >
+                Install / QR
+              </button>
+            </div>
+          )}
+
+          {/* Supabase Cloud Database & OAuth Sync */}
+          <div className="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/80 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center font-bold">
-                <LogOut className="w-4 h-4" />
+              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-semibold shrink-0 shadow-xs">
+                <Database className="w-4 h-4" strokeWidth={1.75} />
               </div>
               <div>
-                <h5 className="text-xs font-black text-slate-900">Account Session</h5>
-                <p className="text-[11px] text-slate-500">Sign in with another nomad passport</p>
+                <div className="flex items-center gap-1.5">
+                  <h5 className="text-xs font-semibold text-stone-900">Supabase Cloud Sync</h5>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-medium ${
+                    isSupabaseConfigured() 
+                      ? 'bg-emerald-100 text-emerald-800' 
+                      : 'bg-stone-200/70 text-stone-600'
+                  }`}>
+                    {isSupabaseConfigured() ? 'Connected' : 'Free Tier / Setup'}
+                  </span>
+                </div>
+                <p className="text-[11px] text-stone-600 font-normal">PostgreSQL database, Google & Apple OAuth</p>
+              </div>
+            </div>
+            {onOpenSupabaseGuide && (
+              <button
+                type="button"
+                onClick={onOpenSupabaseGuide}
+                className="px-3 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
+              >
+                Configure / SQL
+              </button>
+            )}
+          </div>
+
+          {/* Switch Account / Auth Modal */}
+          <div className="p-3 rounded-xl bg-stone-50 border border-stone-200/80 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-stone-200 text-stone-700 flex items-center justify-center font-semibold shrink-0">
+                <LogOut className="w-4 h-4" strokeWidth={1.75} />
+              </div>
+              <div>
+                <h5 className="text-xs font-semibold text-stone-900">Account Session</h5>
+                <p className="text-[11px] text-stone-500 font-normal">Sign in with another nomad passport</p>
               </div>
             </div>
             <button
               type="button"
               onClick={onOpenAuth}
-              className="px-3 py-1.5 bg-white border border-slate-200 hover:border-slate-400 text-slate-700 rounded-xl text-xs font-bold transition-all shadow-2xs cursor-pointer"
+              className="px-3 py-1.5 bg-white border border-stone-200/80 hover:border-stone-400 text-stone-700 rounded-xl text-xs font-semibold transition-colors shadow-xs cursor-pointer"
             >
               Sign In
             </button>
@@ -453,14 +525,14 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
       {/* Add Country Picker Modal */}
       {isAddCountryOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-sm bg-white rounded-3xl p-5 border border-slate-200 shadow-2xl space-y-4">
+          <div className="w-full max-w-sm bg-white rounded-xl p-5 border border-stone-200 shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="text-sm font-black text-slate-900 font-display">Add Country Stamp</h4>
+              <h4 className="text-sm font-semibold text-stone-900 font-display">Add Country Stamp</h4>
               <button
                 onClick={() => setIsAddCountryOpen(false)}
-                className="text-slate-400 hover:text-slate-700 p-1"
+                className="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
             </div>
 
@@ -476,10 +548,10 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
                       }
                       setIsAddCountryOpen(false);
                     }}
-                    className={`w-full p-2.5 rounded-xl flex items-center justify-between text-xs font-bold transition-colors ${
+                    className={`w-full p-2.5 rounded-xl flex items-center justify-between text-xs font-medium transition-colors cursor-pointer ${
                       isVisited
-                        ? 'bg-slate-100 text-slate-400 cursor-default'
-                        : 'hover:bg-orange-50 text-slate-800 hover:text-orange-600'
+                        ? 'bg-stone-100 text-stone-400 cursor-default'
+                        : 'hover:bg-orange-50 text-stone-800 hover:text-orange-600'
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -487,11 +559,11 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
                       <span>{country.name}</span>
                     </div>
                     {isVisited ? (
-                      <span className="flex items-center gap-1 text-[11px] text-emerald-600 font-bold">
-                        <Check className="w-3 h-3" /> Visited
+                      <span className="flex items-center gap-1 text-[11px] text-emerald-600 font-semibold">
+                        <Check className="w-3 h-3" strokeWidth={1.75} /> Visited
                       </span>
                     ) : (
-                      <Plus className="w-4 h-4 text-orange-500" />
+                      <Plus className="w-4 h-4 text-orange-500" strokeWidth={1.75} />
                     )}
                   </button>
                 );
@@ -504,20 +576,20 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
       {/* Edit Profile Modal */}
       {isEditing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in">
-          <div className="w-full max-w-md bg-white rounded-3xl p-6 border border-slate-200 shadow-2xl space-y-4">
+          <div className="w-full max-w-md bg-white rounded-xl p-6 border border-stone-200 shadow-2xl space-y-4">
             <div className="flex items-center justify-between">
-              <h4 className="text-base font-black text-slate-900 font-display">Edit Profile</h4>
+              <h4 className="text-base font-semibold text-stone-900 font-display">Edit Profile</h4>
               <button
                 onClick={() => setIsEditing(false)}
-                className="text-slate-400 hover:text-slate-700 p-1"
+                className="text-stone-400 hover:text-stone-700 p-1 cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
             </div>
 
             <form onSubmit={handleSaveProfile} className="space-y-3">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-medium text-stone-700 uppercase tracking-wider mb-1">
                   Full Name
                 </label>
                 <input
@@ -525,12 +597,12 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
                   required
                   value={editName}
                   onChange={(e) => setEditName(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 bg-stone-50 border border-stone-200/80 rounded-xl text-xs font-normal text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-medium text-stone-700 uppercase tracking-wider mb-1">
                   @Tag
                 </label>
                 <input
@@ -538,12 +610,12 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
                   required
                   value={editTag}
                   onChange={(e) => setEditTag(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 bg-stone-50 border border-stone-200/80 rounded-xl text-xs font-normal text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-medium text-stone-700 uppercase tracking-wider mb-1">
                   Profession / Title
                 </label>
                 <input
@@ -551,12 +623,12 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
                   value={editProfession}
                   onChange={(e) => setEditProfession(e.target.value)}
                   placeholder="e.g. Developer, Designer, Founder"
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 bg-stone-50 border border-stone-200/80 rounded-xl text-xs font-normal text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
+                <label className="block text-xs font-medium text-stone-700 uppercase tracking-wider mb-1">
                   Bio
                 </label>
                 <textarea
@@ -564,21 +636,21 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
                   value={editBio}
                   onChange={(e) => setEditBio(e.target.value)}
                   placeholder="Tell nomads about your adventures..."
-                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  className="w-full px-3 py-2 bg-stone-50 border border-stone-200/80 rounded-xl text-xs font-normal text-stone-900 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
               </div>
 
               <div className="pt-2 flex gap-2">
                 <button
                   type="submit"
-                  className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl text-xs shadow-md shadow-orange-500/20"
+                  className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl text-xs shadow-xs cursor-pointer transition-colors"
                 >
                   Save Changes
                 </button>
                 <button
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2.5 bg-slate-100 text-slate-700 font-bold rounded-xl text-xs"
+                  className="px-4 py-2.5 bg-stone-100 hover:bg-stone-200/80 text-stone-700 font-semibold rounded-xl text-xs cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>

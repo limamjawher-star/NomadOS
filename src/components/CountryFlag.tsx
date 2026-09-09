@@ -64,7 +64,7 @@ export const CountryFlag: React.FC<CountryFlagProps> = ({
   if (!iso || iso.length !== 2 || hasError) {
     return (
       <span
-        className={`inline-flex items-center justify-center font-mono font-black text-[9px] uppercase tracking-tighter bg-slate-100 text-slate-600 border border-slate-200 px-1 py-0.5 rounded ${className}`}
+        className={`inline-flex items-center justify-center font-mono font-semibold text-[9px] uppercase tracking-wider bg-stone-100 text-stone-600 border border-stone-200/80 px-1 py-0.5 rounded ${className}`}
         title={name || code}
       >
         {code ? code.slice(0, 3).toUpperCase() : 'GLB'}

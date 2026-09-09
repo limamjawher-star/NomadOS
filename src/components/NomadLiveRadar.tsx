@@ -134,24 +134,24 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/90 shadow-sm space-y-5">
+    <div className="bg-white rounded-xl p-5 sm:p-6 border border-stone-200/80 shadow-xs space-y-5">
       {/* Header & Status */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-2xl bg-orange-500/10 text-orange-600 flex items-center justify-center relative">
-            <Radio className="w-5 h-5 animate-pulse" />
+          <div className="w-10 h-10 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center relative shrink-0">
+            <Radio className="w-5 h-5 animate-pulse" strokeWidth={1.75} />
             <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-base font-bold text-slate-900 leading-none font-display">
+              <h3 className="text-base font-semibold text-stone-900 leading-none font-display">
                 Nomad & Coworking Radar
               </h3>
               <span className="px-2 py-0.5 rounded-full bg-orange-50 text-orange-700 text-[10px] font-semibold border border-orange-200/60">
                 LIVE 360°
               </span>
             </div>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-stone-500 mt-1 font-normal">
               Scanning {state.currentCity || 'Canggu, Bali'} for remote peers, high-speed WiFi, & spots
             </p>
           </div>
@@ -163,30 +163,30 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
             type="button"
             onClick={handleManualScan}
             disabled={isScanning}
-            className="px-3 py-1.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-medium flex items-center gap-1.5 shadow-sm shadow-orange-500/20 active:scale-95 transition-all"
+            className="px-3.5 py-1.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold flex items-center gap-1.5 shadow-xs transition-colors cursor-pointer"
           >
-            <Zap className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin' : ''}`} />
+            <Zap className={`w-3.5 h-3.5 ${isScanning ? 'animate-spin' : ''}`} strokeWidth={1.75} />
             <span>{isScanning ? 'Pinging...' : 'Ping Radar'}</span>
           </button>
 
           <button
             type="button"
             onClick={() => setIsBroadcasting(!isBroadcasting)}
-            className={`px-3 py-1.5 rounded-xl text-xs font-medium border flex items-center gap-1.5 transition-all ${
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold border flex items-center gap-1.5 transition-colors cursor-pointer ${
               isBroadcasting
-                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100'
-                : 'bg-slate-100 text-slate-600 border-slate-200 hover:bg-slate-200'
+                ? 'bg-emerald-50 text-emerald-700 border-emerald-200/80 hover:bg-emerald-100/70'
+                : 'bg-stone-100 text-stone-600 border-stone-200 hover:bg-stone-200/80'
             }`}
             title={isBroadcasting ? 'Broadcasting: Visible to nearby nomads' : 'Ghost Mode: Hidden from radar'}
           >
             {isBroadcasting ? (
               <>
-                <Eye className="w-3.5 h-3.5 text-emerald-600" />
+                <Eye className="w-3.5 h-3.5 text-emerald-600" strokeWidth={1.75} />
                 <span className="hidden sm:inline">Broadcasting</span>
               </>
             ) : (
               <>
-                <EyeOff className="w-3.5 h-3.5 text-slate-500" />
+                <EyeOff className="w-3.5 h-3.5 text-stone-500" strokeWidth={1.75} />
                 <span className="hidden sm:inline">Ghost Mode</span>
               </>
             )}
@@ -202,16 +202,16 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
             { id: 'all', label: `All Signals (${visibleEntities.length})` },
             { id: 'nomads', label: 'Remote Workers' },
             { id: 'workspots', label: 'Coworking / Cafes' },
-            { id: 'fastwifi', label: '⚡ WiFi >100M' },
+            { id: 'fastwifi', label: 'Fast WiFi (>100M)' },
           ].map((tab) => (
             <button
               key={tab.id}
               type="button"
               onClick={() => setFilter(tab.id as RadarFilter)}
-              className={`px-2.5 py-1 rounded-xl text-[11px] font-medium whitespace-nowrap transition-colors ${
+              className={`px-3 py-1 rounded-full text-[11px] font-medium whitespace-nowrap transition-colors cursor-pointer ${
                 filter === tab.id
                   ? 'bg-orange-500 text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  : 'bg-stone-100 text-stone-600 hover:bg-stone-200/70'
               }`}
             >
               {tab.label}
@@ -220,17 +220,17 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
         </div>
 
         {/* Radius Selector */}
-        <div className="flex items-center gap-1 bg-slate-100/90 p-1 rounded-xl text-[10px] font-medium text-slate-600">
-          <span className="text-[10px] text-slate-400 pl-1 pr-0.5">Range:</span>
+        <div className="flex items-center gap-1 bg-stone-100/90 p-1 rounded-xl text-[10px] font-medium text-stone-600">
+          <span className="text-[10px] text-stone-400 pl-1 pr-0.5">Range:</span>
           {[500, 1000, 2000, 5000].map((m) => (
             <button
               key={m}
               type="button"
               onClick={() => setRadarRange(m)}
-              className={`px-2 py-0.5 rounded-lg transition-all ${
+              className={`px-2 py-0.5 rounded-lg transition-all cursor-pointer ${
                 radarRange === m
-                  ? 'bg-white text-slate-900 font-semibold shadow-xs'
-                  : 'hover:text-slate-900'
+                  ? 'bg-white text-stone-900 font-semibold shadow-xs'
+                  : 'hover:text-stone-900'
               }`}
             >
               {m < 1000 ? `${m}m` : `${m / 1000}km`}
@@ -240,11 +240,11 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
       </div>
 
       {/* Radar Circular Stage */}
-      <div className="relative w-full aspect-square max-w-[400px] mx-auto rounded-full bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border-4 border-slate-800/80 shadow-inner overflow-hidden flex items-center justify-center p-4">
+      <div className="relative w-full aspect-square max-w-[380px] mx-auto rounded-full bg-gradient-to-b from-stone-950 via-stone-900 to-stone-950 border-4 border-stone-800/80 shadow-inner overflow-hidden flex items-center justify-center p-4">
         {/* Background Grid Crosshairs */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-full h-px bg-slate-800/60" />
-          <div className="h-full w-px bg-slate-800/60 absolute" />
+          <div className="w-full h-px bg-stone-800/60" />
+          <div className="h-full w-px bg-stone-800/60 absolute" />
         </div>
 
         {/* Concentric Distance Rings */}
@@ -284,10 +284,10 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
 
         {/* Center: The User */}
         <div className="relative z-10 flex flex-col items-center justify-center">
-          <div className="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center font-bold text-xs shadow-lg shadow-orange-500/50 ring-4 ring-orange-500/30">
-            <MapPin className="w-4 h-4" />
+          <div className="w-9 h-9 rounded-full bg-orange-500 text-white flex items-center justify-center font-semibold text-xs shadow-lg shadow-orange-500/50 ring-4 ring-orange-500/30">
+            <MapPin className="w-4 h-4" strokeWidth={1.75} />
           </div>
-          <span className="text-[9px] font-semibold text-white/90 bg-slate-900/80 px-1.5 py-0.5 rounded mt-1 border border-slate-700">
+          <span className="text-[9px] font-semibold text-white/90 bg-stone-900/80 px-1.5 py-0.5 rounded-sm mt-1 border border-stone-700">
             YOU
           </span>
         </div>
@@ -327,25 +327,25 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
                     />
                   </div>
                   {entity.isOnline && (
-                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-1 ring-slate-900 animate-pulse" />
+                    <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-1 ring-stone-900 animate-pulse" />
                   )}
                 </div>
               ) : (
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-[10px] transition-transform group-hover:scale-125 ${
                   isSelected 
-                    ? 'bg-amber-400 text-slate-950 ring-2 ring-white scale-110' 
+                    ? 'bg-amber-400 text-stone-950 ring-2 ring-white scale-110' 
                     : 'bg-orange-600/90 border border-orange-300'
                 }`}>
                   {entity.wifiSpeed && entity.wifiSpeed >= 150 ? (
-                    <Zap className="w-3 h-3 text-amber-200" />
+                    <Zap className="w-3 h-3 text-amber-200" strokeWidth={1.75} />
                   ) : (
-                    <Wifi className="w-3 h-3" />
+                    <Wifi className="w-3 h-3" strokeWidth={1.75} />
                   )}
                 </div>
               )}
 
               {/* Hover tooltip */}
-              <div className="absolute left-1/2 -bottom-6 -translate-x-1/2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/95 text-white text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap z-30 border border-slate-700">
+              <div className="absolute left-1/2 -bottom-6 -translate-x-1/2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity bg-stone-900/95 text-white text-[9px] px-1.5 py-0.5 rounded-sm whitespace-nowrap z-30 border border-stone-700">
                 {entity.title} • {entity.distanceLabel}
               </div>
             </div>
@@ -355,40 +355,40 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
 
       {/* Selected Entity Card Detail */}
       {selectedEntity ? (
-        <div className="p-4 bg-slate-50 rounded-2xl border border-orange-200/80 space-y-3 animate-in fade-in slide-in-from-bottom-2">
+        <div className="p-4 bg-stone-50 rounded-xl border border-orange-200/80 space-y-3 animate-in fade-in slide-in-from-bottom-2">
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-center gap-3">
               {selectedEntity.type === 'nomad' ? (
-                <div className="relative">
+                <div className="relative shrink-0">
                   <img
                     src={selectedEntity.avatarUrl}
                     alt={selectedEntity.title}
-                    className="w-12 h-12 rounded-2xl object-cover ring-2 ring-orange-400/40"
+                    className="w-12 h-12 rounded-xl object-cover ring-2 ring-orange-400/40"
                   />
                   {selectedEntity.isOnline && (
                     <span className="absolute -bottom-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 ring-2 ring-white" />
                   )}
                 </div>
               ) : (
-                <div className="w-12 h-12 rounded-2xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold">
+                <div className="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center font-bold shrink-0">
                   {selectedEntity.category === 'coworking' ? (
-                    <Radio className="w-6 h-6" />
+                    <Radio className="w-6 h-6" strokeWidth={1.75} />
                   ) : (
-                    <Coffee className="w-6 h-6" />
+                    <Coffee className="w-6 h-6" strokeWidth={1.75} />
                   )}
                 </div>
               )}
 
               <div>
                 <div className="flex items-center gap-2">
-                  <h4 className="font-bold text-slate-900 text-sm">{selectedEntity.title}</h4>
-                  <span className="px-2 py-0.5 rounded-full bg-white text-slate-600 text-[10px] font-medium border border-slate-200">
+                  <h4 className="font-semibold text-stone-900 text-sm font-display">{selectedEntity.title}</h4>
+                  <span className="px-2 py-0.5 rounded-full bg-white text-stone-600 text-[10px] font-medium border border-stone-200/80">
                     {selectedEntity.distanceLabel}
                   </span>
                 </div>
                 <p className="text-xs text-orange-600 font-medium">{selectedEntity.subtitle}</p>
                 {selectedEntity.statusText && (
-                  <p className="text-[11px] text-slate-400 mt-0.5">{selectedEntity.statusText}</p>
+                  <p className="text-[11px] text-stone-400 mt-0.5 font-normal">{selectedEntity.statusText}</p>
                 )}
               </div>
             </div>
@@ -396,13 +396,13 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
             <button
               type="button"
               onClick={() => setSelectedEntity(null)}
-              className="text-slate-400 hover:text-slate-600 p-1"
+              className="text-stone-400 hover:text-stone-600 p-1 cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4" strokeWidth={1.75} />
             </button>
           </div>
 
-          <div className="flex items-center gap-2 pt-1 border-t border-slate-200/60">
+          <div className="flex items-center gap-2 pt-1 border-t border-stone-200/80">
             {selectedEntity.type === 'nomad' ? (
               <>
                 <button
@@ -412,15 +412,15 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
                       onDirectMessage(selectedEntity.rawNomad);
                     }
                   }}
-                  className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm shadow-orange-500/20"
+                  className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition-colors"
                 >
-                  <MessageSquare className="w-3.5 h-3.5" />
+                  <MessageSquare className="w-3.5 h-3.5" strokeWidth={1.75} />
                   <span>Send Direct Message</span>
                 </button>
                 <button
                   type="button"
                   onClick={() => onNavigateTab && onNavigateTab('social')}
-                  className="px-3.5 py-2 bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 rounded-xl text-xs font-semibold"
+                  className="px-3.5 py-2 bg-white hover:bg-stone-100 text-stone-700 border border-stone-200/80 rounded-xl text-xs font-semibold cursor-pointer transition-colors"
                 >
                   View Profile
                 </button>
@@ -430,22 +430,22 @@ export const NomadLiveRadar: React.FC<NomadLiveRadarProps> = ({
                 <button
                   type="button"
                   onClick={() => onNavigateTab && onNavigateTab('explore')}
-                  className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-sm shadow-orange-500/20"
+                  className="flex-1 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition-colors"
                 >
-                  <ExternalLink className="w-3.5 h-3.5" />
-                  <span>View Full Workspace Info & Reviews</span>
+                  <ExternalLink className="w-3.5 h-3.5" strokeWidth={1.75} />
+                  <span>View Workspace & Reviews</span>
                 </button>
               </>
             )}
           </div>
         </div>
       ) : (
-        <div className="p-3 bg-slate-50/80 rounded-2xl border border-slate-200/60 flex items-center justify-between text-xs text-slate-500">
+        <div className="p-3 bg-stone-50 rounded-xl border border-stone-200/80 flex items-center justify-between text-xs text-stone-500">
           <div className="flex items-center gap-2">
-            <Radio className="w-4 h-4 text-orange-500" />
-            <span>Tap any blip on the 360° radar to view distance, speeds, or message</span>
+            <Radio className="w-4 h-4 text-orange-500 shrink-0" strokeWidth={1.75} />
+            <span className="font-normal">Tap any blip on the 360° radar to view distance, speeds, or message</span>
           </div>
-          <span className="font-semibold text-slate-700">{visibleEntities.length} active blips</span>
+          <span className="font-semibold text-stone-700 shrink-0">{visibleEntities.length} active blips</span>
         </div>
       )}
     </div>

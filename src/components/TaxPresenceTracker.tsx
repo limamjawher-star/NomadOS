@@ -71,7 +71,7 @@ export const TaxPresenceTracker: React.FC<TaxPresenceTrackerProps> = ({
                 Physical Presence & Tax Residency Monitor ({currentYear})
               </span>
             </div>
-            <h2 className="text-2xl font-bold text-stone-100 mt-1">
+            <h2 className="text-2xl font-semibold text-stone-100 mt-1">
               The 183-Day Rule & Domicile Guard
             </h2>
             <p className="text-stone-400 text-sm max-w-2xl mt-1 leading-relaxed">
@@ -198,7 +198,7 @@ export const TaxPresenceTracker: React.FC<TaxPresenceTrackerProps> = ({
                   <div className="flex items-center gap-2.5">
                     <span className="text-2xl">{getCountryFlag(p.countryCode)}</span>
                     <div>
-                      <h4 className="font-bold text-stone-100">{p.country}</h4>
+                      <h4 className="font-semibold text-stone-100">{p.country}</h4>
                       <span className="text-xs text-stone-400 font-mono">
                         Tax Year {p.year}
                       </span>
@@ -209,24 +209,24 @@ export const TaxPresenceTracker: React.FC<TaxPresenceTrackerProps> = ({
                     <button
                       onClick={() => onUpdateDays(p.id, -1)}
                       disabled={p.daysSpent <= 0}
-                      className="h-7 w-7 rounded bg-stone-800 hover:bg-stone-700 disabled:opacity-40 text-stone-300 font-mono text-xs flex items-center justify-center transition-colors"
+                      className="h-7 w-7 rounded bg-stone-800 hover:bg-stone-700 disabled:opacity-40 text-stone-300 font-mono text-xs flex items-center justify-center transition-colors cursor-pointer"
                       title="Subtract 1 day"
                     >
                       -1
                     </button>
                     <button
                       onClick={() => onUpdateDays(p.id, 1)}
-                      className="h-7 w-7 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 font-mono text-xs flex items-center justify-center transition-colors"
+                      className="h-7 w-7 rounded bg-stone-800 hover:bg-stone-700 text-stone-300 font-mono text-xs flex items-center justify-center transition-colors cursor-pointer"
                       title="Add 1 day"
                     >
                       +1
                     </button>
                     <button
                       onClick={() => onDeletePresence(p.id)}
-                      className="p-1.5 rounded hover:bg-rose-500/20 text-stone-500 hover:text-rose-400 transition-colors ml-1"
+                      className="p-1.5 rounded hover:bg-rose-500/20 text-stone-500 hover:text-rose-400 transition-colors ml-1 cursor-pointer"
                       title="Remove jurisdiction"
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="h-4 w-4" strokeWidth={1.75} />
                     </button>
                   </div>
                 </div>
@@ -234,7 +234,7 @@ export const TaxPresenceTracker: React.FC<TaxPresenceTrackerProps> = ({
                 {/* Days Spent & Threshold */}
                 <div className="mt-4 flex items-baseline justify-between">
                   <div className="flex items-baseline gap-1.5">
-                    <span className="text-3xl font-bold font-mono text-stone-100">{p.daysSpent}</span>
+                    <span className="text-3xl font-semibold font-mono text-stone-100">{p.daysSpent}</span>
                     <span className="text-stone-400 text-xs font-mono">/ {p.maxSafeDays} max safe days</span>
                   </div>
                   <span className="text-xs font-mono text-stone-400">

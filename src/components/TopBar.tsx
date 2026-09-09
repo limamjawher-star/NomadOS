@@ -34,35 +34,35 @@ export const TopBar: React.FC<TopBarProps> = ({
           onClick={() => onSetViewMode('landing')}
           className="flex items-center gap-2.5 cursor-pointer group"
         >
-          <div className="w-9 h-9 rounded-2xl bg-gradient-to-tr from-orange-500 via-orange-600 to-amber-500 text-white flex items-center justify-center font-black text-base shadow-lg shadow-orange-500/25 group-hover:scale-105 transition-all">
-            <Globe className="w-5 h-5" />
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-orange-500 to-orange-600 text-white flex items-center justify-center text-sm shadow-xs group-hover:scale-105 transition-all">
+            <Globe className="w-4 h-4" strokeWidth={1.75} />
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="text-lg font-black text-slate-900 tracking-tight font-display">
-                Nomad<span className="text-orange-500">OS</span>
+              <span className="text-base font-semibold text-stone-900 tracking-tight">
+                Nomad<span className="text-orange-600">OS</span>
               </span>
-              <span className="px-1.5 py-0.5 bg-orange-50 border border-orange-100/80 text-orange-700 text-[10px] font-black rounded-md uppercase tracking-wider">
+              <span className="px-1.5 py-0.5 bg-orange-50 border border-orange-200/80 text-orange-700 text-[10px] font-semibold rounded-md uppercase tracking-wider">
                 {viewMode === 'landing' ? '2026' : 'App'}
               </span>
             </div>
-            <span className="text-[9px] font-bold text-slate-400 uppercase tracking-widest block leading-none">
+            <span className="text-[9px] font-medium text-stone-400 uppercase tracking-wider block leading-none">
               Location-Independent Operating System
             </span>
           </div>
         </div>
 
         {/* Center: Device & Mode Switcher */}
-        <div className="flex items-center gap-1 bg-slate-100/90 p-1 rounded-2xl border border-slate-200/80 text-xs shadow-inner">
+        <div className="flex items-center gap-1 bg-stone-100 p-1 rounded-xl border border-stone-200/80 text-xs">
           <button
             onClick={() => onSetViewMode('landing')}
-            className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               viewMode === 'landing'
-                ? 'bg-orange-500 text-white shadow-sm font-black'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-orange-500 text-white shadow-xs font-semibold'
+                : 'text-stone-600 hover:text-stone-900 font-medium'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Sparkles className="w-3.5 h-3.5" strokeWidth={1.75} />
             <span className="hidden sm:inline">Landing</span>
           </button>
 
@@ -71,13 +71,13 @@ export const TopBar: React.FC<TopBarProps> = ({
               onSetViewMode('app');
               onSetDeviceMode('web');
             }}
-            className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               viewMode === 'app' && deviceMode === 'web'
-                ? 'bg-orange-500 text-white shadow-sm font-black'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-orange-500 text-white shadow-xs font-semibold'
+                : 'text-stone-600 hover:text-stone-900 font-medium'
             }`}
           >
-            <Monitor className="w-3.5 h-3.5" />
+            <Monitor className="w-3.5 h-3.5" strokeWidth={1.75} />
             <span className="hidden sm:inline">Web Workspace</span>
           </button>
 
@@ -86,13 +86,13 @@ export const TopBar: React.FC<TopBarProps> = ({
               onSetViewMode('app');
               onSetDeviceMode('ios');
             }}
-            className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               viewMode === 'app' && deviceMode === 'ios'
-                ? 'bg-orange-500 text-white shadow-sm font-black'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-orange-500 text-white shadow-xs font-semibold'
+                : 'text-stone-600 hover:text-stone-900 font-medium'
             }`}
           >
-            <Smartphone className="w-3.5 h-3.5" />
+            <Smartphone className="w-3.5 h-3.5" strokeWidth={1.75} />
             <span>iPhone 16</span>
           </button>
 
@@ -101,13 +101,13 @@ export const TopBar: React.FC<TopBarProps> = ({
               onSetViewMode('app');
               onSetDeviceMode('android');
             }}
-            className={`px-3 py-1.5 rounded-xl font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer ${
               viewMode === 'app' && deviceMode === 'android'
-                ? 'bg-orange-500 text-white shadow-sm font-black'
-                : 'text-slate-600 hover:text-slate-900'
+                ? 'bg-orange-500 text-white shadow-xs font-semibold'
+                : 'text-stone-600 hover:text-stone-900 font-medium'
             }`}
           >
-            <Smartphone className="w-3.5 h-3.5" />
+            <Smartphone className="w-3.5 h-3.5" strokeWidth={1.75} />
             <span>Pixel 9</span>
           </button>
         </div>
@@ -115,18 +115,18 @@ export const TopBar: React.FC<TopBarProps> = ({
         {/* Right Actions: Account & Cloud Sync Status (No duplicate Upgrade Pro button) */}
         <div className="flex items-center gap-2">
           {user.isPro && (
-            <span className="px-2.5 py-1 bg-orange-50 border border-orange-200/80 text-orange-700 text-[11px] font-black rounded-full flex items-center gap-1">
-              <Crown className="w-3 h-3 text-orange-600" />
+            <span className="px-2.5 py-1 bg-orange-50 border border-orange-200/80 text-orange-700 text-[11px] font-semibold rounded-full flex items-center gap-1">
+              <Crown className="w-3 h-3 text-orange-600" strokeWidth={1.75} />
               <span>PRO</span>
             </span>
           )}
 
           <button
             onClick={onOpenAuth}
-            className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-slate-200/90 hover:border-orange-400 bg-white hover:bg-slate-50 transition-all shadow-sm group"
+            className="flex items-center gap-2 p-1 pl-2.5 rounded-full border border-stone-200/80 hover:border-orange-400 bg-white hover:bg-stone-50 transition-all shadow-xs group cursor-pointer"
             title="Account & Cloud Sync"
           >
-            <span className="text-xs font-bold text-slate-800 truncate max-w-[80px]">
+            <span className="text-xs font-medium text-stone-800 truncate max-w-[80px]">
               {user.name}
             </span>
             <div className="relative">

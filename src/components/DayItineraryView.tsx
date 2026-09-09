@@ -163,39 +163,39 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
   return (
     <div id="day-by-day-itinerary-module" className="space-y-5">
       {/* Date Bar & Controls (matching Screenshot 4) */}
-      <div className="bg-white rounded-3xl p-4 border border-slate-200/90 shadow-sm flex items-center justify-between">
+      <div className="bg-white rounded-3xl p-4 border border-stone-200/90 shadow-xs flex items-center justify-between">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center font-bold">
-            <Calendar className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-xl bg-orange-50 border border-orange-100 text-orange-600 flex items-center justify-center font-medium">
+            <Calendar className="w-4 h-4" strokeWidth={1.75} />
           </div>
           <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Day Plan</span>
-            <h3 className="text-base font-extrabold text-slate-900 font-display">{selectedDay}</h3>
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-stone-400">Day Plan</span>
+            <h3 className="text-base font-semibold text-stone-900">{selectedDay}</h3>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSelectedDay(selectedDay === 'Sun, 17 May' ? 'Mon, 18 May' : 'Sun, 17 May')}
-            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1 transition-colors"
+            className="px-3 py-1.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium rounded-xl text-xs flex items-center gap-1 transition-colors cursor-pointer"
           >
             <span>Change date</span>
-            <ChevronRight className="w-3.5 h-3.5" />
+            <ChevronRight className="w-3.5 h-3.5" strokeWidth={1.75} />
           </button>
 
           <button
             onClick={() => setIsAiModalOpen(true)}
             id="itinerary-ai-generate-top-btn"
-            className="px-3.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white font-black rounded-xl text-xs flex items-center gap-1.5 shadow-md shadow-orange-500/20 transition-all transform active:scale-95"
+            className="px-3.5 py-1.5 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl text-xs flex items-center gap-1.5 shadow-xs transition-all transform active:scale-95 cursor-pointer"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-200" />
+            <Sparkles className="w-3.5 h-3.5 text-amber-200" strokeWidth={1.75} />
             <span>AI Suggest</span>
           </button>
         </div>
       </div>
 
       {/* Chronological Timeline with side bar (matching Screenshot 4) */}
-      <div className="space-y-3 relative before:absolute before:left-14 before:top-4 before:bottom-4 before:w-0.5 before:bg-slate-200">
+      <div className="space-y-3 relative before:absolute before:left-14 before:top-4 before:bottom-4 before:w-0.5 before:bg-stone-200">
         {activities.map((act) => {
           if (act.isFreeTime) {
             return (
@@ -203,11 +203,11 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
                 key={act.id} 
                 className="flex items-center gap-4 py-2 relative z-10"
               >
-                <div className="w-14 text-right text-xs font-bold text-slate-400 font-display">
+                <div className="w-14 text-right text-xs font-medium text-stone-400">
                   {act.time}
                 </div>
-                <div className="flex-1 border-2 border-dashed border-slate-200 rounded-2xl py-3 px-4 text-center bg-slate-50/50">
-                  <span className="text-xs font-semibold text-slate-500">
+                <div className="flex-1 border-2 border-dashed border-stone-200 rounded-2xl py-3 px-4 text-center bg-stone-50/50">
+                  <span className="text-xs font-medium text-stone-500">
                     {act.title}
                   </span>
                 </div>
@@ -218,31 +218,31 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
           return (
             <div key={act.id} className="flex items-start gap-4 relative z-10 group">
               {/* Left Time label */}
-              <div className="w-14 pt-3.5 text-right text-xs font-extrabold text-slate-700 shrink-0 font-display">
+              <div className="w-14 pt-3.5 text-right text-xs font-semibold text-stone-700 shrink-0">
                 {act.time}
               </div>
 
               {/* Main Activity Card */}
               <div 
-                className={`flex-1 bg-white rounded-2xl p-4 border border-slate-200/90 shadow-sm border-l-4 ${getCategoryColor(act.category)} transition-all hover:border-orange-300 hover:shadow-md`}
+                className={`flex-1 bg-white rounded-2xl p-4 border border-stone-200/90 shadow-xs border-l-4 ${getCategoryColor(act.category)} transition-all hover:border-orange-300 hover:shadow-xs`}
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-extrabold text-slate-900 leading-tight font-display">
+                      <h4 className="text-sm font-semibold text-stone-900 leading-tight">
                         {act.title}
                       </h4>
                     </div>
 
-                    <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500">
-                      <span className="flex items-center gap-1 font-semibold text-slate-600">
-                        <Clock className="w-3 h-3 text-slate-400" />
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-stone-500 font-normal">
+                      <span className="flex items-center gap-1 font-medium text-stone-600">
+                        <Clock className="w-3 h-3 text-stone-400" strokeWidth={1.75} />
                         {act.timeRange}
                       </span>
 
                       {act.locationName && (
-                        <span className="flex items-center gap-1 text-orange-600 font-semibold">
-                          <MapPin className="w-3 h-3 text-orange-500" />
+                        <span className="flex items-center gap-1 text-orange-600 font-medium">
+                          <MapPin className="w-3 h-3 text-orange-500" strokeWidth={1.75} />
                           {act.locationName}
                         </span>
                       )}
@@ -303,49 +303,49 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
 
       {/* AI Generator Modal */}
       {isAiModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-stone-200 space-y-5 animate-in fade-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-xl border border-stone-200 space-y-5 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-black">
-                  <Sparkles className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-semibold">
+                  <Sparkles className="w-4 h-4" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h3 className="font-extrabold text-stone-900 text-base">Nomad Day AI Planner</h3>
-                  <p className="text-xs text-stone-500">Auto-generate the optimal remote worker daily schedule</p>
+                  <h3 className="font-semibold text-stone-900 text-base">Nomad Day AI Planner</h3>
+                  <p className="text-xs text-stone-500 font-normal">Auto-generate the optimal remote worker daily schedule</p>
                 </div>
               </div>
               <button
                 onClick={() => setIsAiModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500"
+                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500 cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1.5">Destination City</label>
+                <label className="block text-xs font-semibold text-stone-700 mb-1.5">Destination City</label>
                 <input
                   type="text"
                   value={aiCity}
                   onChange={(e) => setAiCity(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium focus:outline-none focus:border-orange-500"
                   placeholder="e.g. Florence, Lisbon, Bali, Tokyo"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1.5">Focus Balance</label>
+                <label className="block text-xs font-semibold text-stone-700 mb-1.5">Focus Balance</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['culture', 'coworking', 'food'] as const).map((f) => (
                     <button
                       key={f}
                       type="button"
                       onClick={() => setAiFocus(f)}
-                      className={`py-2 rounded-xl text-xs font-bold capitalize transition-all border ${
+                      className={`py-2 rounded-xl text-xs font-medium capitalize transition-all border cursor-pointer ${
                         aiFocus === f
-                          ? 'bg-orange-500 text-white border-orange-500 shadow-sm'
+                          ? 'bg-orange-500 text-white border-orange-500 shadow-xs'
                           : 'bg-stone-50 text-stone-700 border-stone-200'
                       }`}
                     >
@@ -356,16 +356,16 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1.5">Daily Pace</label>
+                <label className="block text-xs font-semibold text-stone-700 mb-1.5">Daily Pace</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['chill', 'balanced', 'packed'] as const).map((p) => (
                     <button
                       key={p}
                       type="button"
                       onClick={() => setAiPace(p)}
-                      className={`py-2 rounded-xl text-xs font-bold capitalize transition-all border ${
+                      className={`py-2 rounded-xl text-xs font-medium capitalize transition-all border cursor-pointer ${
                         aiPace === p
-                          ? 'bg-orange-500 text-white border-orange-500 shadow-sm'
+                          ? 'bg-orange-500 text-white border-orange-500 shadow-xs'
                           : 'bg-stone-50 text-stone-700 border-stone-200'
                       }`}
                     >
@@ -376,7 +376,7 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
               </div>
 
               <div className="p-3 bg-orange-50 rounded-2xl border border-orange-100 text-xs text-orange-900 flex items-start gap-2">
-                <Sparkles className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" />
+                <Sparkles className="w-4 h-4 text-orange-600 shrink-0 mt-0.5" strokeWidth={1.75} />
                 <span>Plans auto-include coworking sprint hours, verified specialty cafes with 50+ Mbps wifi, and sunset social breaks.</span>
               </div>
             </div>
@@ -385,7 +385,7 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsAiModalOpen(false)}
-                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs"
+                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium rounded-xl text-xs cursor-pointer"
               >
                 Cancel
               </button>
@@ -393,7 +393,7 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
                 type="button"
                 onClick={handleGenerateAiPlans}
                 disabled={isGenerating}
-                className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-500/30 flex items-center justify-center gap-1.5"
+                className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl text-xs shadow-xs flex items-center justify-center gap-1.5 cursor-pointer"
               >
                 {isGenerating ? (
                   <>
@@ -402,7 +402,7 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
                   </>
                 ) : (
                   <>
-                    <Sparkles className="w-4 h-4 text-amber-300" />
+                    <Sparkles className="w-4 h-4 text-amber-300" strokeWidth={1.75} />
                     <span>Generate Day</span>
                   </>
                 )}
@@ -414,71 +414,71 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
 
       {/* Add Custom Activity Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <form onSubmit={handleCreateActivity} className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <form onSubmit={handleCreateActivity} className="bg-white rounded-3xl p-6 max-w-md w-full shadow-xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between">
-              <h3 className="font-extrabold text-stone-900 text-base">Add Daily Activity</h3>
+              <h3 className="font-semibold text-stone-900 text-base">Add Daily Activity</h3>
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500"
+                className="w-8 h-8 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500 cursor-pointer"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Activity Title</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">Activity Title</label>
               <input
                 type="text"
                 required
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
                 placeholder="e.g. Visit Museum, Coworking sprint, Sunset dinner"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs font-medium focus:outline-none focus:border-orange-500"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Start Time</label>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">Start Time</label>
                 <input
                   type="text"
                   value={newTime}
                   onChange={(e) => setNewTime(e.target.value)}
                   placeholder="e.g. 14:00"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-medium focus:outline-none focus:border-orange-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-stone-700 mb-1">Time Slot Range</label>
+                <label className="block text-xs font-semibold text-stone-700 mb-1">Time Slot Range</label>
                 <input
                   type="text"
                   value={newTimeRange}
                   onChange={(e) => setNewTimeRange(e.target.value)}
                   placeholder="e.g. 13:30 – 15:00"
-                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-medium focus:outline-none focus:border-orange-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Location / Maps Pin</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">Location / Maps Pin</label>
               <input
                 type="text"
                 value={newLocation}
                 onChange={(e) => setNewLocation(e.target.value)}
                 placeholder="e.g. Osteria dei Leoni, Duomo Square"
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-medium focus:outline-none focus:border-orange-500"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-stone-700 mb-1">Category</label>
+              <label className="block text-xs font-semibold text-stone-700 mb-1">Category</label>
               <select
                 value={newCategory}
                 onChange={(e) => setNewCategory(e.target.value as any)}
-                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-semibold focus:outline-none focus:border-orange-500 bg-white"
+                className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs font-medium focus:outline-none focus:border-orange-500 bg-white"
               >
                 <option value="sightseeing">Sightseeing / Exploration</option>
                 <option value="food">Food & Dining</option>
@@ -490,12 +490,12 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
             </div>
 
             <div className="pt-1">
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-bold text-stone-700">
+              <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-stone-700">
                 <input
                   type="checkbox"
                   checked={hasDoc}
                   onChange={(e) => setHasDoc(e.target.checked)}
-                  className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 border-stone-300"
+                  className="w-4 h-4 rounded text-orange-600 focus:ring-orange-500 border-stone-300 cursor-pointer"
                 />
                 <span>Attach Ticket / PDF Voucher</span>
               </label>
@@ -506,7 +506,7 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
                   value={docName}
                   onChange={(e) => setDocName(e.target.value)}
                   placeholder="e.g. Gallery_FastPass_Ticket.pdf"
-                  className="w-full mt-2 px-3.5 py-2 rounded-xl border border-orange-200 bg-orange-50/50 text-xs font-semibold focus:outline-none focus:border-orange-500"
+                  className="w-full mt-2 px-3.5 py-2 rounded-xl border border-orange-200 bg-orange-50/50 text-xs font-medium focus:outline-none focus:border-orange-500"
                 />
               )}
             </div>
@@ -515,13 +515,13 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
               <button
                 type="button"
                 onClick={() => setIsAddModalOpen(false)}
-                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-bold rounded-xl text-xs"
+                className="flex-1 py-2.5 bg-stone-100 hover:bg-stone-200 text-stone-700 font-medium rounded-xl text-xs cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-extrabold rounded-xl text-xs shadow-md shadow-orange-500/30"
+                className="flex-1 py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl text-xs shadow-xs cursor-pointer"
               >
                 Save Activity
               </button>
@@ -532,41 +532,41 @@ export const DayItineraryView: React.FC<DayItineraryViewProps> = ({
 
       {/* Attachment Preview Modal */}
       {selectedAttachment && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-xl border border-stone-200 space-y-4 animate-in fade-in zoom-in-95">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-bold">
-                  <FileText className="w-4 h-4" />
+                <div className="w-8 h-8 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center font-medium">
+                  <FileText className="w-4 h-4" strokeWidth={1.75} />
                 </div>
-                <h4 className="font-extrabold text-stone-900 text-sm">Attached Document</h4>
+                <h4 className="font-semibold text-stone-900 text-sm">Attached Document</h4>
               </div>
               <button
                 onClick={() => setSelectedAttachment(null)}
-                className="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500"
+                className="w-7 h-7 rounded-full bg-stone-100 hover:bg-stone-200 flex items-center justify-center text-stone-500 cursor-pointer"
               >
-                <X className="w-3.5 h-3.5" />
+                <X className="w-3.5 h-3.5" strokeWidth={1.75} />
               </button>
             </div>
 
             <div className="bg-stone-50 rounded-2xl p-4 border border-stone-200/80 space-y-2 text-center">
-              <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white mx-auto flex items-center justify-center shadow-lg shadow-orange-500/25">
-                <FileText className="w-6 h-6" />
+              <div className="w-12 h-12 rounded-2xl bg-orange-500 text-white mx-auto flex items-center justify-center shadow-xs">
+                <FileText className="w-6 h-6" strokeWidth={1.75} />
               </div>
-              <h5 className="font-extrabold text-stone-900 text-xs truncate">
+              <h5 className="font-semibold text-stone-900 text-xs truncate">
                 {selectedAttachment.filename}
               </h5>
-              <p className="text-[11px] text-stone-500 font-medium">
+              <p className="text-[11px] text-stone-500 font-normal">
                 Linked to: {selectedAttachment.title}
               </p>
-              <span className="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-bold rounded-full">
+              <span className="inline-block px-2.5 py-0.5 bg-emerald-100 text-emerald-800 text-[10px] font-medium rounded-full">
                 Verified Barcode / QR Ready
               </span>
             </div>
 
             <button
               onClick={() => setSelectedAttachment(null)}
-              className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-extrabold rounded-xl text-xs transition-colors"
+              className="w-full py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl text-xs transition-colors cursor-pointer"
             >
               Done
             </button>

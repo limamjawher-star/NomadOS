@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="nomadGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c" />
+      <stop offset="100%" stop-color="#f97316" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#ea580c" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  <!-- App Icon Rounded Squircle Background -->
+  <rect width="512" height="512" rx="120" fill="url(#nomadGrad)" />
+  
+  <!-- Subtle Outer Compass Ring -->
+  <circle cx="256" cy="256" r="170" fill="none" stroke="#ffffff" stroke-width="12" stroke-opacity="0.25" />
+  
+  <!-- Subtle Cardinal Ticks -->
+  <line x1="256" y1="64" x2="256" y2="82" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-opacity="0.6" />
+  <line x1="256" y1="430" x2="256" y2="448" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-opacity="0.6" />
+  <line x1="64" y1="256" x2="82" y2="256" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-opacity="0.6" />
+  <line x1="430" y1="256" x2="448" y2="256" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-opacity="0.6" />
+  
+  <!-- Center Globe Latitude Longitude lines -->
+  <ellipse cx="256" cy="256" rx="130" ry="60" fill="none" stroke="#ffffff" stroke-width="6" stroke-opacity="0.3" transform="rotate(-25 256 256)" />
+  <ellipse cx="256" cy="256" rx="60" ry="130" fill="none" stroke="#ffffff" stroke-width="6" stroke-opacity="0.3" transform="rotate(-25 256 256)" />
+
+  <!-- Compass Needle Diamond -->
+  <!-- North Needle (White) -->
+  <polygon points="256,120 300,240 256,256 212,240" fill="#ffffff" filter="url(#shadow)" />
+  <!-- South Needle (Soft Dark / Tint) -->
+  <polygon points="256,392 300,272 256,256 212,272" fill="#7c2d12" fill-opacity="0.85" />
+  
+  <!-- Needle Pivot Center -->
+  <circle cx="256" cy="256" r="22" fill="#ffffff" />
+  <circle cx="256" cy="256" r="10" fill="#ea580c" />
+</svg>

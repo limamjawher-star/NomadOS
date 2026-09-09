@@ -92,7 +92,7 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
                 <HelpCircle className="h-3.5 w-3.5" />
               </button>
             </div>
-            <h2 className="text-2xl font-bold text-stone-100 mt-1">
+            <h2 className="text-2xl font-semibold text-stone-100 mt-1">
               Short-Stay Visa Compliance Engine
             </h2>
             <p className="text-stone-400 text-sm max-w-2xl mt-1 leading-relaxed">
@@ -102,7 +102,7 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
 
           {/* Reference date picker for simulation */}
           <div className="flex items-center gap-3 bg-stone-950/80 border border-stone-800 px-4 py-2.5 rounded-xl">
-            <Calendar className="h-4 w-4 text-amber-400" />
+            <Calendar className="h-4 w-4 text-amber-400" strokeWidth={1.75} />
             <div>
               <div className="text-[10px] text-stone-400 uppercase font-mono">Simulate Date</div>
               <input
@@ -121,7 +121,7 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
           <div className="bg-stone-950/50 border border-stone-800 p-4 rounded-xl">
             <span className="text-xs text-stone-400 font-mono uppercase">Days Used (In 180d)</span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-3xl font-bold font-mono text-stone-100">
+              <span className="text-3xl font-semibold font-mono text-stone-100">
                 {result.daysUsedInWindow}
               </span>
               <span className="text-stone-500 font-mono text-sm">/ 90 days</span>
@@ -144,7 +144,7 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
             <span className="text-xs text-stone-400 font-mono uppercase">Remaining Allowance</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span
-                className={`text-3xl font-bold font-mono ${
+                className={`text-3xl font-semibold font-mono ${
                   result.daysRemainingInWindow === 0
                     ? 'text-rose-400'
                     : result.daysRemainingInWindow < 15
@@ -165,7 +165,7 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
           <div className="bg-stone-950/50 border border-stone-800 p-4 rounded-xl">
             <span className="text-xs text-stone-400 font-mono uppercase">Continuous Stay Limit</span>
             <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-3xl font-bold font-mono text-amber-300">
+              <span className="text-3xl font-semibold font-mono text-amber-300">
                 {result.maxContinuousFutureDays}
               </span>
               <span className="text-stone-500 font-mono text-sm">days continuous</span>
@@ -232,7 +232,7 @@ export const SchengenTracker: React.FC<SchengenTrackerProps> = ({
       <div className="rounded-2xl border border-stone-800 bg-stone-900/60 p-6">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-bold text-stone-100 flex items-center gap-2">
+            <h3 className="text-lg font-semibold text-stone-100 flex items-center gap-2">
               <span>Schengen Entry & Exit Log</span>
               <span className="text-xs font-mono font-normal text-stone-400">
                 ({stays.length} recorded {stays.length === 1 ? 'stay' : 'stays'})
