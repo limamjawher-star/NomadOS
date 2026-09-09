@@ -40,11 +40,13 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
   onSetCity,
   onAddEvent,
 }) => {
+  const [isLocating, setIsLocating] = useState(false);
+
   // 1: Identity, 2: Photo, 3: Nomad Life Config, 4: First choice, 5: Join Map, 6: Create Meetup, 7: All Set
   const [step, setStep] = useState<number>(1);
-  const [tag, setTag] = useState(state.user.tag || '@jawher');
+  const [tag, setTag] = useState(state.user.tag || '');
   const [nationality, setNationality] = useState(state.user.nationality || 'Argentina');
-  const [gender, setGender] = useState<'Male' | 'Female' | 'Non-binary' | 'Prefer not to say'>(state.user.gender || 'Male');
+  const [gender, setGender] = useState<'Male' | 'Female' | 'Other' | 'Prefer not to say'>((state.user.gender as string) === 'Non-binary' ? 'Other' : (state.user.gender || 'Prefer not to say') as any);
   const [avatarUrl, setAvatarUrl] = useState(state.user.avatarUrl);
   const [firstAction, setFirstAction] = useState<string>('trip');
   const [currentLocation, setCurrentLocation] = useState(state.currentCity || 'Lisbon');
@@ -90,6 +92,35 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
       onComplete();
     } else {
       onClose();
+    }
+  };
+
+  const handleLocateMe = () => {
+    setIsLocating(true);
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          try {
+            const { latitude, longitude } = position.coords;
+            const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+            const data = await res.json();
+            if (data && data.address) {
+              const city = data.address.city || data.address.town || data.address.village || data.address.state || 'Unknown';
+              setCurrentLocation(city);
+            }
+          } catch (error) {
+            console.error('Failed to geocode location:', error);
+          } finally {
+            setIsLocating(false);
+          }
+        },
+        (error) => {
+          console.error('Geolocation error:', error);
+          setIsLocating(false);
+        }
+      );
+    } else {
+      setIsLocating(false);
     }
   };
 
@@ -178,7 +209,7 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                   >
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Non-binary">Non-binary</option>
+                    <option value="Other">Other</option>
                     <option value="Prefer not to say">Prefer not to say</option>
                   </select>
                 </div>
@@ -236,11 +267,17 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
                     }} 
                   />
                   <label htmlFor="avatar-upload" className="cursor-pointer block relative">
-                    <img
-                      src={avatarUrl}
-                      alt="Nomad Avatar"
-                      className="w-28 h-28 rounded-full object-cover border-4 border-orange-500/20 shadow-md ring-4 ring-orange-500/10"
-                    />
+                    {avatarUrl ? (
+                      <img
+                        src={avatarUrl}
+                        alt="Nomad Avatar"
+                        className="w-28 h-28 rounded-full object-cover border-4 border-orange-500/20 shadow-md ring-4 ring-orange-500/10"
+                      />
+                    ) : (
+                      <div className="w-28 h-28 rounded-full bg-orange-100 flex items-center justify-center border-4 border-orange-500/20 shadow-md ring-4 ring-orange-500/10">
+                        <Camera className="w-10 h-10 text-orange-400" />
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                       <Camera className="w-6 h-6 text-white" />
                     </div>
@@ -455,19 +492,35 @@ export const OnboardingModal: React.FC<OnboardingModalProps> = ({
               </div>
 
               <div className="space-y-3 pt-2">
-                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center gap-1">
-                  <MapPin className="w-3.5 h-3.5 text-orange-500" />
-                  <span>Where are you right now?</span>
-                  <span className="text-orange-500">*</span>
+                <label className="block text-xs font-bold text-stone-700 uppercase tracking-wider flex items-center justify-between">
+                  <div className="flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-orange-500" />
+                    <span>Where are you right now?</span>
+                    <span className="text-orange-500">*</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleLocateMe}
+                    disabled={isLocating}
+                    className="text-orange-600 hover:text-orange-700 flex items-center gap-1 transition-colors disabled:opacity-50"
+                  >
+                    {isLocating ? <RefreshCw className="w-3 h-3 animate-spin" /> : <Compass className="w-3 h-3" />}
+                    {isLocating ? 'Locating...' : 'Locate me'}
+                  </button>
                 </label>
-                <input
-                  id="onboarding-location-input"
-                  type="text"
-                  value={currentLocation}
-                  onChange={(e) => setCurrentLocation(e.target.value)}
-                  placeholder="e.g. Lisbon, Chiang Mai, Bansko, Canggu"
-                  className="w-full px-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all text-sm"
-                />
+                <div className="relative">
+                  <input
+                    id="onboarding-location-input"
+                    type="text"
+                    value={currentLocation}
+                    onChange={(e) => setCurrentLocation(e.target.value)}
+                    placeholder="e.g. Lisbon, Chiang Mai, Bansko, Canggu"
+                    className="w-full px-4 py-3.5 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-semibold focus:outline-none focus:ring-2 focus:ring-orange-500 focus:bg-white transition-all text-sm pr-10"
+                  />
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400">
+                    <MapPin className="w-5 h-5" />
+                  </div>
+                </div>
                 <p className="text-[11px] text-stone-400">Nomads nearby will be able to find you on the map.</p>
               </div>
 

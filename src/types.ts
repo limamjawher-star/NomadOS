@@ -108,7 +108,7 @@ export interface NomadUser {
   avatarUrl: string;
   nationality: string;
   nationalityCode: string;
-  gender: 'Male' | 'Female' | 'Non-binary' | 'Prefer not to say';
+  gender: 'Male' | 'Female' | 'Other' | 'Prefer not to say';
   profession: string;
   bio: string;
   rank: string;
