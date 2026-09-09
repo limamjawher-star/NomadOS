@@ -7,7 +7,7 @@ import {
   Scale, 
   Plus, 
   Calendar, 
-  MapPin, 
+  MapPin, Globe, 
   Clock, 
   AlertTriangle, 
   CheckCircle2, 
@@ -239,23 +239,44 @@ export const TravelTab: React.FC<TravelTabProps> = ({
         </button>
       </div>
 
-      {/* ================= 1. TRIPS VIEW (Screenshot 3 Multi-Stop) ================= */}
+      {/* ================= 1. TRIPS VIEW ================= */}
       {subTab === 'trips' && (
         <div className="space-y-4">
-          <MultiStopTripView />
+          
+          {state.trips.length === 0 && (
+            <div className="bg-white rounded-xl p-8 border border-stone-200/80 shadow-xs flex flex-col items-center text-center space-y-3">
+              <div className="w-12 h-12 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center">
+                <Globe className="w-6 h-6" strokeWidth={1.5} />
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-stone-900">No upcoming trips</h3>
+                <p className="text-xs text-stone-500 mt-1 max-w-sm mx-auto">
+                  Start planning your nomad journey by adding your first destination.
+                </p>
+              </div>
+              <button
+                onClick={() => setIsAddTripOpen(true)}
+                className="mt-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-xl text-xs transition-colors shadow-xs"
+              >
+                Add Destination
+              </button>
+            </div>
+          )}
 
           <div className="pt-2">
             <div className="flex items-center justify-between pb-2">
               <h4 className="text-xs font-semibold uppercase text-stone-400 tracking-wider">
                 All Planned Relocations
               </h4>
-              <button
-                onClick={() => setIsAddTripOpen(true)}
-                className="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1"
-              >
-                <Plus className="w-3.5 h-3.5" strokeWidth={1.75} />
-                <span>Add Destination</span>
-              </button>
+              {state.trips.length > 0 && (
+                <button
+                  onClick={() => setIsAddTripOpen(true)}
+                  className="text-xs font-semibold text-orange-600 hover:text-orange-700 flex items-center gap-1"
+                >
+                  <Plus className="w-3.5 h-3.5" strokeWidth={1.75} />
+                  <span>Add Destination</span>
+                </button>
+              )}
             </div>
 
             <div className="space-y-3">

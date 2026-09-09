@@ -116,6 +116,15 @@ export function App() {
     }
   }, [state]);
 
+  // Auto-onboarding for new users exploring the app
+  useEffect(() => {
+    if (viewMode === 'app' && !state.user.name && !isOnboardingOpen) {
+      // Small delay to allow transition from landing to finish
+      const timer = setTimeout(() => setIsOnboardingOpen(true), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [viewMode, state.user.name, isOnboardingOpen]);
+
   const showToast = (msg: string) => {
     setToastMessage(msg);
     setTimeout(() => setToastMessage(null), 3000);

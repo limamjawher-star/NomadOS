@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   Crown, 
   Share2, 
-  Settings, 
+  Settings, User, 
   Edit3, 
   MapPin, 
   Globe, 
@@ -149,12 +149,28 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
       {/* Profile Hero Card */}
       <div className="bg-white rounded-xl p-6 border border-stone-200/80 shadow-xs flex flex-col items-center text-center space-y-4">
         <div className="relative">
-          <img
-            src={state.user.avatarUrl}
-            alt={state.user.name}
-            referrerPolicy="no-referrer"
-            className="w-24 h-24 rounded-full object-cover border-4 border-orange-500/20 shadow-sm ring-4 ring-orange-500/10"
-          />
+          {state.user.avatarUrl && state.user.avatarUrl.trim() !== '' ? (
+            <img
+              src={state.user.avatarUrl}
+              alt={state.user.name || 'Nomad'}
+              referrerPolicy="no-referrer"
+              className="w-24 h-24 rounded-full object-cover border-4 border-orange-500/20 shadow-sm ring-4 ring-orange-500/10 bg-stone-100"
+              onError={(e) => {
+                // Fallback if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.parentElement?.querySelector('.avatar-fallback')?.classList.remove('hidden');
+              }}
+            />
+          ) : null}
+          
+          <div className={`avatar-fallback w-24 h-24 rounded-full border-4 border-orange-500/20 shadow-sm ring-4 ring-orange-500/10 bg-stone-100 flex items-center justify-center text-stone-400 ${state.user.avatarUrl && state.user.avatarUrl.trim() !== '' ? 'hidden' : ''}`}>
+            {state.user.name ? (
+              <span className="text-3xl font-bold text-stone-600">{state.user.name.charAt(0).toUpperCase()}</span>
+            ) : (
+              <User className="w-10 h-10" strokeWidth={2} />
+            )}
+          </div>
+
           {state.user.isPro && (
             <div className="absolute -bottom-1 -right-1 bg-gradient-to-tr from-amber-500 to-orange-600 text-white p-1.5 rounded-full shadow-xs text-xs flex items-center justify-center">
               <Crown className="w-3.5 h-3.5" strokeWidth={1.75} />
@@ -163,26 +179,34 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
         </div>
 
         <div>
-          <h3 className="text-xl font-semibold text-stone-900 font-display tracking-tight">{state.user.name}</h3>
-          <p className="text-xs font-semibold text-orange-600 mt-0.5">{state.user.tag}</p>
-          <p className="text-xs text-stone-600 font-normal mt-1">{state.user.profession}</p>
+          <h3 className="text-xl font-semibold text-stone-900 font-display tracking-tight">
+            {state.user.name || 'Digital Nomad'}
+          </h3>
+          {state.user.tag && <p className="text-xs font-semibold text-orange-600 mt-0.5">{state.user.tag}</p>}
+          <p className="text-xs text-stone-600 font-normal mt-1">{state.user.profession || 'Explorer'}</p>
         </div>
 
         {/* Location and Nationality pills */}
         <div className="flex flex-wrap items-center justify-center gap-2">
-          <span className="flex items-center gap-1.5 text-xs font-medium bg-stone-100 text-stone-700 px-3 py-1 rounded-full border border-stone-200/80">
-            <MapPin className="w-3.5 h-3.5 text-orange-500" strokeWidth={1.75} />
-            <span>{state.currentCity}, {state.currentCountry}</span>
-          </span>
-          <span className="flex items-center gap-1.5 text-xs font-medium bg-stone-100 text-stone-700 px-3 py-1 rounded-full border border-stone-200/80">
-            <CountryFlag code="AR" name="Argentina" size="xs" />
-            <span>{state.user.nationality}</span>
-          </span>
+          {(state.currentCity || state.currentCountry) && (
+            <span className="flex items-center gap-1.5 text-xs font-medium bg-stone-100 text-stone-700 px-3 py-1 rounded-full border border-stone-200/80">
+              <MapPin className="w-3.5 h-3.5 text-orange-500" strokeWidth={1.75} />
+              <span>{[state.currentCity, state.currentCountry].filter(Boolean).join(', ')}</span>
+            </span>
+          )}
+          {state.user.nationalityCode && (
+            <span className="flex items-center gap-1.5 text-xs font-medium bg-stone-100 text-stone-700 px-3 py-1 rounded-full border border-stone-200/80">
+              <CountryFlag code={state.user.nationalityCode} name={state.user.nationality || 'Nationality'} size="xs" />
+              <span>{state.user.nationality || 'Unknown'}</span>
+            </span>
+          )}
         </div>
 
-        <p className="text-xs text-stone-500 max-w-md leading-relaxed font-normal">
-          {state.user.bio}
-        </p>
+        {state.user.bio && (
+          <p className="text-xs text-stone-500 max-w-md leading-relaxed font-normal">
+            {state.user.bio}
+          </p>
+        )}
 
         <button
           onClick={() => setIsEditing(true)}
@@ -219,7 +243,12 @@ export const ProfileTab: React.FC<ProfileTabProps> = ({
         <div className="bg-white rounded-xl p-4 border border-stone-200/80 shadow-xs text-center flex flex-col justify-between min-h-[6.5rem]">
           <span className="text-[10px] font-medium text-stone-400 uppercase tracking-wider">Nomad Days</span>
           <p className="text-xl font-semibold text-stone-900 font-display mt-1">
-            428d
+            {state.trips.length > 0 
+              ? state.trips.reduce((total, trip) => {
+                  const days = Math.max(0, Math.ceil((new Date(trip.departureDate).getTime() - new Date(trip.arrivalDate).getTime()) / (1000 * 60 * 60 * 24)));
+                  return total + (isNaN(days) ? 0 : days);
+                }, 0)
+              : 0}d
           </p>
           <span className="text-[10px] text-emerald-600 font-medium flex items-center justify-center gap-1">
             <CheckCircle2 className="w-3 h-3" strokeWidth={1.75} />

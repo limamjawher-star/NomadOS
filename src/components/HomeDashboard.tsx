@@ -93,16 +93,18 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       <div className="flex items-center justify-between bg-white px-4 py-3 rounded-xl border border-slate-200/80 shadow-xs">
         <div>
           <h1 className="text-lg sm:text-xl font-semibold text-slate-900 tracking-tight font-display">
-            Welcome back, {state.user.name.split(' ')[0]}
+            Welcome back, {state.user.name ? state.user.name.split(' ')[0] : 'Nomad'}
           </h1>
           <p className="text-xs text-slate-500 font-normal mt-0.5">
             Everything is in order for your nomad journey today.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-xs font-medium px-3 py-1.5 bg-orange-50 text-orange-700 rounded-full border border-orange-200/60 shrink-0">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>{state.currentCity}, {state.currentCountry}</span>
-        </div>
+        {(state.currentCity || state.currentCountry) && (
+          <div className="flex items-center gap-2 text-xs font-medium px-3 py-1.5 bg-orange-50 text-orange-700 rounded-full border border-orange-200/60 shrink-0">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>{[state.currentCity, state.currentCountry].filter(Boolean).join(', ')}</span>
+          </div>
+        )}
       </div>
 
       {/* 2. CINEMATIC DESTINATION HERO CARD (Primary Focal Element) */}
@@ -112,7 +114,7 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
       >
         <img 
           src={currentTrip?.coverUrl || "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1200&q=80"}
-          alt="Current Destination - Bali"
+          alt={`Current Destination - ${currentTrip?.city || 'Unknown'}`}
           className="w-full h-48 sm:h-56 object-cover group-hover:scale-105 transition-transform duration-700 opacity-90"
         />
         {/* Consistent Photographic Dark Gradient Overlay */}
@@ -123,16 +125,16 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <div className="flex items-center gap-1">
-              <span>Active Base ·</span>
-              <CountryFlag code="ID" name="Indonesia" size="xs" />
-              <span>Canggu, Bali</span>
+              <span>{currentTrip ? 'Active Base ·' : 'No Active Trip'}</span>
+              {currentTrip?.countryCode && <CountryFlag code={currentTrip.countryCode} name={currentTrip.country} size="xs" />}
+              {currentTrip && <span>{currentTrip.city}, {currentTrip.country}</span>}
             </div>
           </div>
 
           <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/40 backdrop-blur-md border border-white/20 text-white text-[11px] font-medium">
             <span className="flex items-center gap-1"><Sun className="w-3.5 h-3.5 text-amber-400" /> 29°C</span>
             <span className="text-white/40">·</span>
-            <span>15:45 WITA</span>
+            <span>Local Time</span>
           </div>
         </div>
 
@@ -140,15 +142,21 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
         <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
           <div>
             <h3 className="text-2xl sm:text-3xl font-semibold text-white tracking-tight font-display drop-shadow-xs">
-              Bali, Indonesia
+              {currentTrip ? `${currentTrip.city}, ${currentTrip.country}` : 'Ready for a new adventure?'}
             </h3>
-            <p className="text-xs text-white/85 font-normal flex items-center gap-2 mt-1">
-              <span>VoA B213 (Day 28 of 30)</span>
-              <span className="w-1 h-1 rounded-full bg-white/40" />
-              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-200 text-[10px] font-medium">
-                2 days to renew
-              </span>
-            </p>
+            {currentTrip ? (
+              <p className="text-xs text-white/85 font-normal flex items-center gap-2 mt-1">
+                <span>{currentTrip.visaType || 'Tourist Visa'}</span>
+                <span className="w-1 h-1 rounded-full bg-white/40" />
+                <span className="px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/30 text-amber-200 text-[10px] font-medium">
+                  Active Stay
+                </span>
+              </p>
+            ) : (
+              <p className="text-xs text-white/85 font-normal flex items-center gap-2 mt-1">
+                <span>Add your first trip in the Travel tab</span>
+              </p>
+            )}
           </div>
 
           <span className="px-3.5 py-1.5 rounded-full bg-orange-500 hover:bg-orange-600 text-white font-medium text-xs shadow-xs flex items-center gap-1 group-hover:translate-x-0.5 transition-all">

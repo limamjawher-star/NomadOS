@@ -1,5 +1,5 @@
 import React from 'react';
-import { Crown } from 'lucide-react';
+import { Crown, User } from 'lucide-react';
 import { NomadState } from '../types';
 import { Logo } from './Logo';
 import { TopSearchBar } from './TopSearchBar';
@@ -66,15 +66,23 @@ export const TopHeader: React.FC<TopHeaderProps> = ({
           <button
             id="top-header-profile-btn"
             onClick={() => onNavigateTab('me')}
-            className="w-8 h-8 rounded-full overflow-hidden ring-2 ring-stone-200 hover:ring-orange-500 transition-all shadow-xs shrink-0 cursor-pointer"
+            className="w-8 h-8 rounded-full bg-stone-200 overflow-hidden ring-2 ring-stone-200 hover:ring-orange-500 transition-all shadow-xs shrink-0 cursor-pointer flex items-center justify-center text-stone-500 relative"
             title="Passport & Settings"
           >
-            <img 
-              src={state.user.avatarUrl} 
-              alt={state.user.name} 
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover" 
-            />
+            {state.user.avatarUrl && state.user.avatarUrl.trim() !== '' && (
+              <img 
+                src={state.user.avatarUrl} 
+                alt={state.user.name || 'User'} 
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover absolute inset-0" 
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+              />
+            )}
+            {state.user.name ? (
+              <span className="text-[10px] font-bold text-stone-700">{state.user.name.charAt(0).toUpperCase()}</span>
+            ) : (
+              <User className="w-4 h-4" strokeWidth={2.5} />
+            )}
           </button>
         </div>
       </div>
